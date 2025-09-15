@@ -2,12 +2,11 @@
 import { gummyBagsSelector } from '~/assets/data/checkout'
 
 const slides = [
-    '/images/cl-1.jpg',
-    '/images/cl-2.webp',
-    '/images/cl-3.jpg',
-    '/images/cl-4.webp',
-    '/images/cl-5.jpg',
-    '/images/cl-6.jpg',
+    '/images/slider1.jpg',
+    '/images/slider2.jpg',
+    '/images/slider3.jpg',
+    '/images/slider4.jpg',
+    '/images/slider5.jpg',
 ]
 
 const activeSlide = ref(0)
@@ -60,7 +59,7 @@ onMounted(() => {
 
             <!-- Left: Logo -->
             <div class="flex-shrink-0">
-                <img src="/images/logo.png" alt="YOMZ" class="h-16 lg:h-14">
+                <img src="/images/logo.png" alt="YOMZ" class="h-10 lg:h-14">
             </div>
 
             <!-- Center: SSL Secure -->
@@ -70,38 +69,42 @@ onMounted(() => {
 
             <!-- Right: Flag + Contact -->
             <div class="flex items-center gap-2">
-                <img src="/images/flag.png" alt="US Flag" class="w-16">
-                <div class="text-sm lg:text-sm text-gray-800 text-center">
-                    <span class="font-bold block text-lg">Contact Us:</span>
-                    <a href="mailto:support@yomz.co" class="text-black-600 hover:underline">support@yomz.co</a>
-                </div>
-            </div>
+  <img src="/images/flag.png" alt="US Flag" class="w-16">
+  <div class="text-sm lg:text-sm text-gray-800 text-center">
+    <div class="hidden sm:block">
+      <span class="font-bold block text-lg">Contact Us:</span>
+      <a href="mailto:support@yomz.co" class="text-black-600 hover:underline">support@yomz.co</a>
+    </div>
+  </div>
+</div>
 
         </div>
     </header>
 
     <section class="w-full pt-3">
         <div class="max-w-[1200px] bg-white mx-auto grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 items-center 
-  p-6 md:px-6 lg:px-8 border-[3px] border-dashed border-[#000]">
+  lg:p-6 p-3 px-3 md:px-3 lg:px-8 border-[3px] border-dashed border-[#000]">
+  
+ 
 
             <!-- Left: Image & Reasons -->
             <div class="flex flex-col items-center md:items-start text-center md:text-left">
                 <div x-data="carousel()" class="w-full max-w-4xl space-y-4">
 
                     <!-- Main Image -->
-                    <div class="relative overflow-hidden rounded-xl shadow-lg h-150">
+                    <div class="relative overflow-hidden rounded-xl shadow-lg">
                         <img :src="currentSlide" alt="Carousel Image"
-                            class="w-full h-130 object-cover transition duration-500" />
+                            class="w-full  object-cover transition duration-500" />
 
                         <!-- Prev Button -->
                         <button @click="prev"
-                            class="absolute w-15 h-15 top-1/2 left-3 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200">
+                            class="absolute text-4xl w-15 h-15 top-1/2 left-3 -translate-y-1/2 p-2 rounded-full shadow ">
                             &#10094;
                         </button>
 
                         <!-- Next Button -->
                         <button @click="next"
-                            class="absolute w-15 h-15 top-1/2 right-3 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200">
+                            class="absolute w-15 text-4xl h-15 top-1/2 right-3 -translate-y-1/2 p-2 rounded-full shadow ">
                             &#10095;
                         </button>
                     </div>
@@ -260,7 +263,7 @@ onMounted(() => {
                         <p class="uppercase">Incl. FREE Shipping</p>
                     </div>
 
-                    <img src="/images/redarrow.svg" class="w-[45px] absolute left-[-40px]">
+                   <img src="/images/redarrow.svg" class="w-8 lg:w-12 absolute lg:-left-10 -left-5">
                 </label>
 
                 <!-- Option -->
@@ -755,7 +758,7 @@ onMounted(() => {
                     STEP 6: ORDER SUMMARY
                 </h2>
 
-                <div class="w-full bg-[#f5f5f5] border-[#e0e0e0 ] rounded-lg shadow-sm p-6 space-y-4 text-center">
+                <div class="w-full bg-[#f5f5f5] border-[#e0e0e0 ] rounded-lg shadow-sm lg:p-6  p-3 space-y-4 text-center">
 
                     <!-- Icon at top -->
                     <div class="flex justify-center">
@@ -848,23 +851,22 @@ onMounted(() => {
                         <img src="/images/ssl2.jpg" class="w-2/4">
                     </div>
 
-                    <div class="flex items-start pt-0 pr-6 pb-6 pl-6">
-                        <img src="/images/guarantee.png" alt="" class="h-[100px] mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700 leading-[1.2]">Your order today is protected by our ridiculously
-                            iron-clad Picky Momz
-                            90-day <span class="font-bold">200% Happiness Guarantee.</span> If you’re not happy with how
-                            <span class="font-bold">great</span> you and your family
-                            feel, or how improved your energy, focus, and gut issues are, then let us know anytime in
-                            the next <span class="font-bold">90 days.</span> We’ll refund <span
-                                class="font-bold">DOUBLE</span> what you paid.
-                        </p>
-                    </div>
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
+  <img src="/images/guarantee.png" alt="" class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
+  <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
+    Your order today is protected by our ridiculously iron-clad Picky Momz
+    90-day <span class="font-bold">200% Happiness Guarantee.</span> If you’re not happy with how
+    <span class="font-bold">great</span> you and your family
+    feel, or how improved your energy, focus, and gut issues are, then let us know anytime in
+    the next <span class="font-bold">90 days.</span> We’ll refund <span class="font-bold">DOUBLE</span> what you paid.
+  </p>
+</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="max-w-[1200px] mx-auto px-4 py-8 gap-8">
+    <div class="max-w-[1200px] mx-auto lg:px-4 px-0 lg:py-8 py-2 gap-8">
         <div class="w-full bg-white shadow rounded-lg p-6">
 
             <!-- Section Title -->
