@@ -1,22 +1,76 @@
+<script setup lang="ts">
+import { gummyBagsSelector } from '~/assets/data/checkout'
+
+const slides = [
+    '/images/cl-1.jpg',
+    '/images/cl-2.webp',
+    '/images/cl-3.jpg',
+    '/images/cl-4.webp',
+    '/images/cl-5.jpg',
+    '/images/cl-6.jpg',
+]
+
+const activeSlide = ref(0)
+const currentSlide = computed(() => slides[activeSlide.value])
+
+const next = () => {
+    activeSlide.value = (activeSlide.value + 1) % slides.length
+}
+
+const prev = () => {
+    activeSlide.value = (activeSlide.value - 1 + slides.length) % slides.length
+}
+
+const goTo = (index: number) => {
+    activeSlide.value = index
+}
+
+// timer funtionality
+const minutes = ref(10)
+const seconds = ref(0)
+
+let countdownInterval: ReturnType<typeof setInterval> | null = null
+
+function startCountdown() {
+    countdownInterval = setInterval(() => {
+        if (seconds.value === 0) {
+            if (minutes.value === 0) {
+                if (countdownInterval) clearInterval(countdownInterval)
+                return
+            }
+            minutes.value--
+            seconds.value = 59
+        } else {
+            seconds.value--
+        }
+    }, 1000)
+}
+
+// 
+
+onMounted(() => {
+    startCountdown()
+})
+
+</script>
 <template>
-    <p>This is checkout Page.</p>
     <!-- Header -->
     <header class="w-full border-b border-gray-200 bg-white">
         <div class="max-w-[1200px] mx-auto flex items-center justify-between px-2 py-2 md:py-2">
 
             <!-- Left: Logo -->
             <div class="flex-shrink-0">
-                <img src="images/logo.png" alt="YOMZ" class="h-16 lg:h-14">
+                <img src="/images/logo.png" alt="YOMZ" class="h-16 lg:h-14">
             </div>
 
             <!-- Center: SSL Secure -->
             <div class="hidden lg:flex items-center gap-2">
-                <img src="images/ssl.png" alt="SSL" class="w-26">
+                <img src="/images/ssl.png" alt="SSL" class="w-26">
             </div>
 
             <!-- Right: Flag + Contact -->
             <div class="flex items-center gap-2">
-                <img src="images/flag.png" alt="US Flag" class="w-16">
+                <img src="/images/flag.png" alt="US Flag" class="w-16">
                 <div class="text-sm lg:text-sm text-gray-800 text-center">
                     <span class="font-bold block text-lg">Contact Us:</span>
                     <a href="mailto:support@yomz.co" class="text-black-600 hover:underline">support@yomz.co</a>
@@ -35,26 +89,26 @@
                 <div x-data="carousel()" class="w-full max-w-4xl space-y-4">
 
                     <!-- Main Image -->
-                    <div class="relative overflow-hidden rounded-xl shadow-lg">
-                        <img :src="slides[activeSlide]" alt="Carousel Image"
-                            class="w-full h-150 md:h-150 object-cover transition duration-500">
+                    <div class="relative overflow-hidden rounded-xl shadow-lg h-150">
+                        <img :src="currentSlide" alt="Carousel Image"
+                            class="w-full h-130 object-cover transition duration-500" />
 
                         <!-- Prev Button -->
-                        <button @click="prev()"
+                        <button @click="prev"
                             class="absolute w-15 h-15 top-1/2 left-3 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200">
                             &#10094;
                         </button>
 
                         <!-- Next Button -->
-                        <button @click="next()"
-                            class="absolute w-15 h-15  top-1/2 right-3 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200">
+                        <button @click="next"
+                            class="absolute w-15 h-15 top-1/2 right-3 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200">
                             &#10095;
                         </button>
                     </div>
 
                     <!-- Thumbnails -->
                     <div class="flex justify-center space-x-2">
-                        <template x-for="(slide, index) in slides" :key="index">
+                        <template v-for="(slide, index) in slides" :key="index">
                             <img :src="slide" @click="goTo(index)" :class="activeSlide === index
                                 ? 'ring-2 ring-blue-500 opacity-100'
                                 : 'opacity-60 hover:opacity-100'"
@@ -75,35 +129,35 @@
                 <div class="space-y-4 text-left">
                     <!-- Point 1 -->
                     <div class="flex items-start">
-                        <img src="images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
+                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700">Fill in Your Family’s Nutrition Gaps and Help Transform Their Lives!
                         </p>
                     </div>
 
                     <!-- Point 2 -->
                     <div class="flex items-start">
-                        <img src="images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
+                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700">Packed with Vitamins, Antioxidants, and Nutrients from 18 Superfoods
                         </p>
                     </div>
 
                     <!-- Point 3 -->
                     <div class="flex items-start">
-                        <img src="images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
+                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700">One Serving Is the Phytonutrient Equal of 2 Servings of Fruits &
                             Vegetables</p>
                     </div>
 
                     <!-- Point 4 -->
                     <div class="flex items-start">
-                        <img src="images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
+                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700">Crafted to Support: Gut Health, Energy, Focus, Mood, Brain Activity,
                             Immunity, Heart Function, Vision, Family Nutrition</p>
                     </div>
 
                     <!-- Point 5 -->
                     <div class="flex items-start">
-                        <img src="images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
+                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700">Join 6,312 American families Boosting Their Nutrition.</p>
                     </div>
                 </div>
@@ -114,16 +168,19 @@
 
     <section class="w-full py-5">
         <div
-            class="max-w-[1200px] mx-auto flex  bg-yellow-200 border border-yellow-300 rounded-md px-4 py-6 flex items-center justify-center text-sm sm:text-base text-gray-800 font-medium ">
+            class="max-w-[1200px] mx-auto flex  bg-yellow-200 border border-yellow-300 rounded-md px-4 py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium ">
 
             <!-- Fire Icon -->
-            <img src="images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
+            <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
 
             <!-- Text -->
             <p class="text-center text-[18px]">
                 YOMZ is selling like hotcakes & inventory is very limited.
                 But we've reserved your order for:
-                <span class="text-red-600 font-bold">10 MIN 00 SEC</span>
+                <!-- <span class="text-red-600 font-bold">10 MIN 00 SEC</span> -->
+                <span class="text-red-600 font-bold">
+                    {{ String(minutes).padStart(2, '0') }} MIN {{ String(seconds).padStart(2, '0') }} SEC
+                </span>
             </p>
         </div>
     </section>
@@ -164,44 +221,46 @@
                     <!-- Checkbox 1 -->
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-500" />
-                        <img src="images/og-bag.png" alt="Option 1" class="w-16 h-16 object-cover" />
+                        <img src="/images/og-bag.png" alt="Option 1" class="w-16 h-16 object-cover" />
                         <span class="text-gray-700 font-medium text-[18px]">OG Gummies</span>
                     </label>
 
                     <!-- Checkbox 2 -->
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-500" />
-                        <img src="images/sour-bag.png" alt="Option 2" class="w-16 h-16 object-cover" />
+                        <img src="/images/sour-bag.png" alt="Option 2" class="w-16 h-16 object-cover" />
                         <span class="text-gray-700 font-medium text-[18px]">Sour Gummies</span>
                     </label>
                 </div>
 
                 <!-- BEST SELLER -->
-                <label
+                <label v-for="value in gummyBagsSelector" :key="value.id"
                     class="relative flex items-center justify-between pl-0 pt-4 pb-4 pr-4 border-yellow-400 cursor-pointer bg-yellow-400/90">
                     <div class="flex items-center space-x-3">
                         <!-- Custom Radio -->
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <span
-                            class="w-6 h-6 border-2 border-yellow-600 rounded-full flex items-center justify-center peer-checked:bg-yellow-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white hidden peer-checked:block"
+                            class="w-6 h-6 border-2 border-yellow-600 rounded-full flex items-center justify-center peer-checked:bg-yellow-600 ml-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white peer-checked:block"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
                                     d="M16.704 5.29a1 1 0 00-1.408-1.42l-7.004 6.98-3.588-3.59a1 1 0 00-1.416 1.42l4.296 4.3a1 1 0 001.416 0l7.704-7.69z"
                                     clip-rule="evenodd" />
                             </svg>
                         </span>
-                        <span>
-                            <span class="font-bold">BEST SELLER</span>
-                            <span class="text-gray-800">51% OFF:<br>2 Bags</span>
-                        </span>
+
+                        <p>
+                            <span v-if="value.id === 1" class="font-bold">BEST SELLER </span>
+                            <span class="text-gray-800 w-[10%]">51% OFF: <br v-if="value.id === 1" /> 2 Bags</span>
+                        </p>
+
                     </div>
                     <div class="text-right text-sm font-bold text-gray-900">
                         <p>$39.00 each</p>
                         <p class="uppercase">Incl. FREE Shipping</p>
                     </div>
 
-                    <img src="images/redarrow.svg" class="w-[45px] absolute left-[-40px]">
+                    <img src="/images/redarrow.svg" class="w-[45px] absolute left-[-40px]">
                 </label>
 
                 <!-- Option -->
@@ -210,7 +269,7 @@
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <span
-                            class="w-6 h-6 border-2 border-blue-600 rounded-full flex items-center justify-center peer-checked:bg-blue-600">
+                            class="w-6 h-6 border-2 border-blue-600 rounded-full flex items-center justify-center peer-checked:bg-blue-600 ml-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white hidden peer-checked:block"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -231,7 +290,7 @@
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <span
-                            class="w-6 h-6 border-2 border-blue-600 rounded-full flex items-center justify-center peer-checked:bg-blue-600">
+                            class="w-6 h-6 border-2 border-blue-600 rounded-full flex items-center justify-center peer-checked:bg-blue-600 ml-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white hidden peer-checked:block"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -273,7 +332,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </span>
-                        <img src="images/paypal.png" alt="PayPal" class="h-8">
+                        <img src="/images/paypal.png" alt="PayPal" class="h-8">
 
                     </div>
                 </label>
@@ -298,7 +357,7 @@
 
                     <!-- Card Logos -->
                     <div class="flex space-x-2">
-                        <img src="images/payicons.svg" alt="" class="h-10">
+                        <img src="/images/payicons.svg" alt="" class="h-10">
 
                     </div>
                 </label>
@@ -314,7 +373,7 @@
                     <form class="space-y-4">
                         <!-- First & Last Name -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input type="text" placeholder="First Name"
+                            <input type="text" id="first-name" placeholder="First Name"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
                             <input type="text" placeholder="Last Name"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
@@ -343,7 +402,7 @@
                 <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
 
                     <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="images/rw-1.jpg" alt="" />
+                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-1.jpg" alt="" />
                         <div class="flex-1 min-w-0">
                             <div class="flex items-baseline gap-2">
                                 <h3 class="font-semibold text-gray-900 truncate">Dorothy P.</h3>
@@ -402,7 +461,7 @@
                 <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
 
                     <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="images/rw-7.jpg" alt="" />
+                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-7.jpg" alt="" />
                         <div class="flex-1 min-w-0">
                             <div class="flex items-baseline gap-2">
                                 <h3 class="font-semibold text-gray-900 truncate">Clinton G.</h3>
@@ -460,7 +519,7 @@
                 <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
 
                     <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="images/rw-6.jpg" alt="" />
+                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-6.jpg" alt="" />
                         <div class="flex-1 min-w-0">
                             <div class="flex items-baseline gap-2">
                                 <h3 class="font-semibold text-gray-900 truncate">Ashley P.</h3>
@@ -629,7 +688,7 @@
                 <label class="flex items-center justify-between pb-4 cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <!-- Custom Radio -->
-                        <input type="radio" name="payment" class="peer hidden" checked="">
+                        <input type="radio" name="payment" class="peer hidden">
                         <span
                             class="w-6 h-6 border-2 border-blue-700 rounded-full flex items-center justify-center peer-checked:bg-blue-700">
                             <!-- Check Icon -->
@@ -641,7 +700,7 @@
                 <label class="flex items-center justify-between pb-4 cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <!-- Custom Radio -->
-                        <input type="radio" name="payment" class="peer hidden" checked="">
+                        <input type="radio" name="payment" class="peer hidden">
                         <span
                             class="w-6 h-6 border-2 border-blue-700 rounded-full flex items-center justify-center peer-checked:bg-blue-700">
                             <!-- Check Icon -->
@@ -700,7 +759,7 @@
 
                     <!-- Icon at top -->
                     <div class="flex justify-center">
-                        <span class="text-4xl"><img src="images/funds.png" class="h-16"></span>
+                        <span class="text-4xl"><img src="/images/funds.png" class="h-16"></span>
                     </div>
 
                     <!-- Radio + Heading -->
@@ -725,19 +784,16 @@
                 <div class="w-full pt-6 space-y-6">
 
                     <!-- Product Section -->
-
                     <div class="flex justify-between items-center">
                         <div class="flex items-center space-x-2">
-
                             <p class="font-medium text-800 text-lg">Product</p>
                         </div>
-
                         <p class="font-medium text-gray-800 text-lg">Price</p>
                     </div>
 
                     <div class="flex justify-between items-start">
                         <div class="flex items-start space-x-4">
-                            <img src="images/og-bag.png" alt="Product" class="w-16 h-16 object-contain border rounded">
+                            <img src="/images/og-bag.png" alt="Product" class="w-16 h-16 object-contain border rounded">
                             <div>
                                 <h3 class="font-semibold text-gray-900">OG Gummies</h3>
                                 <span
@@ -754,7 +810,7 @@
                     <!-- Free Shipping -->
                     <div class="flex justify-between items-center">
                         <div class="flex items-center space-x-2">
-                            <span class="text-lg"><img src="images/check-icons.png"></span>
+                            <span class="text-lg"><img src="/images/check-icons.png"></span>
                             <p class="font-medium text-gray-800">Free shipping</p>
                         </div>
                         <p class="text-sm"><span class="line-through text-red-500">$7.95</span>
@@ -772,13 +828,13 @@
                             <p> <span class="text-sm text-red-500">-17%</span>
                                 <span class="font-bold text-gray-900 text-lg">$95.91
                                     <span
-                                        class="text-lg text-lg text-red-500 line-through ml-2 bg-[#c91f3f] pt-1 pr-4 pl-4 pb-1 text-white"
+                                        class="text-lg text-red-500 line-through ml-2 bg-[#c91f3f] pt-1 pr-4 pl-4 pb-1"
                                         style="border-radius: 12px; font-size: 16px;">$143</span>
+                                </span>
 
                             </p>
                         </div>
                     </div>
-
                     <p>🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.</p>
 
                     <!-- Checkout Button -->
@@ -789,28 +845,23 @@
                             class="h-6 ml-2">
                     </button>
                     <div class="flex justify-center">
-                        <img src="images/ssl2.jpg" class="w-2/4">
+                        <img src="/images/ssl2.jpg" class="w-2/4">
                     </div>
 
                     <div class="flex items-start pt-0 pr-6 pb-6 pl-6">
-                        <img src="images/guarantee.png" alt="" class="h-[100px] mr-3 flex-shrink-0 mt-1">
+                        <img src="/images/guarantee.png" alt="" class="h-[100px] mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700 leading-[1.2]">Your order today is protected by our ridiculously
                             iron-clad Picky Momz
                             90-day <span class="font-bold">200% Happiness Guarantee.</span> If you’re not happy with how
                             <span class="font-bold">great</span> you and your family
                             feel, or how improved your energy, focus, and gut issues are, then let us know anytime in
                             the next <span class="font-bold">90 days.</span> We’ll refund <span
-                                class="font-bold"></span>DOUBLE</span> what you paid.
-
+                                class="font-bold">DOUBLE</span> what you paid.
                         </p>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="max-w-[1200px] mx-auto px-4 py-8 gap-8">
@@ -960,7 +1011,7 @@
 
         <!-- DMCA Badge -->
         <div class="flex justify-center mt-3">
-            <img src="images/dmca.png" alt="DMCA Protection" class="h-6">
+            <img src="/images/dmca.png" alt="DMCA Protection" class="h-6">
         </div>
 
     </footer>
@@ -972,3 +1023,16 @@
     </div>
 
 </template>
+
+<style scoped>
+.offer-circle .offer-text {
+    -webkit-animation: rotateclc 12s linear infinite;
+    animation: rotateclc 12s linear infinite;
+}
+
+@keyframes rotateclc {
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+</style>
