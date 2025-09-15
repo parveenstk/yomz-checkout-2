@@ -52,6 +52,9 @@ onMounted(() => {
     startCountdown()
 })
 
+// Gummy bags
+const selectedBag = ref(1);
+
 </script>
 <template>
     <!-- Header -->
@@ -218,94 +221,78 @@ onMounted(() => {
                 </h2>
 
                 <div class="flex space-x-6 mb-8">
-                    <!-- Checkbox 1 -->
+                    <!-- OG Gummies Selector -->
                     <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-500" />
+                        <input type="radio" name="YOMZ" class="peer hidden">
+                        <div
+                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </g>
+                            </svg>
+                        </div>
                         <img src="/images/og-bag.png" alt="Option 1" class="w-16 h-16 object-cover" />
                         <span class="text-gray-700 font-medium text-[18px]">OG Gummies</span>
                     </label>
 
-                    <!-- Checkbox 2 -->
+                    <!-- Sours Selector -->
                     <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-500" />
+                        <input type="radio" name="YOMZ" class="peer hidden">
+                        <div
+                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </g>
+                            </svg>
+                        </div>
+
                         <img src="/images/sour-bag.png" alt="Option 2" class="w-16 h-16 object-cover" />
                         <span class="text-gray-700 font-medium text-[18px]">Sour Gummies</span>
                     </label>
                 </div>
 
                 <!-- BEST SELLER -->
-                <label v-for="value in gummyBagsSelector" :key="value.id"
-                    class="relative flex items-center justify-between pl-0 pt-4 pb-4 pr-4 border-yellow-400 cursor-pointer bg-yellow-400/90">
+                <label v-for="value in gummyBagsSelector" :key="value.id" @click="selectedBag = value.id"
+                    :class="['relative flex items-center justify-between pl-0 pt-4 pb-4 pr-4 border-yellow-400 cursor-pointer', value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
                     <div class="flex items-center space-x-3">
                         <!-- Custom Radio -->
                         <input type="radio" name="YOMZ" class="peer hidden">
-                        <span
-                            class="w-6 h-6 border-2 border-yellow-600 rounded-full flex items-center justify-center peer-checked:bg-yellow-600 ml-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white peer-checked:block"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M16.704 5.29a1 1 0 00-1.408-1.42l-7.004 6.98-3.588-3.59a1 1 0 00-1.416 1.42l4.296 4.3a1 1 0 001.416 0l7.704-7.69z"
-                                    clip-rule="evenodd" />
+                        <div
+                            :class="['w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] ml-3', { 'bg-[#172969]': selectedBag === value.id }]">
+                            <svg v-if="selectedBag === value.id" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </g>
                             </svg>
-                        </span>
+                        </div>
 
-                        <p>
+                        <p :class="{ 'w-2/3': value.id === 1 }">
                             <span v-if="value.id === 1" class="font-bold">BEST SELLER </span>
-                            <span class="text-gray-800 w-[10%]">51% OFF: <br v-if="value.id === 1" /> 2 Bags</span>
+                            <span class="text-gray-800 w-[10%]">{{ value.title }}</span>
                         </p>
-
                     </div>
-                    <div class="text-right text-sm font-bold text-gray-900">
-                        <p>$39.00 each</p>
-                        <p class="uppercase">Incl. FREE Shipping</p>
+                    <div :class="['text-right text-sm text-gray-900', value.id === 1 && 'font-bold']">
+                        <p>${{ value.price.toFixed(2) }} each</p>
+                        <p class="uppercase">{{ value.shipping }}</p>
                     </div>
 
-                    <img src="/images/redarrow.svg" class="w-[45px] absolute left-[-40px]">
+                    <img v-if="value.id === 1" src="/images/redarrow.svg" class="w-[45px] absolute left-[-40px]">
                 </label>
-
-                <!-- Option -->
-                <label
-                    class="flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer hover:shadow-md bg-white">
-                    <div class="flex items-center space-x-3">
-                        <input type="radio" name="YOMZ" class="peer hidden">
-                        <span
-                            class="w-6 h-6 border-2 border-blue-600 rounded-full flex items-center justify-center peer-checked:bg-blue-600 ml-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white hidden peer-checked:block"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M16.704 5.29a1 1 0 00-1.408-1.42l-7.004 6.98-3.588-3.59a1 1 0 00-1.416 1.42l4.296 4.3a1 1 0 001.416 0l7.704-7.69z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-800">60% OFF: 3 Bags</span>
-                    </div>
-                    <div class="text-right text-gray-700 text-sm">
-                        <p class="font-semibold">$32.00 each </p>
-                        <p>Incl. FREE Shipping</p>
-                    </div>
-                </label>
-
-                <!-- Option -->
-                <label class="flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer  bg-white">
-                    <div class="flex items-center space-x-3">
-                        <input type="radio" name="YOMZ" class="peer hidden">
-                        <span
-                            class="w-6 h-6 border-2 border-blue-600 rounded-full flex items-center justify-center peer-checked:bg-blue-600 ml-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white hidden peer-checked:block"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M16.704 5.29a1 1 0 00-1.408-1.42l-7.004 6.98-3.588-3.59a1 1 0 00-1.416 1.42l4.296 4.3a1 1 0 001.416 0l7.704-7.69z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-800">40% OFF: 1 Bag</span>
-                    </div>
-                    <div class="text-right text-gray-700 text-sm">
-                        <p class="font-semibold">$48.00 each</p>
-                        <p>$7.99 Shipping</p>
-                    </div>
-                </label>
-
             </div>
         </div>
 
@@ -320,18 +307,19 @@ onMounted(() => {
                 <!-- PayPal -->
                 <label class="flex items-center justify-between  pl-0 pt-6 pr-6 pb-6 border-b cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <!-- Custom Radio -->
-                        <input type="radio" name="payment" class="peer hidden" checked>
-                        <span
-                            class="w-6 h-6 border-2 border-blue-700 rounded-full flex items-center justify-center peer-checked:bg-blue-700">
-                            <!-- Check Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white hidden peer-checked:block"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M16.704 5.29a1 1 0 00-1.408-1.42l-7.004 6.98-3.588-3.59a1 1 0 00-1.416 1.42l4.296 4.3a1 1 0 001.416 0l7.704-7.69z"
-                                    clip-rule="evenodd" />
+                        <input type="radio" name="YOMZ" class="peer hidden">
+                        <div
+                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </g>
                             </svg>
-                        </span>
+                        </div>
                         <img src="/images/paypal.png" alt="PayPal" class="h-8">
 
                     </div>
@@ -340,18 +328,19 @@ onMounted(() => {
                 <!-- Credit Card -->
                 <label class="flex items-center justify-between pl-0 pt-6 pr-6 pb-6 cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <!-- Custom Radio -->
-                        <input type="radio" name="payment" class="peer hidden">
-                        <span
-                            class="w-6 h-6 border-2 border-blue-700 rounded-full flex items-center justify-center peer-checked:bg-blue-700">
-                            <!-- Check Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white hidden peer-checked:block"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M16.704 5.29a1 1 0 00-1.408-1.42l-7.004 6.98-3.588-3.59a1 1 0 00-1.416 1.42l4.296 4.3a1 1 0 001.416 0l7.704-7.69z"
-                                    clip-rule="evenodd" />
+                        <input type="radio" name="YOMZ" class="peer hidden">
+                        <div
+                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </g>
                             </svg>
-                        </span>
+                        </div>
                         <span class="text-gray-800 text-lg font-semibold">Credit Card</span>
                     </div>
 
