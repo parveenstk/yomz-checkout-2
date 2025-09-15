@@ -836,9 +836,9 @@ const selectedBag = ref(1);
                         <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal"
                             class="h-6 ml-2">
                     </button>
-                    <div class="flex justify-center">
+                    <!-- <div class="flex justify-center">
                         <img src="/images/ssl2.jpg" class="w-2/4">
-                    </div>
+                    </div> -->
 
                     <div class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
   <img src="/images/guarantee.png" alt="" class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
