@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-stone-100;
+    min-height: 100vh; /* fallback if you want it always full-height */
+  }
+}
