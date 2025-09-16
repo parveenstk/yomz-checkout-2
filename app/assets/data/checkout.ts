@@ -21,7 +21,7 @@ export const gummyBagsSelector = [
     }
 ];
 
-export const productData = [
+export const productData: ProductData[] = [
     {
         id: 1,
         img: {
@@ -32,7 +32,7 @@ export const productData = [
             ogGummies: 'OG Gummies',
             soursGummies: 'Sours Gummies'
         },
-        bagQty: 1,
+        bagQty: 2,
         compareAtPrice: 79.99,
         price: 48,
         percentageOff: 40
@@ -48,7 +48,7 @@ export const productData = [
             ogGummies: 'OG Gummies',
             soursGummies: 'Sours Gummies'
         },
-        bagQty: 2,
+        bagQty: 3,
         compareAtPrice: 159.98,
         price: 78,
         percentageOff: 51
@@ -64,7 +64,7 @@ export const productData = [
             ogGummies: 'OG Gummies',
             soursGummies: 'Sours Gummies'
         },
-        bagQty: 3,
+        bagQty: 1,
         compareAtPrice: 239.97,
         price: 96,
         percentageOff: 60

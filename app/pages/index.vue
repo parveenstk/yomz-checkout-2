@@ -3,13 +3,13 @@ import { gummyBagsSelector, productData } from '~/assets/data/checkout';
 
 // Gummy type
 const gummyType = ref('');
-const cartData = [];
+const cartData: Ref<ProductData[]> = ref([]);
 
 // Gummy bags
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('');
+const paymentMethod = ref('creditCard');
 // console.log('paymentMethod:', paymentMethod.value);
 
 // same billing
@@ -61,8 +61,11 @@ function startCountdown() {
 
 // Add data in Cart
 const addProductData = (id: number) => {
-    selectedBag.value = id
-    console.log('id:', id);
+    selectedBag.value = id;
+    const selectedProduct: ProductData = productData.find(p => p.id === id)!;
+    console.log("selectedProduct", selectedProduct)
+    // cartData.value.push(selectedProduct);
+    cartData.value[0] = selectedProduct
 };
 
 onMounted(() => {
@@ -1022,57 +1025,66 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Product Section -->
                     <div class="w-full pt-6 space-y-6">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <p class="font-medium text-800 text-lg">Product</p>
-                            </div>
-                            <p class="font-medium text-gray-800 text-lg">Price</p>
-                        </div>
 
-                        <div class="flex justify-between items-start">
-                            <div class="flex items-start space-x-4">
-                                <img src="/images/og-bag.png" alt="Product"
-                                    class="w-16 h-16 object-contain border rounded">
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">OG Gummies</h3>
-                                    <span
-                                        class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full">2
-                                        Bags</span>
+                        <div name="product-details">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <p class="font-medium text-800 text-lg">Product</p>
+                                </div>
+                                <p class="font-medium text-gray-800 text-lg">Price</p>
+                            </div>
+
+                            <div v-for="product in cartData" :key="product.id"
+                                class="flex justify-between items-start mb-2">
+                                <div class="flex items-start space-x-4">
+                                    <img :src="product.img[gummyType]" alt="Product"
+                                        class="w-16 h-16 object-contain border rounded">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">{{ product.title[gummyType] }}</h3>
+                                        <span
+                                            class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full">{{
+                                                product.bagQty }}
+                                            Bags</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-red-500 line-through">Regular ${{ product.compareAtPrice }}
+                                    </p>
+                                    <p class="font-semibold text-gray-900">${{ product.price }}</p>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-sm text-red-500 line-through">Regular $134.91</p>
-                                <p class="font-semibold text-gray-900">$95.91</p>
-                            </div>
-                        </div>
 
-                        <!-- Free Shipping -->
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <img class="w-5" src="/images/check-icons.png">
-                                <p class=" text-lg font-medium text-gray-800">Free shipping</p>
-                            </div>
-                            <p class="text-sm">
-                                <span class="text-md line-through text-red-500">$7.95</span>
-                                <span class="text-md text-green-600 font-medium"> Free</span>
-                            </p>
-                        </div>
-
-                        <!-- Total -->
-                        <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center">
-                            <div>
-                                <p class="font-medium text-gray-700">Total:
-                                    <span class="text-sm">Before Taxes</span>
+                            <!-- Free Shipping -->
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <img class="w-5" src="/images/check-icons.png">
+                                    <p class=" text-lg font-medium text-gray-800">Free shipping</p>
+                                </div>
+                                <p class="text-sm">
+                                    <span class="text-md line-through text-red-500">$7.95</span>
+                                    <span class="text-md text-green-600 font-medium"> Free</span>
                                 </p>
                             </div>
-                            <div class="flex gap-3 items-baseline">
-                                <span class="font-medium text-sm text-red-500">-17%</span>
-                                <span class="font-medium text-gray-900 text-lg">$95.9</span>
-                                <span class="text-lg font-medium text-white line-through bg-[#c91f3f] px-2 py-1 py-auto"
-                                    style="border-radius: 12px; font-size: 16px;">$143</span>
+
+                            <!-- Total -->
+                            <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
+                                <div>
+                                    <p class="font-medium text-gray-700">Total:
+                                        <span class="text-sm">Before Taxes</span>
+                                    </p>
+                                </div>
+                                <div class="flex gap-3 items-baseline">
+                                    <span class="font-medium text-sm text-red-500">-17%</span>
+                                    <span class="font-medium text-gray-900 text-lg">$95.9</span>
+                                    <span
+                                        class="text-lg font-medium text-white line-through bg-[#c91f3f] px-2 py-1 py-auto"
+                                        style="border-radius: 12px; font-size: 16px;">$143</span>
+                                </div>
                             </div>
+                            <p class="text-center">🔒 By placing this order you accept YOMZ's Privacy Policy and Terms
+                                of
+                                Use.</p>
                         </div>
-                        <p>🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.</p>
 
                         <!-- Checkout Button -->
                         <button
