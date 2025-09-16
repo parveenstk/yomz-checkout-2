@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { gummyBagsSelector } from '~/assets/data/checkout'
+import { gummyBagsSelector, productData } from '~/assets/data/checkout';
+
+// Gummy type
+const gummyType = ref('');
+const cartData = [];
 
 // Gummy bags
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('creditCard');
-console.log('paymentMethod:', paymentMethod.value);
+const paymentMethod = ref('');
+// console.log('paymentMethod:', paymentMethod.value);
 
 // same billing
 const sameBilling = ref(true);
@@ -55,7 +59,11 @@ function startCountdown() {
     }, 1000)
 }
 
-// 
+// Add data in Cart
+// const addProductData = (id: number) => {
+//     selectedBag.value = id
+//     console.log('id:', id);
+// };
 
 onMounted(() => {
     startCountdown()
@@ -233,39 +241,23 @@ watch(paymentMethod, (newValue) => {
                 </h2>
 
                 <div class="flex space-x-2 lg:space-x-6 mb-8">
-                    <!-- OG Gummies Selector -->
-                    <label class="flex items-center space-x-1 cursor-pointer">
+                    <!-- OG Gummies Gummy -->
+                    <label @click="gummyType = 'ogGummies'" class="flex items-center space-x-1 cursor-pointer">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
                             class="w-6 h-6 border-2 shrink-0 aspect-square rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </g>
-                            </svg>
+                            <img v-if="gummyType === 'ogGummies'" src="/images/whiteTick.svg" alt="white-tick">
                         </div>
                         <img src="/images/og-bag.png" alt="Option 1" class="w-12 h-12 lg:w-16 lg:h-16  object-cover" />
                         <span class="text-gray-700 font-medium text-lg leading-5">OG Gummies</span>
                     </label>
 
-                    <!-- Sours Selector -->
-                    <label class="flex items-center space-x-1 cursor-pointer">
+                    <!-- Sours Gummy -->
+                    <label @click="gummyType = 'soursGummies'" class="flex items-center space-x-1 cursor-pointer">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
                             class="w-6 h-6 border-2 shrink-0 aspect-square rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </g>
-                            </svg>
+                            <img v-if="gummyType === 'soursGummies'" src="/images/whiteTick.svg" alt="white-tick">
                         </div>
 
                         <img src="/images/sour-bag.png" alt="Option 2"
@@ -278,23 +270,20 @@ watch(paymentMethod, (newValue) => {
                     STEP 2: Select Order Quantity
                 </h2>
 
-                <!-- BEST SELLER -->
-                <label v-for="value in gummyBagsSelector" :key="value.id" @click="selectedBag = value.id"
-                    :class="['relative flex items-center justify-between pl-0 pt-4 pb-4 pr-4 border-yellow-400 cursor-pointer', value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
+                <label v-for="value in gummyBagsSelector" :key="value.id" :class="['relative flex items-center justify-between pl-0 pt-4 pb-4 pr-4 border-yellow-400 cursor-pointer',
+                    value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
                     <div class="flex items-center space-x-3">
                         <!-- Custom Radio -->
-                        <input type="radio" name="YOMZ" class="peer hidden">
-                        <div
-                            :class="['w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] ml-3', { 'bg-[#172969]': selectedBag === value.id }]">
+                        <input type="radio" name="YOMZ" class="peer hidden" :value="value.id"
+                            :checked="selectedBag === value.id" @change="addProductData(value.id)" />
+                        <div :class="[
+                            'w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] ml-3',
+                            { 'bg-[#172969]': selectedBag === value.id }
+                        ]">
                             <svg v-if="selectedBag === value.id" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </g>
+                                <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                    stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
 
@@ -303,13 +292,14 @@ watch(paymentMethod, (newValue) => {
                             <span class="text-gray-800 w-[10%]">{{ value.title }}</span>
                         </p>
                     </div>
+
                     <div :class="['text-right text-sm text-gray-900', value.id === 1 && 'font-bold']">
                         <p>${{ value.price.toFixed(2) }} each</p>
                         <p class="uppercase">{{ value.shipping }}</p>
                     </div>
 
                     <img v-if="value.id === 1" src="/images/redarrow.svg"
-                        class="w-8 lg:w-12 absolute lg:-left-10 -left-5">
+                        class="w-8 lg:w-12 absolute lg:-left-10 -left-5" />
                 </label>
             </div>
 
@@ -902,98 +892,49 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- STEP 5: BILLING ADDRESS -->
                 <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
-
-                    <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
+                    <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
                         STEP 5: BILLING ADDRESS
                     </h2>
 
-                    <!-- <label class="flex items-center justify-between pb-4 cursor-pointer">
-                        <div @click="sameBilling = true" class="flex items-center space-x-3">
-                            Same as shipping address
-                            <input type="radio" name="YOMZ" class="peer hidden">
-                            <div
-                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                    <!-- Option: Same as shipping address -->
+                    <div class="flex items-center justify-between pb-4 ">
+                        <div class="flex items-center space-x-3">
+                            <div @click="sameBilling = true"
+                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
+                                :class="{ 'bg-[#172969]': sameBilling }">
                                 <svg v-if="sameBilling" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                    <g id="SVGRepo_iconCarrier">
-                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
-                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        </path>
-                                    </g>
+                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <span>Same as shipping address.</span>
+                            <span class="cursor-pointer select-none" @click="sameBilling = true">
+                                Same as shipping address</span>
                         </div>
-                    </label>
+                    </div>
 
-                    <label class="flex items-center justify-between pb-4 cursor-pointer">
-                        <div @click="sameBilling = false" class="flex items-center space-x-3">
-                            Use a different billing address
-                            <input type="radio" name="YOMZ" class="peer hidden">
-                            <div
-                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                    <!-- Option: Use a different billing address -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div @click="sameBilling = false"
+                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
+                                :class="{ 'bg-[#172969]': !sameBilling }">
                                 <svg v-if="!sameBilling" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                    <g id="SVGRepo_iconCarrier">
-                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
-                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                        </path>
-                                    </g>
+                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <span> Use a different billing address.</span>
-                        </div>
-                    </label> -->
-
-                    <!-- STEP 5: BILLING ADDRESS -->
-                    <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
-                        <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
-                            STEP 5: BILLING ADDRESS
-                        </h2>
-
-                        <!-- Option: Same as shipping address -->
-                        <div class="flex items-center justify-between pb-4 ">
-                            <div class="flex items-center space-x-3">
-                                <div @click="sameBilling = true"
-                                    class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
-                                    :class="{ 'bg-[#172969]': sameBilling }">
-                                    <svg v-if="sameBilling" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
-                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
-                                <span class="cursor-pointer select-none" @click="sameBilling = true">
-                                    Same as shipping address</span>
-                            </div>
-                        </div>
-
-                        <!-- Option: Use a different billing address -->
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <div @click="sameBilling = false"
-                                    class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
-                                    :class="{ 'bg-[#172969]': !sameBilling }">
-                                    <svg v-if="!sameBilling" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
-                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
-                                <span @click="sameBilling = false" class="cursor-pointer select-none">
-                                    Use a different billing address</span>
-                            </div>
+                            <span @click="sameBilling = false" class="cursor-pointer select-none">
+                                Use a different billing address</span>
                         </div>
                     </div>
 
                     <Transition name="sameName">
-                        <form v-if="!sameBilling" class="space-y-4">
+                        <form v-if="!sameBilling" class="space-y-4 mt-5">
                             <!-- First & Last Name -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <input type="text" placeholder="First Name"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                                 <input type="text" placeholder="Last Name"
@@ -1028,11 +969,9 @@ watch(paymentMethod, (newValue) => {
                                 <input type="text" placeholder="Postal Code"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                             </div>
-
                         </form>
                     </Transition>
                 </div>
-
                 <!-- ORDER SUMMARY -->
                 <div class="bg-white p-4 rounded-lg shadow mt-3">
                     <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
@@ -1085,9 +1024,8 @@ watch(paymentMethod, (newValue) => {
                         </p>
                     </div>
 
+                    <!-- Product Section -->
                     <div class="w-full pt-6 space-y-6">
-
-                        <!-- Product Section -->
                         <div class="flex justify-between items-center">
                             <div class="flex items-center space-x-2">
                                 <p class="font-medium text-800 text-lg">Product</p>
@@ -1115,43 +1053,39 @@ watch(paymentMethod, (newValue) => {
                         <!-- Free Shipping -->
                         <div class="flex justify-between items-center">
                             <div class="flex items-center space-x-2">
-                                <span class="text-lg"><img src="/images/check-icons.png"></span>
-                                <p class="font-medium text-gray-800">Free shipping</p>
+                                <img class="w-5" src="/images/check-icons.png">
+                                <p class=" text-lg font-medium text-gray-800">Free shipping</p>
                             </div>
-                            <p class="text-sm"><span class="line-through text-red-500">$7.95</span>
-                                <span class="text-green-600 font-medium">Free</span>
+                            <p class="text-sm">
+                                <span class="text-md line-through text-red-500">$7.95</span>
+                                <span class="text-md text-green-600 font-medium"> Free</span>
                             </p>
                         </div>
 
                         <!-- Total -->
                         <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center">
                             <div>
-                                <p class="font-medium text-gray-700">Total: <span class="text-sm">Before Taxes</span>
+                                <p class="font-medium text-gray-700">Total:
+                                    <span class="text-sm">Before Taxes</span>
                                 </p>
                             </div>
-                            <div class="text-right">
-                                <p> <span class="text-sm text-red-500">-17%</span>
-                                    <span class="font-bold text-gray-900 text-lg">$95.91
-                                        <span
-                                            class="text-lg text-red-500 line-through ml-2 bg-[#c91f3f] pt-1 pr-4 pl-4 pb-1"
-                                            style="border-radius: 12px; font-size: 16px;">$143</span>
-                                    </span>
-
-                                </p>
+                            <div class="flex gap-3 items-baseline">
+                                <span class="font-medium text-sm text-red-500">-17%</span>
+                                <span class="font-medium text-gray-900 text-lg">$95.9</span>
+                                <span class="text-lg font-medium text-white line-through bg-[#c91f3f] px-2 py-1 py-auto"
+                                    style="border-radius: 12px; font-size: 16px;">$143</span>
                             </div>
                         </div>
                         <p>🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.</p>
 
                         <!-- Checkout Button -->
                         <button
-                            class="w-full flex justify-center items-center bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg text-lg">
-                            CHECKOUT WITH
-                            <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal"
+                            :class="['w-full flex justify-center items-center  font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
+                            {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
+                            <img v-if="paymentMethod === 'payPal'"
+                                src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal"
                                 class="h-6 ml-2">
                         </button>
-                        <!-- <div class="flex justify-center">
-                        <img src="/images/ssl2.jpg" class="w-2/4">
-                    </div> -->
 
                         <div
                             class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">

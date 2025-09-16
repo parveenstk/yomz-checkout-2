@@ -20,3 +20,53 @@ export const gummyBagsSelector = [
         shipping: "$7.99 Shipping"
     }
 ];
+
+export const productData = [
+    {
+        id: 1,
+        img: {
+            ogGummies: '/images/og-bag.png',
+            soursGummies: '/images/sour-bag.png'
+        },
+        title: {
+            ogGummies: 'OG Gummies',
+            soursGummies: 'Sours Gummies'
+        },
+        bagQty: 1,
+        compareAtPrice: 79.99,
+        price: 48,
+        percentageOff: 40
+    },
+
+    {
+        id: 2,
+        img: {
+            ogGummies: '/images/og-bag.png',
+            soursGummies: '/images/sour-bag.png'
+        },
+        title: {
+            ogGummies: 'OG Gummies',
+            soursGummies: 'Sours Gummies'
+        },
+        bagQty: 2,
+        compareAtPrice: 159.98,
+        price: 78,
+        percentageOff: 51
+    },
+
+    {
+        id: 3,
+        img: {
+            ogGummies: '/images/og-bag.png',
+            soursGummies: '/images/sour-bag.png'
+        },
+        title: {
+            ogGummies: 'OG Gummies',
+            soursGummies: 'Sours Gummies'
+        },
+        bagQty: 3,
+        compareAtPrice: 239.97,
+        price: 96,
+        percentageOff: 60
+    }
+];
