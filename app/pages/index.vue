@@ -17,7 +17,7 @@ const sameBilling = ref(true);
 
 const slides = [
     '/images/slider1.jpg',
-    '/images/slider3.jpg',    
+    '/images/slider3.jpg',
     '/images/slider4.jpg',
     '/images/slider2.jpg',
     '/images/slider5.jpg',
@@ -191,13 +191,13 @@ watch(paymentMethod, (newValue) => {
 
     <section class="w-full lg:py-5 lg:p-2 py-2 p-0">
         <div
-            class="max-w-[1200px] mx-auto flex  bg-yellow-200 border border-yellow-300 rounded-md px-4 py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium ">
+            class="max-w-[1200px] mx-auto flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium ">
 
             <!-- Fire Icon -->
             <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
 
             <!-- Text -->
-            <p class="text-center text-[18px]">
+            <p class="text-center text-lg">
                 YOMZ is selling like hotcakes & inventory is very limited.
                 But we've reserved your order for:
                 <!-- <span class="text-red-600 font-bold">10 MIN 00 SEC</span> -->
@@ -370,7 +370,6 @@ watch(paymentMethod, (newValue) => {
                     </div>
                 </article>
 
-
                 <!-- Review item -->
                 <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
                     <div class="flex items-center gap-4">
@@ -495,8 +494,6 @@ watch(paymentMethod, (newValue) => {
                 </article>
             </div>
         </div>
-
-
 
         <!-- Right Column -->
         <div class="">
@@ -656,7 +653,6 @@ watch(paymentMethod, (newValue) => {
                                 <time class="text-[#90949c] text-xs text-400 ml-auto">10/7/25</time>
                             </div>
                         </article>
-
 
                         <!-- Review item -->
                         <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
@@ -1110,7 +1106,7 @@ watch(paymentMethod, (newValue) => {
     </div>
 
     <div class="max-w-[1200px] mx-auto py-5">
-        <div class="w-full bg-white shadow rounded-lg lg:p-6 p-3">
+        <div class="w-full bg-white shadow rounded-lg lg:p-6 p-3 lg:pt-0 pt-6">
 
             <!-- Section Title -->
             <h2 class="text-center text-2xl font-bold text-gray-800 mb-6">
