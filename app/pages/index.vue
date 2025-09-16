@@ -217,16 +217,16 @@ const selectedBag = ref(1);
                     </div>
                 </div>
 
-                <h2 class="d-block text-[20px] font-bold mt-3 border-b border-[#e7e7e7] pb-4 py-4 mb-4 uppercase">
+                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 py-4 mb-4 uppercase">
                     STEP 1: Select Gummy Style
                 </h2>
 
                 <div class="flex space-x-6 mb-8">
                     <!-- OG Gummies Selector -->
-                    <label class="flex items-center space-x-2 cursor-pointer">
+                    <label class="flex items-center space-x-1 cursor-pointer">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
-                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            class="w-6 h-6 border-2 shrink-0 aspect-square rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -242,10 +242,10 @@ const selectedBag = ref(1);
                     </label>
 
                     <!-- Sours Selector -->
-                    <label class="flex items-center space-x-2 cursor-pointer">
+                    <label class="flex items-center space-x-1 cursor-pointer">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
-                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            class="w-6 h-6 border-2 shrink-0 aspect-square rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -261,6 +261,12 @@ const selectedBag = ref(1);
                         <span class="text-gray-700 font-medium text-[18px]">Sour Gummies</span>
                     </label>
                 </div>
+
+
+
+                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 py-4 mb-4 uppercase">
+                    STEP 2: Select Order Quantity
+                </h2>
 
                 <!-- BEST SELLER -->
                 <label v-for="value in gummyBagsSelector" :key="value.id" @click="selectedBag = value.id"
@@ -302,16 +308,17 @@ const selectedBag = ref(1);
         <div class="">
             <div class="bg-white p-4 rounded-lg shadow">
 
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-0 uppercase">
+                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 2: PAYMENT METHOD
                 </h2>
 
                 <!-- PayPal -->
-                <label class="flex items-center justify-between  pl-0 pt-6 pr-6 pb-6 border-b cursor-pointer">
+                <label
+                    class="flex items-center justify-between  pl-0 pt-6 pr-6 pb-6 border-b border-[#e7e7e7] cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
-                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            class="w-6 h-6 border-2  rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -356,7 +363,7 @@ const selectedBag = ref(1);
             </div>
             <div class="bg-white p-4 rounded-lg shadow mt-3">
 
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-0 uppercase">
+                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                     STEP 3: CONTACT INFORMATION
                 </h2>
 
@@ -386,8 +393,11 @@ const selectedBag = ref(1);
                     </form>
                 </div>
 
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-4 mb-3 text-center">
-                    What Customers say about YOMZ:
+
+                <h2
+                    class="text-3xl lg:text-2xl font-bold border-b text-centerc border-[#e7e7e7] lg:pb-4 pb-2 pt-4 mb-3 text-center">
+                    <span class="block md:inline">Families Like You</span>
+                    <span class="block md:inline"> Already Trust YOMZ</span>
                 </h2>
                 <!-- Review item -->
                 <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
@@ -396,7 +406,7 @@ const selectedBag = ref(1);
                         <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-1.jpg" alt="" />
                         <div class="flex-1 min-w-0">
                             <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Dorothy P.</h3>
+                                <h3 class="font-semibold text-gray-900 truncate">Deb M.</h3>
                                 <span
                                     class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
                                     Buyer</span>
@@ -437,14 +447,15 @@ const selectedBag = ref(1);
                     </div>
 
                     <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">I got the 9x family bundle and I LOVE THEM!!</h4>
+                        <h4 class="font-semibold text-gray-800">Perfect for the whole fam!</h4>
                         <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            I live in a smaller home and have grandkids over every week. One of them has allergies, so I
-                            wanted to try something that might help. I plugged in the YOMZ devices to my living
-                            room, bedrooms, and bathrooms, and wouldn’t you know! Less sneezing, less dust! It’s quiet,
-                            no filter nonsense, and it just works.
+                            I got YOMZ for my 4yo daughter. It only took a week to get a bag for me lol. I've noticed a
+                            difference in my gut health and my daughter's moods. When my husband gets back from
+                            deployment,
+                            we'll be getting a 3rd bag!
+
                         </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">06/17/25</time>
+                        <time class="text-[#90949c] text-xs text-400 ml-auto">10/7/25</time>
                     </div>
                 </article>
 
@@ -452,10 +463,10 @@ const selectedBag = ref(1);
                 <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
 
                     <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-7.jpg" alt="" />
+                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-3.jpg" alt="" />
                         <div class="flex-1 min-w-0">
                             <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Clinton G.</h3>
+                                <h3 class="font-semibold text-gray-900 truncate">Misty C.</h3>
                                 <span
                                     class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
                                     Buyer</span>
@@ -496,13 +507,14 @@ const selectedBag = ref(1);
                     </div>
 
                     <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">Excellence product.</h4>
+                        <h4 class="font-semibold text-gray-800">All my husband's fault...</h4>
                         <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            I’m an older guy and don’t usually mess w/ this kinda
-                            stuff but my daughter swore by it so figured why not.
-                            plugged it in...and way less dust! THANKS!
+                            My husband loves gummies, so when he found YOMZ, he had to try, didn't care if it was
+                            nutritious, just that it tasted good. Once I tried them, I started reading up on them. I was
+                            shocked to find out how nutritious they are, so I had to order for me and our 6yo
+                            soccer-crazy daughter.
                         </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">05/29/25</time>
+                        <time class="text-[#90949c] text-xs text-400 ml-auto">10/06/25</time>
                     </div>
                 </article>
 
@@ -510,10 +522,10 @@ const selectedBag = ref(1);
                 <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
 
                     <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-6.jpg" alt="" />
+                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-2.jpg" alt="" />
                         <div class="flex-1 min-w-0">
                             <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Ashley P.</h3>
+                                <h3 class="font-semibold text-gray-900 truncate">Sheila T.</h3>
                                 <span
                                     class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
                                     Buyer</span>
@@ -554,21 +566,21 @@ const selectedBag = ref(1);
                     </div>
 
                     <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">This easily cleans my dusty home.</h4>
+                        <h4 class="font-semibold text-gray-800">Meets our many needs...</h4>
                         <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            our house ALWAYS picks up dust easily. But I got this lil
-                            plug in thing to try and honestly? shocked. not saying
-                            it’s magic but it’s def doing something. ended up getting
-                            6 of them so now every room has one. soooo glad i did.
+                            We're a very active family. Hubs is into boats, my son football, daughter volleyball, and
+                            I'm a runner. So a snack that's nutritious AND convenient is a must. YOMZ is perfect. Highly
+                            recommend!
                         </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">03/21/25</time>
+                        <time class="text-[#90949c] text-xs text-400 ml-auto">9/29/25</time>
                     </div>
                 </article>
 
             </div>
 
             <div class="bg-white p-4 rounded-lg shadow mt-3">
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+
+                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
                     STEP 4: SHIPPING ADDRESS
                 </h2>
 
@@ -672,9 +684,13 @@ const selectedBag = ref(1);
             </div>
 
             <div class="bg-white p-4 rounded-lg shadow mt-3">
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+
+
+                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
                     STEP 5: BILLING ADDRESS
                 </h2>
+
+
 
                 <label class="flex items-center justify-between pb-4 cursor-pointer">
                     <div class="flex items-center space-x-3">
@@ -742,20 +758,24 @@ const selectedBag = ref(1);
             </div>
 
             <div class="bg-white p-4 rounded-lg shadow mt-3">
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
                     STEP 6: ORDER SUMMARY
                 </h2>
 
-                <div
-                    class="w-full bg-[#f5f5f5] border-[#e0e0e0 ] rounded-lg shadow-sm lg:p-6  p-3 space-y-4 text-center">
+                <div class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-3 space-y-4 
+         text-center hover:border-[#323232] 
+         transition-all duration-[400ms] ease-[cubic-bezier(0,0,0.3,1)]">
 
                     <!-- Icon at top -->
                     <div class="flex justify-center">
-                        <span class="text-4xl"><img src="/images/funds.png" class="h-16"></span>
+                        <span class="text-4xl">
+                            <img src="/images/funds.png" class="h-16">
+                        </span>
                     </div>
 
                     <!-- Radio + Heading -->
-                    <label class="flex items-center space-x-3 cursor-pointer justify-center">
+                    <label class="flex items-center space-x-3 cursor-pointer justify-center relative">
+                        <img data-v-02281a80="" src="/images/redarrow.svg" class="w-6 lg:w-6 absolute arrowimg">
                         <input type="radio" name="protection"
                             class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500">
                         <span class="font-semibold text-gray-900 text-lg">
@@ -770,8 +790,8 @@ const selectedBag = ref(1);
                         <span class="font-semibold">$19.97</span>. This extended warranty means your product is
                         covered for 2 years.
                     </p>
-
                 </div>
+
 
                 <div class="w-full pt-6 space-y-6">
 
@@ -1009,11 +1029,7 @@ const selectedBag = ref(1);
 
     </footer>
 
-    <div class="max-w-[1200px] mx-auto px-4 py-8 gap-8">
-        <div class="w-full">
-
-        </div>
-    </div>
+    
 
 </template>
 
@@ -1023,9 +1039,56 @@ const selectedBag = ref(1);
     animation: rotateclc 12s linear infinite;
 }
 
+.arrowimg{
+
+    -webkit-animation: leftdemote 3s infinite;
+    animation: leftdemote 3s infinite;
+}
+
 @keyframes rotateclc {
     100% {
         transform: rotate(-360deg);
     }
 }
+
+
+.rotateclc {width: 25px;
+    display: inline-block;
+    margin-right: 10px;
+    position: absolute;
+    -webkit-animation: leftdemote 3s infinite;
+    animation: leftdemote 3s infinite;
+    top: -1.5px;
+    left: -30px;}
+
+
+.rotateclc {
+            width: 25px;
+            display: inline-block;
+            margin-right: 10px;
+            position: absolute;
+            -webkit-animation: F8JCcsKhiTKy7IF_xpqsB 3s infinite;
+            animation: F8JCcsKhiTKy7IF_xpqsB 3s infinite;
+            top: -1.5px;
+            left: -30px;
+        }
+
+
+@keyframes leftdemote {
+            0% {
+                left: -30px;
+            }
+
+            10% {
+                left: -40px;
+            }
+
+            18% {
+                left: -24px;
+            }
+
+            25% {
+                left: -30px;
+            }
+        }
 </style>
