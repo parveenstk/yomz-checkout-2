@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { gummyBagsSelector } from '~/assets/data/checkout'
 
+// Gummy bags
+const selectedBag = ref(1);
+
+// Payment method
+const paymentMethod = ref('creditCard');
+console.log('paymentMethod:', paymentMethod.value);
+
+// same billing
+const sameBilling = ref(true);
+
 const slides = [
     '/images/slider1.jpg',
     '/images/slider2.jpg',
@@ -51,8 +61,9 @@ onMounted(() => {
     startCountdown()
 })
 
-// Gummy bags
-const selectedBag = ref(1);
+watch(paymentMethod, (newValue) => {
+    console.log('newValue:', newValue);
+});
 
 </script>
 <template>
@@ -301,18 +312,19 @@ const selectedBag = ref(1);
         <!-- Right Column -->
         <div class="">
             <div class="bg-white p-4 rounded-lg shadow">
-
                 <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-0 uppercase">
                     STEP 2: PAYMENT METHOD
                 </h2>
 
-                <!-- PayPal -->
-                <label class="flex items-center justify-between  pl-0 pt-6 pr-6 pb-6 border-b cursor-pointer">
+                <!-- PayPal Method -->
+                <label @click="paymentMethod = 'payPal'"
+                    class="flex items-center justify-between  pl-0 pt-6 pr-6 pb-6 border-b cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
                             class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                            <svg v-if="paymentMethod === 'payPal'" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                 <g id="SVGRepo_iconCarrier">
@@ -327,13 +339,15 @@ const selectedBag = ref(1);
                     </div>
                 </label>
 
-                <!-- Credit Card -->
-                <label class="flex items-center justify-between pl-0 pt-6 pr-6 pb-6 cursor-pointer">
+                <!-- Credit Card Method -->
+                <label @click="paymentMethod = 'creditCard'"
+                    class="flex items-center justify-between pl-0 pt-6 pr-6 pb-6 cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
                             class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                            <svg v-if="paymentMethod === 'creditCard'" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                 <g id="SVGRepo_iconCarrier">
@@ -354,506 +368,592 @@ const selectedBag = ref(1);
                 </label>
 
             </div>
-            <div class="bg-white p-4 rounded-lg shadow mt-3">
 
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-0 uppercase">
-                    STEP 3: CONTACT INFORMATION
-                </h2>
+            <section v-if="paymentMethod === 'creditCard' || paymentMethod === 'payPal'">
+                <!-- STEP 3: CONTACT INFORMATION -->
+                <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-0 uppercase">
+                        STEP 3: CONTACT INFORMATION
+                    </h2>
 
-                <div class="bg-white pt-4">
+                    <div class="bg-white pt-4">
+                        <form class="space-y-4">
+                            <!-- First & Last Name -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="first-name" placeholder="First Name"
+                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                                <input type="text" placeholder="Last Name"
+                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                            </div>
+
+                            <!-- Email -->
+                            <input type="email" placeholder="E-mail"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+
+                            <!-- Phone -->
+                            <div class="flex items-center w-full">
+                                <div class="flex items-center bg-white shadow-md px-3 py-2 rounded-md mr-2 h-[60px]">
+                                    <img src="/images/flag.png" alt="US Flag" class="h-6 mr-1">
+                                    <span class="text-gray-700">+1</span>
+                                </div>
+                                <input type="tel" placeholder="Phone"
+                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                            </div>
+                        </form>
+                    </div>
+
+                    <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-4 mb-3 text-center">
+                        What Customers say about YOMZ:
+                    </h2>
+                    <!-- Review item -->
+                    <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
+
+                        <div class="flex items-center gap-4">
+                            <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-1.jpg" alt="" />
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-baseline gap-2">
+                                    <h3 class="font-semibold text-gray-900 truncate">Dorothy P.</h3>
+                                    <span
+                                        class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
+                                        Buyer</span>
+                                </div>
+                                <div class="mt-1 flex items-center gap-2">
+                                    <!-- Stars -->
+                                    <div class="flex items-center">
+                                        <!-- 5 filled stars -->
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-1">
+                            <h4 class="font-semibold text-gray-800">I got the 9x family bundle and I LOVE THEM!!</h4>
+                            <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
+                                I live in a smaller home and have grandkids over every week. One of them has allergies,
+                                so I
+                                wanted to try something that might help. I plugged in the YOMZ devices to my living
+                                room, bedrooms, and bathrooms, and wouldn’t you know! Less sneezing, less dust! It’s
+                                quiet,
+                                no filter nonsense, and it just works.
+                            </p>
+                            <time class="text-[#90949c] text-xs text-400 ml-auto">06/17/25</time>
+                        </div>
+                    </article>
+
+                    <!-- Review item -->
+                    <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
+
+                        <div class="flex items-center gap-4">
+                            <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-7.jpg" alt="" />
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-baseline gap-2">
+                                    <h3 class="font-semibold text-gray-900 truncate">Clinton G.</h3>
+                                    <span
+                                        class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
+                                        Buyer</span>
+                                </div>
+                                <div class="mt-1 flex items-center gap-2">
+                                    <!-- Stars -->
+                                    <div class="flex items-center">
+                                        <!-- 5 filled stars -->
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-1">
+                            <h4 class="font-semibold text-gray-800">Excellence product.</h4>
+                            <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
+                                I’m an older guy and don’t usually mess w/ this kinda
+                                stuff but my daughter swore by it so figured why not.
+                                plugged it in...and way less dust! THANKS!
+                            </p>
+                            <time class="text-[#90949c] text-xs text-400 ml-auto">05/29/25</time>
+                        </div>
+                    </article>
+
+                    <!-- Review item -->
+                    <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
+
+                        <div class="flex items-center gap-4">
+                            <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-6.jpg" alt="" />
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-baseline gap-2">
+                                    <h3 class="font-semibold text-gray-900 truncate">Ashley P.</h3>
+                                    <span
+                                        class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
+                                        Buyer</span>
+                                </div>
+                                <div class="mt-1 flex items-center gap-2">
+                                    <!-- Stars -->
+                                    <div class="flex items-center">
+                                        <!-- 5 filled stars -->
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
+                                        </svg>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-1">
+                            <h4 class="font-semibold text-gray-800">This easily cleans my dusty home.</h4>
+                            <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
+                                our house ALWAYS picks up dust easily. But I got this lil
+                                plug in thing to try and honestly? shocked. not saying
+                                it’s magic but it’s def doing something. ended up getting
+                                6 of them so now every room has one. soooo glad i did.
+                            </p>
+                            <time class="text-[#90949c] text-xs text-400 ml-auto">03/21/25</time>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- STEP 4: SHIPPING ADDRESS -->
+                <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
+                    <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+                        STEP 4: SHIPPING ADDRESS
+                    </h2>
+
                     <form class="space-y-4">
                         <!-- First & Last Name -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input type="text" id="first-name" placeholder="First Name"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <input type="text" placeholder="First Name"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                             <input type="text" placeholder="Last Name"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                         </div>
 
                         <!-- Email -->
-                        <input type="email" placeholder="E-mail"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                        <input type="text" placeholder="Street Address"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                        <input type="text" placeholder="Apartment or Suite (Optional)"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                        <input type="text" placeholder="City"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                        <input type="text" placeholder="Street Address"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
 
-                        <!-- Phone -->
-                        <div class="flex items-center w-full">
-                            <div class="flex items-center bg-white shadow-md px-3 py-2 rounded-md mr-2 h-[60px]">
-                                <img src="https://flagcdn.com/w20/us.png" alt="US Flag" class="h-6 mr-1">
-                                <span class="text-gray-700">+1</span>
-                            </div>
-                            <input type="tel" placeholder="Phone"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                        <select
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <option value="us">United States</option>
+                            <option value="ca">Canada</option>
+                        </select>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <select
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <option value="us">-- Choose State --</option>
+                                <option value="us">United States</option>
+                                <option value="ca">Canada</option>
+                            </select>
+
+                            <input type="text" placeholder="Postal Code"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                         </div>
+
+                        <input type="text" placeholder="Credit Card Number"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                        <input type="text" placeholder="Security Code (3-4 Digits)"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <select
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <option>
+                                    Card Month</option>
+                                <option value="01">
+                                    01 - January</option>
+                                <option value="02">
+                                    02 - February</option>
+                                <option value="03">
+                                    03 - March</option>
+                                <option value="04">
+                                    04 - April</option>
+                                <option value="05">
+                                    05 - May</option>
+                                <option value="06">
+                                    06 - June</option>
+                                <option value="07">
+                                    07 - July</option>
+                                <option value="08">
+                                    08 - August</option>
+                                <option value="09">
+                                    09 - September</option>
+                                <option value="10">
+                                    10 - October</option>
+                                <option value="11">
+                                    11 - November</option>
+                                <option value="12">
+                                    12 - December</option>
+                            </select>
+
+                            <select
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <option value="">Exp Year</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                                <option value="2029">2029</option>
+                                <option value="2030">2030</option>
+                                <option value="2031">2031</option>
+                                <option value="2032">2032</option>
+                                <option value="2033">2033</option>
+                                <option value="2034">2034</option>
+                                <option value="2035">2035</option>
+                                <option value="2036">2036</option>
+                                <option value="2037">2037</option>
+                                <option value="2038">2038</option>
+                                <option value="2039">2039</option>
+                                <option value="2040">2040</option>
+                            </select>
+                        </div>
+
                     </form>
                 </div>
 
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-4 mb-3 text-center">
-                    What Customers say about YOMZ:
-                </h2>
-                <!-- Review item -->
-                <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
+                <!-- STEP 5: BILLING ADDRESS -->
+                <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
+                    <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+                        STEP 5: BILLING ADDRESS
+                    </h2>
 
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-1.jpg" alt="" />
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Dorothy P.</h3>
-                                <span
-                                    class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                    Buyer</span>
+                    <!-- <label class="flex items-center justify-between pb-4 cursor-pointer">
+                        <div @click="sameBilling = true" class="flex items-center space-x-3">
+                            Same as shipping address
+                            <input type="radio" name="YOMZ" class="peer hidden">
+                            <div
+                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                                <svg v-if="sameBilling" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        </path>
+                                    </g>
+                                </svg>
                             </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <!-- Stars -->
-                                <div class="flex items-center">
-                                    <!-- 5 filled stars -->
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                </div>
-
-                            </div>
+                            <span>Same as shipping address.</span>
                         </div>
-                    </div>
-
-                    <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">I got the 9x family bundle and I LOVE THEM!!</h4>
-                        <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            I live in a smaller home and have grandkids over every week. One of them has allergies, so I
-                            wanted to try something that might help. I plugged in the YOMZ devices to my living
-                            room, bedrooms, and bathrooms, and wouldn’t you know! Less sneezing, less dust! It’s quiet,
-                            no filter nonsense, and it just works.
-                        </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">06/17/25</time>
-                    </div>
-                </article>
-
-                <!-- Review item -->
-                <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
-
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-7.jpg" alt="" />
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Clinton G.</h3>
-                                <span
-                                    class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                    Buyer</span>
-                            </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <!-- Stars -->
-                                <div class="flex items-center">
-                                    <!-- 5 filled stars -->
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">Excellence product.</h4>
-                        <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            I’m an older guy and don’t usually mess w/ this kinda
-                            stuff but my daughter swore by it so figured why not.
-                            plugged it in...and way less dust! THANKS!
-                        </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">05/29/25</time>
-                    </div>
-                </article>
-
-                <!-- Review item -->
-                <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
-
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-6.jpg" alt="" />
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Ashley P.</h3>
-                                <span
-                                    class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                    Buyer</span>
-                            </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <!-- Stars -->
-                                <div class="flex items-center">
-                                    <!-- 5 filled stars -->
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">This easily cleans my dusty home.</h4>
-                        <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            our house ALWAYS picks up dust easily. But I got this lil
-                            plug in thing to try and honestly? shocked. not saying
-                            it’s magic but it’s def doing something. ended up getting
-                            6 of them so now every room has one. soooo glad i did.
-                        </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">03/21/25</time>
-                    </div>
-                </article>
-
-            </div>
-
-            <div class="bg-white p-4 rounded-lg shadow mt-3">
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
-                    STEP 4: SHIPPING ADDRESS
-                </h2>
-
-                <form class="space-y-4">
-                    <!-- First & Last Name -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <input type="text" placeholder="First Name"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <input type="text" placeholder="Last Name"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    </div>
-
-                    <!-- Email -->
-                    <input type="text" placeholder="Street Address"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    <input type="text" placeholder="Apartment or Suite (Optional)"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    <input type="text" placeholder="City"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    <input type="text" placeholder="Street Address"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-
-                    <select
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <option value="us">United States</option>
-                        <option value="ca">Canada</option>
-                    </select>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <select
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <option value="us">-- Choose State --</option>
-                            <option value="us">United States</option>
-                            <option value="ca">Canada</option>
-                        </select>
-
-                        <input type="text" placeholder="Postal Code"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    </div>
-
-                    <input type="text" placeholder="Credit Card Number"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    <input type="text" placeholder="Security Code (3-4 Digits)"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <select
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <option>
-                                Card Month</option>
-                            <option value="01">
-                                01 - January</option>
-                            <option value="02">
-                                02 - February</option>
-                            <option value="03">
-                                03 - March</option>
-                            <option value="04">
-                                04 - April</option>
-                            <option value="05">
-                                05 - May</option>
-                            <option value="06">
-                                06 - June</option>
-                            <option value="07">
-                                07 - July</option>
-                            <option value="08">
-                                08 - August</option>
-                            <option value="09">
-                                09 - September</option>
-                            <option value="10">
-                                10 - October</option>
-                            <option value="11">
-                                11 - November</option>
-                            <option value="12">
-                                12 - December</option>
-                        </select>
-
-                        <select
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <option value="">Exp Year</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                            <option value="2028">2028</option>
-                            <option value="2029">2029</option>
-                            <option value="2030">2030</option>
-                            <option value="2031">2031</option>
-                            <option value="2032">2032</option>
-                            <option value="2033">2033</option>
-                            <option value="2034">2034</option>
-                            <option value="2035">2035</option>
-                            <option value="2036">2036</option>
-                            <option value="2037">2037</option>
-                            <option value="2038">2038</option>
-                            <option value="2039">2039</option>
-                            <option value="2040">2040</option>
-                        </select>
-                    </div>
-
-                </form>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg shadow mt-3">
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
-                    STEP 5: BILLING ADDRESS
-                </h2>
-
-                <label class="flex items-center justify-between pb-4 cursor-pointer">
-                    <div class="flex items-center space-x-3">
-                        <!-- Custom Radio -->
-                        <input type="radio" name="payment" class="peer hidden">
-                        <span
-                            class="w-6 h-6 border-2 border-blue-700 rounded-full flex items-center justify-center peer-checked:bg-blue-700">
-                            <!-- Check Icon -->
-                        </span>
-                        <span> Same as shipping address.</span>
-                    </div>
-                </label>
-
-                <label class="flex items-center justify-between pb-4 cursor-pointer">
-                    <div class="flex items-center space-x-3">
-                        <!-- Custom Radio -->
-                        <input type="radio" name="payment" class="peer hidden">
-                        <span
-                            class="w-6 h-6 border-2 border-blue-700 rounded-full flex items-center justify-center peer-checked:bg-blue-700">
-                            <!-- Check Icon -->
-                        </span>
-                        <span> Use a different billing address.</span>
-                    </div>
-                </label>
-
-                <form class="space-y-4">
-                    <!-- First & Last Name -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <input type="text" placeholder="First Name"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <input type="text" placeholder="Last Name"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    </div>
-
-                    <!-- Email -->
-                    <input type="text" placeholder="Street Address"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    <input type="text" placeholder="Apartment or Suite (Optional)"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    <input type="text" placeholder="City"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    <input type="text" placeholder="Street Address"
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-
-                    <select
-                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <option value="us">United States</option>
-                        <option value="ca">Canada</option>
-                    </select>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <select
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <option value="us">-- Choose State --</option>
-                            <option value="us">United States</option>
-                            <option value="ca">Canada</option>
-                        </select>
-
-                        <input type="text" placeholder="Postal Code"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                    </div>
-
-                </form>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg shadow mt-3">
-                <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
-                    STEP 6: ORDER SUMMARY
-                </h2>
-
-                <div
-                    class="w-full bg-[#f5f5f5] border-[#e0e0e0 ] rounded-lg shadow-sm lg:p-6  p-3 space-y-4 text-center">
-
-                    <!-- Icon at top -->
-                    <div class="flex justify-center">
-                        <span class="text-4xl"><img src="/images/funds.png" class="h-16"></span>
-                    </div>
-
-                    <!-- Radio + Heading -->
-                    <label class="flex items-center space-x-3 cursor-pointer justify-center">
-                        <input type="radio" name="protection"
-                            class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500">
-                        <span class="font-semibold text-gray-900 text-lg">
-                            Yes, I want 2 Years of Protection.
-                        </span>
                     </label>
 
-                    <!-- Description -->
-                    <p class="text-gray-700 text-sm">
-                        <span class="font-semibold">One Time Offer:</span> By placing your order today you can have
-                        2 years of protection and replacement warranty for only an additional
-                        <span class="font-semibold">$19.97</span>. This extended warranty means your product is
-                        covered for 2 years.
-                    </p>
-
-                </div>
-
-                <div class="w-full pt-6 space-y-6">
-
-                    <!-- Product Section -->
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-2">
-                            <p class="font-medium text-800 text-lg">Product</p>
+                    <label class="flex items-center justify-between pb-4 cursor-pointer">
+                        <div @click="sameBilling = false" class="flex items-center space-x-3">
+                            Use a different billing address
+                            <input type="radio" name="YOMZ" class="peer hidden">
+                            <div
+                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                                <svg v-if="!sameBilling" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        </path>
+                                    </g>
+                                </svg>
+                            </div>
+                            <span> Use a different billing address.</span>
                         </div>
-                        <p class="font-medium text-gray-800 text-lg">Price</p>
-                    </div>
+                    </label> -->
 
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-start space-x-4">
-                            <img src="/images/og-bag.png" alt="Product" class="w-16 h-16 object-contain border rounded">
-                            <div>
-                                <h3 class="font-semibold text-gray-900">OG Gummies</h3>
-                                <span
-                                    class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full">2
-                                    Bags</span>
+                    <!-- STEP 5: BILLING ADDRESS -->
+                    <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
+                        <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+                            STEP 5: BILLING ADDRESS
+                        </h2>
+
+                        <!-- Option: Same as shipping address -->
+                        <div class="flex items-center justify-between pb-4 ">
+                            <div class="flex items-center space-x-3">
+                                <div @click="sameBilling = true"
+                                    class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
+                                    :class="{ 'bg-[#172969]': sameBilling }">
+                                    <svg v-if="sameBilling" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <span class="cursor-pointer select-none" @click="sameBilling = true">
+                                    Same as shipping address</span>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-sm text-red-500 line-through">Regular $134.91</p>
-                            <p class="font-semibold text-gray-900">$95.91</p>
+
+                        <!-- Option: Use a different billing address -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div @click="sameBilling = false"
+                                    class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
+                                    :class="{ 'bg-[#172969]': !sameBilling }">
+                                    <svg v-if="!sameBilling" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <span @click="sameBilling = false" class="cursor-pointer select-none">
+                                    Use a different billing address</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Free Shipping -->
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-lg"><img src="/images/check-icons.png"></span>
-                            <p class="font-medium text-gray-800">Free shipping</p>
+                    <Transition name="sameName">
+                        <form v-if="!sameBilling" class="space-y-4">
+                            <!-- First & Last Name -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <input type="text" placeholder="First Name"
+                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <input type="text" placeholder="Last Name"
+                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            </div>
+
+                            <!-- Email -->
+                            <input type="text" placeholder="Street Address"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <input type="text" placeholder="Apartment or Suite (Optional)"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <input type="text" placeholder="City"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <input type="text" placeholder="Street Address"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+
+                            <select
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <option value="us">United States</option>
+                                <option value="ca">Canada</option>
+                            </select>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                <select
+                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                    <option value="us">-- Choose State --</option>
+                                    <option value="us">United States</option>
+                                    <option value="ca">Canada</option>
+                                </select>
+
+                                <input type="text" placeholder="Postal Code"
+                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            </div>
+
+                        </form>
+                    </Transition>
+                </div>
+
+                <!-- ORDER SUMMARY -->
+                <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+                        {{ paymentMethod === 'payPal' ? 'STEP 4' : 'STEP 6' }}: ORDER SUMMARY
+                    </h2>
+
+                    <div
+                        class="w-full bg-[#f5f5f5] border-[#e0e0e0 ] rounded-lg shadow-sm lg:p-6  p-3 space-y-4 text-center">
+
+                        <!-- Icon at top -->
+                        <div class="flex justify-center">
+                            <span class="text-4xl"><img src="/images/funds.png" class="h-16"></span>
                         </div>
-                        <p class="text-sm"><span class="line-through text-red-500">$7.95</span>
-                            <span class="text-green-600 font-medium">Free</span>
+
+                        <!-- STEP 6: ORDER SUMMARY -->
+                        <label class="flex items-center space-x-3 cursor-pointer justify-center">
+                            <input type="radio" name="YOMZ" class="peer hidden">
+                            <div
+                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                    stroke="#ffffff">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        </path>
+                                    </g>
+                                </svg>
+                            </div>
+                            <span class="font-semibold text-gray-900 text-lg">
+                                Yes, I want 2 Years of Protection.
+                            </span>
+                        </label>
+
+                        <!-- Description -->
+                        <p class="text-gray-700 text-sm">
+                            <span class="font-semibold">One Time Offer:</span> By placing your order today you can have
+                            2 years of protection and replacement warranty for only an additional
+                            <span class="font-semibold">$19.97</span>. This extended warranty means your product is
+                            covered for 2 years.
                         </p>
+
                     </div>
 
-                    <!-- Total -->
-                    <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center">
-                        <div>
-                            <p class="font-medium text-gray-700">Total: <span class="text-sm">Before Taxes</span>
-                            </p>
+                    <div class="w-full pt-6 space-y-6">
+
+                        <!-- Product Section -->
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-2">
+                                <p class="font-medium text-800 text-lg">Product</p>
+                            </div>
+                            <p class="font-medium text-gray-800 text-lg">Price</p>
                         </div>
-                        <div class="text-right">
-                            <p> <span class="text-sm text-red-500">-17%</span>
-                                <span class="font-bold text-gray-900 text-lg">$95.91
+
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-start space-x-4">
+                                <img src="/images/og-bag.png" alt="Product"
+                                    class="w-16 h-16 object-contain border rounded">
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">OG Gummies</h3>
                                     <span
-                                        class="text-lg text-red-500 line-through ml-2 bg-[#c91f3f] pt-1 pr-4 pl-4 pb-1"
-                                        style="border-radius: 12px; font-size: 16px;">$143</span>
-                                </span>
+                                        class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full">2
+                                        Bags</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-red-500 line-through">Regular $134.91</p>
+                                <p class="font-semibold text-gray-900">$95.91</p>
+                            </div>
+                        </div>
 
+                        <!-- Free Shipping -->
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-lg"><img src="/images/check-icons.png"></span>
+                                <p class="font-medium text-gray-800">Free shipping</p>
+                            </div>
+                            <p class="text-sm"><span class="line-through text-red-500">$7.95</span>
+                                <span class="text-green-600 font-medium">Free</span>
                             </p>
                         </div>
-                    </div>
-                    <p>🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.</p>
 
-                    <!-- Checkout Button -->
-                    <button
-                        class="w-full flex justify-center items-center bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg text-lg">
-                        CHECKOUT WITH
-                        <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal"
-                            class="h-6 ml-2">
-                    </button>
-                    <!-- <div class="flex justify-center">
+                        <!-- Total -->
+                        <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center">
+                            <div>
+                                <p class="font-medium text-gray-700">Total: <span class="text-sm">Before Taxes</span>
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <p> <span class="text-sm text-red-500">-17%</span>
+                                    <span class="font-bold text-gray-900 text-lg">$95.91
+                                        <span
+                                            class="text-lg text-red-500 line-through ml-2 bg-[#c91f3f] pt-1 pr-4 pl-4 pb-1"
+                                            style="border-radius: 12px; font-size: 16px;">$143</span>
+                                    </span>
+
+                                </p>
+                            </div>
+                        </div>
+                        <p>🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.</p>
+
+                        <!-- Checkout Button -->
+                        <button
+                            class="w-full flex justify-center items-center bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg text-lg">
+                            CHECKOUT WITH
+                            <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal"
+                                class="h-6 ml-2">
+                        </button>
+                        <!-- <div class="flex justify-center">
                         <img src="/images/ssl2.jpg" class="w-2/4">
                     </div> -->
 
-                    <div
-                        class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
-                        <img src="/images/guarantee.png" alt="" class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
-                            Your order today is protected by our ridiculously iron-clad Picky Momz
-                            90-day <span class="font-bold">200% Happiness Guarantee.</span> If you’re not happy with how
-                            <span class="font-bold">great</span> you and your family
-                            feel, or how improved your energy, focus, and gut issues are, then let us know anytime in
-                            the next <span class="font-bold">90 days.</span> We’ll refund <span
-                                class="font-bold">DOUBLE</span> what you paid.
-                        </p>
+                        <div
+                            class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
+                            <img src="/images/guarantee.png" alt=""
+                                class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
+                            <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
+                                Your order today is protected by our ridiculously iron-clad Picky Momz
+                                90-day <span class="font-bold">200% Happiness Guarantee.</span> If you’re not happy with
+                                how
+                                <span class="font-bold">great</span> you and your family
+                                feel, or how improved your energy, focus, and gut issues are, then let us know anytime
+                                in
+                                the next <span class="font-bold">90 days.</span> We’ll refund <span
+                                    class="font-bold">DOUBLE</span> what you paid.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
         </div>
     </div>
 
