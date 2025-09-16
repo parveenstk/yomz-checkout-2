@@ -764,7 +764,7 @@ const selectedBag = ref(1);
 
                 <div class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-3 space-y-4 
          text-center hover:border-[#323232] 
-         transition-all duration-[400ms] ease-[cubic-bezier(0,0,0.3,1)]">
+         transition-all duration-[400ms]">
 
                     <!-- Icon at top -->
                     <div class="flex justify-center">
@@ -774,8 +774,8 @@ const selectedBag = ref(1);
                     </div>
 
                     <!-- Radio + Heading -->
-                    <label class="flex items-center space-x-3 cursor-pointer justify-center relative">
-                        <img data-v-02281a80="" src="/images/redarrow.svg" class="w-6 lg:w-6 absolute arrowimg">
+                    <label class="items-center space-x-3 cursor-pointer justify-center relative">
+                        <img data-v-02281a80="" src="/images/redarrow.svg" class="w-6 lg:w-6 absolute right-7 arrowimg">
                         <input type="radio" name="protection"
                             class="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500">
                         <span class="font-semibold text-gray-900 text-lg">
@@ -1029,7 +1029,7 @@ const selectedBag = ref(1);
 
     </footer>
 
-    
+
 
 </template>
 
@@ -1038,57 +1038,34 @@ const selectedBag = ref(1);
     -webkit-animation: rotateclc 12s linear infinite;
     animation: rotateclc 12s linear infinite;
 }
-
-.arrowimg{
-
-    -webkit-animation: leftdemote 3s infinite;
-    animation: leftdemote 3s infinite;
-}
-
+.arrowimg {
+-webkit-animation: leftdemote 3s infinite;
+    animation: leftdemote 3s infinite;}
 @keyframes rotateclc {
     100% {
         transform: rotate(-360deg);
     }
 }
-
-
-.rotateclc {width: 25px;
-    display: inline-block;
+.arrowimg {
     margin-right: 10px;
     position: absolute;
     -webkit-animation: leftdemote 3s infinite;
     animation: leftdemote 3s infinite;
-    top: -1.5px;
-    left: -30px;}
-
-
-.rotateclc {
-            width: 25px;
-            display: inline-block;
-            margin-right: 10px;
-            position: absolute;
-            -webkit-animation: F8JCcsKhiTKy7IF_xpqsB 3s infinite;
-            animation: F8JCcsKhiTKy7IF_xpqsB 3s infinite;
-            top: -1.5px;
-            left: -30px;
-        }
-
-
+    top: -5px;
+    left: -30px;
+}
 @keyframes leftdemote {
-            0% {
-                left: -30px;
-            }
-
-            10% {
-                left: -40px;
-            }
-
-            18% {
-                left: -24px;
-            }
-
-            25% {
-                left: -30px;
-            }
-        }
+    0% {
+        left: -30px;
+    }
+    10% {
+        left: -40px;
+    }
+    18% {
+        left: -24px;
+    }
+    25% {
+        left: -30px;
+    }
+}
 </style>
