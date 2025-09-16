@@ -60,10 +60,10 @@ function startCountdown() {
 }
 
 // Add data in Cart
-// const addProductData = (id: number) => {
-//     selectedBag.value = id
-//     console.log('id:', id);
-// };
+const addProductData = (id: number) => {
+    selectedBag.value = id
+    console.log('id:', id);
+};
 
 onMounted(() => {
     startCountdown()
