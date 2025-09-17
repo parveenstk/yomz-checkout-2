@@ -21,6 +21,22 @@ export const gummyBagsSelector = [
     }
 ];
 
+export const gymmyTypeData = [
+    {
+        id: 'ogGummies',
+        img: '/images/og-bag.png',
+        name: 'OG Gummies',
+        alt: 'og-bag'
+    },
+
+    {
+        id: 'soursGummies',
+        img: '/images/sour-bag.png',
+        name: 'Sour Gummies',
+        alt: 'sours-bag'
+    }
+];
+
 export const productData: ProductData[] = [
     {
         id: 1,
@@ -33,9 +49,10 @@ export const productData: ProductData[] = [
             soursGummies: 'Sours Gummies'
         },
         bagQty: 2,
-        compareAtPrice: 79.99,
-        price: 48,
-        percentageOff: 40
+        compareAtPrice: 159.98,
+        price: 78,
+        percentageOff: 51
+
     },
 
     {
@@ -49,9 +66,9 @@ export const productData: ProductData[] = [
             soursGummies: 'Sours Gummies'
         },
         bagQty: 3,
-        compareAtPrice: 159.98,
-        price: 78,
-        percentageOff: 51
+        compareAtPrice: 239.97,
+        price: 96,
+        percentageOff: 60
     },
 
     {
@@ -65,8 +82,8 @@ export const productData: ProductData[] = [
             soursGummies: 'Sours Gummies'
         },
         bagQty: 1,
-        compareAtPrice: 239.97,
-        price: 96,
-        percentageOff: 60
+        compareAtPrice: 79.99,
+        price: 48,
+        percentageOff: 40
     }
 ];

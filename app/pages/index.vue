@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { gummyBagsSelector, productData } from '~/assets/data/checkout';
+import { gummyBagsSelector, gymmyTypeData, productData } from '~/assets/data/checkout';
 
 // Gummy type
-const gummyType = ref('');
+const gummyType = ref('ogGummies');
 const cartData: Ref<ProductData[]> = ref([]);
 
 // Gummy bags
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('creditCard');
+const paymentMethod = ref('payPal');
 // console.log('paymentMethod:', paymentMethod.value);
 
 // same billing
@@ -239,55 +239,41 @@ watch(paymentMethod, (newValue) => {
                     </div>
                 </div>
 
+                <!-- STEP 1: Select Gummy Style -->
                 <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 py-4 mb-4 uppercase">
                     STEP 1: Select Gummy Style
                 </h2>
 
-                <div class="flex space-x-2 lg:space-x-6 mb-8">
-                    <!-- OG Gummies Gummy -->
-                    <label @click="gummyType = 'ogGummies'" class="flex items-center space-x-1 cursor-pointer">
-                        <input type="radio" name="YOMZ" class="peer hidden">
-                        <div
-                            class="w-6 h-6 border-2 shrink-0 aspect-square rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
-                            <img v-if="gummyType === 'ogGummies'" src="/images/whiteTick.svg" alt="white-tick">
-                        </div>
-                        <img src="/images/og-bag.png" alt="Option 1" class="w-12 h-12 lg:w-16 lg:h-16  object-cover" />
-                        <span class="text-gray-700 font-medium text-lg leading-5">OG Gummies</span>
-                    </label>
-
-                    <!-- Sours Gummy -->
-                    <label @click="gummyType = 'soursGummies'" class="flex items-center space-x-1 cursor-pointer">
-                        <input type="radio" name="YOMZ" class="peer hidden">
-                        <div
-                            class="w-6 h-6 border-2 shrink-0 aspect-square rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
-                            <img v-if="gummyType === 'soursGummies'" src="/images/whiteTick.svg" alt="white-tick">
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
+                    <!-- Gummy Selectors -->
+                    <div v-for="value in gymmyTypeData" :key="value.id"
+                        class="flex items-center space-x-1 cursor-pointer relative" @click="gummyType = value.id">
+                        <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3"
+                            :class="{ 'bg-[#172969] ': gummyType === value.id }">
+                            <NuxtImg v-if="gummyType === value.id" src="/images/whiteTick.svg" alt="white-tick" />
                         </div>
 
-                        <img src="/images/sour-bag.png" alt="Option 2"
-                            class="w-12 h-12 lg:w-16 lg:h-16  object-cover" />
-                        <span class="text-gray-700 font-medium text-lg leading-5">Sour Gummies</span>
-                    </label>
+                        <NuxtImg :src="value.img" width="64" height="64" :alt="value.alt" />
+                        <span class="text-gray-700 font-medium text-lg leading-5">
+                            {{ value.name }}
+                        </span>
+                    </div>
                 </div>
 
+                <!-- STEP 2: Select Order Quantity -->
                 <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 py-4 mb-4 uppercase">
                     STEP 2: Select Order Quantity
                 </h2>
 
-                <label v-for="value in gummyBagsSelector" :key="value.id" :class="['relative flex items-center justify-between pl-0 pt-4 pb-4 pr-4 border-yellow-400 cursor-pointer',
+                <div v-for="value in gummyBagsSelector" :key="value.id" @click="addProductData(value.id)" :class="[
+                    'flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer transition relative',
                     value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
                     <div class="flex items-center space-x-3">
-                        <!-- Custom Radio -->
-                        <input type="radio" name="YOMZ" class="peer hidden" :value="value.id"
-                            :checked="selectedBag === value.id" @change="addProductData(value.id)" />
-                        <div :class="[
-                            'w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] ml-3',
-                            { 'bg-[#172969]': selectedBag === value.id }
-                        ]">
-                            <svg v-if="selectedBag === value.id" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
+                        <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2" :class="{
+                            'bg-[#172969]': selectedBag === value.id,
+                            'border-[#172969]': selectedBag !== value.id
+                        }">
+                            <NuxtImg v-if="selectedBag === value.id" src="/images/whiteTick.svg" />
                         </div>
 
                         <p :class="{ 'w-2/3': value.id === 1 }">
@@ -296,14 +282,18 @@ watch(paymentMethod, (newValue) => {
                         </p>
                     </div>
 
-                    <div :class="['text-right text-sm text-gray-900', value.id === 1 && 'font-bold']">
+                    <div :class="[
+                        'text-right text-sm text-gray-900',
+                        value.id === 1 ? 'font-bold' : ''
+                    ]">
                         <p>${{ value.price.toFixed(2) }} each</p>
                         <p class="uppercase">{{ value.shipping }}</p>
                     </div>
 
                     <img v-if="value.id === 1" src="/images/redarrow.svg"
-                        class="w-8 lg:w-12 absolute lg:-left-10 -left-5" />
-                </label>
+                        class="w-8 lg:w-12 absolute lg:-left-10 -left-5" alt="Best Seller Arrow" />
+                </div>
+
             </div>
 
             <div name="reviews-section" class="lg:hidden bg-white p-3 rounded-lg shadow mt-3">
@@ -559,8 +549,10 @@ watch(paymentMethod, (newValue) => {
             </div>
 
             <section v-if="paymentMethod === 'creditCard' || paymentMethod === 'payPal'" class="lg:m-0 m-2">
+
                 <!-- STEP 3: CONTACT INFORMATION -->
-                <div class="bg-white p-4 rounded-lg shadow mt-3">
+                <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
+                <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
                     <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                         STEP 3: CONTACT INFORMATION
                     </h2>
@@ -1024,7 +1016,7 @@ watch(paymentMethod, (newValue) => {
                     </div>
 
                     <!-- Product Section -->
-                    <div class="w-full pt-6 space-y-6">
+                    <div v-for="product in cartData" :key="product.id" class=" w-full pt-6 space-y-6">
 
                         <div name="product-details">
                             <div class="flex justify-between items-center mb-2">
@@ -1034,23 +1026,22 @@ watch(paymentMethod, (newValue) => {
                                 <p class="font-medium text-gray-800 text-lg">Price</p>
                             </div>
 
-                            <div v-for="product in cartData" :key="product.id"
-                                class="flex justify-between items-start mb-2">
+                            <div class="flex justify-between items-start mb-2">
                                 <div class="flex items-start space-x-4">
                                     <img :src="product.img[gummyType]" alt="Product"
                                         class="w-16 h-16 object-contain border rounded">
                                     <div>
                                         <h3 class="font-semibold text-gray-900">{{ product.title[gummyType] }}</h3>
                                         <span
-                                            class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full">{{
-                                                product.bagQty }}
-                                            Bags</span>
+                                            class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full">
+                                            {{ product.bagQty }} Bags
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-sm text-red-500 line-through">Regular ${{ product.compareAtPrice }}
-                                    </p>
-                                    <p class="font-semibold text-gray-900">${{ product.price }}</p>
+                                    <p class="text-sm text-red-500 line-through">
+                                        Regular ${{ product.compareAtPrice }}</p>
+                                    <p class="font-semibold text-gray-900">${{ product.price.toFixed(2) }}</p>
                                 </div>
                             </div>
 
@@ -1060,10 +1051,14 @@ watch(paymentMethod, (newValue) => {
                                     <img class="w-5" src="/images/check-icons.png">
                                     <p class=" text-lg font-medium text-gray-800">Free shipping</p>
                                 </div>
-                                <p class="text-sm">
-                                    <span class="text-md line-through text-red-500">$7.95</span>
-                                    <span class="text-md text-green-600 font-medium"> Free</span>
-                                </p>
+                                <div v-if="product.id === 3">
+                                    <span class="text-md font-medium">$7.95</span>
+                                </div>
+                                <div v-else class="flex gap-1">
+                                    <span class="text-md font-medium line-through text-red-500">$7.95</span>
+                                    <span class="text-md font-medium text-green-600 ">Free</span>
+                                </div>
+
                             </div>
 
                             <!-- Total -->
@@ -1073,17 +1068,33 @@ watch(paymentMethod, (newValue) => {
                                         <span class="text-sm">Before Taxes</span>
                                     </p>
                                 </div>
+
                                 <div class="flex gap-3 items-baseline">
-                                    <span class="font-medium text-sm text-red-500">-17%</span>
-                                    <span class="font-medium text-gray-900 text-lg">$95.9</span>
+                                    <!-- discount % -->
+                                    <span class="font-medium text-sm text-red-500">
+                                        -{{ product.percentageOff }}%</span>
+
+                                    <!-- final price -->
+                                    <span class="font-medium text-gray-900 text-lg">
+                                        ${{ product.id === 3
+                                            ? (product.price + 7.95) : product.price }}
+                                    </span>
+
+                                    <!-- total price -->
                                     <span
-                                        class="text-lg font-medium text-white line-through bg-[#c91f3f] px-2 py-1 py-auto"
-                                        style="border-radius: 12px; font-size: 16px;">$143</span>
+                                        class="text-md font-medium text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
+                                        ${{ product.id === 3
+                                            ? (Number(product.compareAtPrice) + 7.95).toFixed(2)
+                                            : Number(product.compareAtPrice).toFixed(2)
+                                        }}
+                                    </span>
+
                                 </div>
                             </div>
-                            <p class="text-center">🔒 By placing this order you accept YOMZ's Privacy Policy and Terms
-                                of
-                                Use.</p>
+
+                            <p class="text-center">
+                                🔒 By placing this order you accept YOMZ's Privacy Policy and Terms ofUse.
+                            </p>
                         </div>
 
                         <!-- Checkout Button -->
@@ -1100,14 +1111,15 @@ watch(paymentMethod, (newValue) => {
                             <img src="/images/guarantee.png" alt=""
                                 class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
                             <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
-                                Your order today is protected by our ridiculously iron-clad Picky Momz
-                                90-day <span class="font-bold">200% Happiness Guarantee.</span> If you’re not happy with
-                                how
-                                <span class="font-bold">great</span> you and your family
-                                feel, or how improved your energy, focus, and gut issues are, then let us know anytime
-                                in
-                                the next <span class="font-bold">90 days.</span> We’ll refund <span
-                                    class="font-bold">DOUBLE</span> what you paid.
+                                Your order today is protected by our ridiculously iron-clad Picky Momz 90-day
+                                <span class="font-bold">200% Happiness Guarantee.</span>
+                                If you’re not happy with how
+                                <span class="font-bold">great</span>
+                                you and your family feel, or how improved your energy, focus, and gut issues are, then
+                                let us know anytime in the next
+                                <span class="font-bold">90 days.</span> We’ll refund <span
+                                    class="font-bold">DOUBLE</span>
+                                what you paid.
                             </p>
                         </div>
                     </div>
