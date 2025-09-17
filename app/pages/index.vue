@@ -1000,7 +1000,7 @@ watch(paymentMethod, (newValue) => {
                                         </g>
                                     </svg>
                                 </div>
-                                <span class="font-semibold text-gray-900 lg:text-lg text-base lg:ms-5 ms-2 ">
+                                <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
                                     Yes, I want 2 Years of Protection.
                                 </span>
                             </label>
@@ -1130,7 +1130,7 @@ watch(paymentMethod, (newValue) => {
     </div>
 
     <div class="max-w-[1200px] mx-auto py-5">
-        <div class="w-full bg-white shadow rounded-lg lg:p-6 p-3 lg:pt-0 pt-6">
+        <div class="w-full bg-white shadow rounded-lg lg:p-6 p-3 lg:pt-6 pt-6">
 
             <!-- Section Title -->
             <h2 class="text-center text-2xl font-bold text-gray-800 mb-6">
