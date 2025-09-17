@@ -200,7 +200,7 @@ watch(paymentMethod, (newValue) => {
             <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
 
             <!-- Text -->
-            <p class="text-center text-lg">
+            <p class="text-center text-lg font-bold">
                 YOMZ is selling like hotcakes & inventory is very limited.
                 But we've reserved your order for:
                 <!-- <span class="text-red-600 font-bold">10 MIN 00 SEC</span> -->
@@ -211,7 +211,7 @@ watch(paymentMethod, (newValue) => {
         </div>
     </section>
 
-    <div class="max-w-[1200px] mx-auto px-0 py-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-1 lg:gap-8">
+    <div class="max-w-[1200px] mx-auto px-0 py-2 grid grid-cols-1 md:grid-cols-2 gap-1 lg:gap-8">
 
         <!-- Left Column -->
         <div class="lg:p-0 p-2 ">
@@ -254,7 +254,7 @@ watch(paymentMethod, (newValue) => {
                         </div>
 
                         <NuxtImg :src="value.img" width="64" height="64" :alt="value.alt" />
-                        <span class="text-gray-700 font-medium text-lg leading-5">
+                        <span class="text-gray text-lg leading-5 font-extrabold">
                             {{ value.name }}
                         </span>
                     </div>
@@ -294,7 +294,7 @@ watch(paymentMethod, (newValue) => {
 
             </div>
 
-            <div name="reviews-section" class="lg:hidden bg-white p-3 rounded-lg shadow mt-3">
+            <div name="reviews-section" class="block md:hidden bg-white p-3 rounded-lg shadow mt-3">
                 <h2
                     class="text-3xl lg:text-2xl font-bold border-b text-centerc border-[#e7e7e7] lg:pb-4 pb-2 pt-4 mb-3 text-center">
                     <span class="block md:inline">Families Like You</span>
