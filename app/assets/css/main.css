@@ -41,3 +41,13 @@
 }
 
 .extrablod{font-family: 'century_gothic_paneuropeanXBd'}
+
+@media screen and (max-width: 366px) {
+.odr-text{font-size: 10px;}
+
+}
+
+@media screen and (max-width: 348px) {
+.odr-text{font-size: 9px;}
+
+}
