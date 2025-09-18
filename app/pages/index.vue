@@ -1,28 +1,29 @@
 <script setup lang="ts">
-import { gummyBagsSelector, gymmyTypeData, productData } from '~/assets/data/checkout';
+import { gummyBagsSelector, gymmyTypeData, productData, slides } from '~/assets/data/checkout';
 
 // Gummy type
 const gummyType = ref('ogGummies');
-const cartData: Ref<ProductData[]> = ref([]);
+// const cartData: Ref<ProductData[]> = ref([]);
+// const cartData: Ref<ProductData[]> = ref([productData[0]!]);
+let cartData: Ref<ProductData[]> = ref([]);
+if (Array.isArray(productData) && productData[0]) {
+    cartData.value[0] = productData[0];
+};
 
 // Gummy bags
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('payPal');
+const paymentMethod = ref('');
 // console.log('paymentMethod:', paymentMethod.value);
 
 // same billing
 const sameBilling = ref(true);
 
-const slides = [
-    '/images/slider1.jpg',
-    '/images/slider3.jpg',
-    '/images/slider4.jpg',
-    '/images/slider2.jpg',
-    '/images/slider5.jpg',
-]
+// add extra product
+const extraProduct = ref(false);
 
+// carousel slider
 const activeSlide = ref(0)
 const currentSlide = computed(() => slides[activeSlide.value])
 
@@ -62,9 +63,8 @@ function startCountdown() {
 // Add data in Cart
 const addProductData = (id: number) => {
     selectedBag.value = id;
-    const selectedProduct: ProductData = productData.find(p => p.id === id)!;
+    const selectedProduct: ProductData = productData.find(product => product.id === id)!;
     console.log("selectedProduct", selectedProduct)
-    // cartData.value.push(selectedProduct);
     cartData.value[0] = selectedProduct
 };
 
@@ -269,10 +269,8 @@ watch(paymentMethod, (newValue) => {
                     'flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer transition relative',
                     value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
                     <div class="flex items-center space-x-3">
-                        <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2" :class="{
-                            'bg-[#172969]': selectedBag === value.id,
-                            'border-[#172969]': selectedBag !== value.id
-                        }">
+                        <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2"
+                            :class="{ 'bg-[#172969]': selectedBag === value.id, 'border-[#172969]': selectedBag !== value.id }">
                             <NuxtImg v-if="selectedBag === value.id" src="/images/whiteTick.svg" />
                         </div>
 
@@ -551,8 +549,8 @@ watch(paymentMethod, (newValue) => {
             <section v-if="paymentMethod === 'creditCard' || paymentMethod === 'payPal'" class="lg:m-0 m-2">
 
                 <!-- STEP 3: CONTACT INFORMATION -->
-                <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
-                <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
+                <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <!-- <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3"> -->
                     <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                         STEP 3: CONTACT INFORMATION
                     </h2>
@@ -969,9 +967,8 @@ watch(paymentMethod, (newValue) => {
                         {{ paymentMethod === 'payPal' ? 'STEP 4' : 'STEP 6' }}: ORDER SUMMARY
                     </h2>
 
-                    <div class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-4 
-         text-center hover:border-[#323232] 
-         transition-all duration-[400ms]">
+                    <div @click="extraProduct = !extraProduct"
+                        class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
 
                         <!-- Icon at top -->
                         <div class="flex justify-center">
@@ -985,7 +982,7 @@ watch(paymentMethod, (newValue) => {
 
                             <label class="flex items-center cursor-pointer justify-center w-fit">
                                 <img data-v-02281a80="" src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative">
-                                <input type="radio" name="YOMZ" class="peer hidden">
+                                <!-- <input type="radio" name="YOMZ" class="peer hidden">
                                 <div
                                     class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-0">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -999,7 +996,19 @@ watch(paymentMethod, (newValue) => {
                                             </path>
                                         </g>
                                     </svg>
+                                </div> -->
+
+                                <!-- <div
+                                    class="w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3">
+                                    <NuxtImg src="/images/whiteTick.svg" alt="white-tick" />
+                                </div> -->
+
+                                <div :class="[
+                                    'w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3 cursor-pointer',
+                                    extraProduct ? 'bg-[#172969]' : 'bg-transparent']">
+                                    <NuxtImg v-if="extraProduct" src="/images/whiteTick.svg" alt="white-tick" />
                                 </div>
+
                                 <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
                                     Yes, I want 2 Years of Protection.
                                 </span>
@@ -1021,9 +1030,9 @@ watch(paymentMethod, (newValue) => {
                         <div name="product-details">
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center space-x-2">
-                                    <p class="font-medium text-800 text-lg">Product</p>
+                                    <p class="text-800 text-lg font-bold">Product</p>
                                 </div>
-                                <p class="font-medium text-gray-800 text-lg">Price</p>
+                                <p class="text-gray-800 text-lg font-bold">Price</p>
                             </div>
 
                             <div class="flex justify-between items-start mb-2">
@@ -1033,15 +1042,15 @@ watch(paymentMethod, (newValue) => {
                                     <div>
                                         <h3 class="font-semibold text-gray-900">{{ product.title[gummyType] }}</h3>
                                         <span
-                                            class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full">
+                                            class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full font-semibold">
                                             {{ product.bagQty }} Bags
                                         </span>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-sm text-red-500 line-through">
+                                    <p class="text-sm text-red-500 line-through font-semibold">
                                         Regular ${{ product.compareAtPrice }}</p>
-                                    <p class="font-semibold text-gray-900">${{ product.price.toFixed(2) }}</p>
+                                    <p class="text-gray-900 font-semibold">${{ product.price.toFixed(2) }}</p>
                                 </div>
                             </div>
 
@@ -1049,14 +1058,14 @@ watch(paymentMethod, (newValue) => {
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center space-x-2">
                                     <img class="w-5" src="/images/check-icons.png">
-                                    <p class=" text-lg font-medium text-gray-800">Free shipping</p>
+                                    <p class="text-lg font-semibold text-gray-800">Free shipping</p>
                                 </div>
                                 <div v-if="product.id === 3">
-                                    <span class="text-md font-medium">$7.95</span>
+                                    <span class="text-md font-bold">$7.95</span>
                                 </div>
                                 <div v-else class="flex gap-1">
-                                    <span class="text-md font-medium line-through text-red-500">$7.95</span>
-                                    <span class="text-md font-medium text-green-600 ">Free</span>
+                                    <span class="text-md font-semibold line-through text-red-500">$7.95</span>
+                                    <span class="text-md font-semibold text-green-600 ">Free</span>
                                 </div>
 
                             </div>
@@ -1077,7 +1086,7 @@ watch(paymentMethod, (newValue) => {
                                     <!-- final price -->
                                     <span class="font-bold text-gray-900 text-lg">
                                         ${{ product.id === 3
-                                            ? (product.price + 7.95) : product.price }}
+                                            ? (product.price + 7.95).toFixed(2) : product.price.toFixed(2) }}
                                     </span>
 
                                     <!-- total price -->
@@ -1092,8 +1101,8 @@ watch(paymentMethod, (newValue) => {
                                 </div>
                             </div>
 
-                            <p class="text-center">
-                                🔒 By placing this order you accept YOMZ's Privacy Policy and Terms ofUse.
+                            <p class="text-center text-[0.9rem] font-medium">
+                                🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.
                             </p>
                         </div>
 
