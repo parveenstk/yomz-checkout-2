@@ -105,24 +105,8 @@
                         <p data-v-02281a80="">$39.00 each</p>
                         <p class="uppercase" data-v-02281a80="">Incl. FREE Shipping</p>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col text-center">
-                        <h1>OG Gummies</h1>
-                        <img src="/images/og-bag.png" class="w-18">
-                        <p><span class="font-bold">BEST SELLER
-                            </span><span class="text-gray-800 w-[10%]" data-v-02281a80="">51% OFF: 2 Bags</span></p>
-
-                        <p data-v-02281a80="">$39.00 each</p>
-                        <p class="uppercase" data-v-02281a80="">Incl. FREE Shipping</p>
-                    </div>
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col text-center">
-                        <h1>OG Gummies</h1>
-                        <img src="/images/og-bag.png" class="w-18">
-                        <p><span class="font-bold">BEST SELLER
-                            </span><span class="text-gray-800 w-[10%]" data-v-02281a80="">51% OFF: 2 Bags</span></p>
-
-                        <p data-v-02281a80="">$39.00 each</p>
-                        <p class="uppercase" data-v-02281a80="">Incl. FREE Shipping</p>
-                    </div>
+                  
+                    
                 </div>
             </div>
         </div>
