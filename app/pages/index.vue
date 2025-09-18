@@ -147,7 +147,7 @@ watch(paymentMethod, (newValue) => {
 
             <!-- Right: Text Content -->
             <div class="space-y-4">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900 leading-snug text-center md:text-left">
+                <h2 class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left">
                     Families Like Yours Are Using YOMZ to Boost Their Nutrition and Supercharge Their Lives
                 </h2>
 
@@ -200,7 +200,7 @@ watch(paymentMethod, (newValue) => {
             <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
 
             <!-- Text -->
-            <p class="text-center text-lg font-bold">
+            <p class="text-center text-lg extrablod">
                 YOMZ is selling like hotcakes & inventory is very limited.
                 But we've reserved your order for:
                 <!-- <span class="text-red-600 font-bold">10 MIN 00 SEC</span> -->
@@ -232,9 +232,9 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Right Text -->
                     <div class="text-center sm:text-center space-y-1">
-                        <p class="text-700 text-[#C91F3F] font-bold text-xl">Your up to 60% Discount Has Been Applied
+                        <p class="text-700 text-[#C91F3F] extrablod text-xl">Your up to 60% Discount Has Been Applied
                         </p>
-                        <p class="text-gray-700">Your Order Today Qualifies for a <span class="font-bold">Bulk
+                        <p class="text-gray-700">Your Order Today Qualifies for a <span class="extrablod">Bulk
                                 Discount</span></p>
                     </div>
                 </div>
@@ -574,8 +574,8 @@ watch(paymentMethod, (newValue) => {
                             <!-- Phone -->
                             <div class="flex items-center w-full">
                                 <div class="flex items-center bg-white shadow-md px-3 py-2 rounded-md mr-2 h-[60px]">
-                                    <img src="/images/flag.png" alt="US Flag" class="h-6 mr-1">
-                                    <span class="text-gray-700">+1</span>
+                                    <img src="/images/flag.png" alt="US Flag" class="lg:h-5 h-4  mr-1">
+                                    <span class="text-gray font-bold">+1</span>
                                 </div>
                                 <input type="tel" placeholder="Phone"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
@@ -1029,7 +1029,7 @@ watch(paymentMethod, (newValue) => {
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex items-start space-x-4">
                                     <img :src="product.img[gummyType]" alt="Product"
-                                        class="w-16 h-16 object-contain border rounded">
+                                        class="w-20 h-20 object-contain border rounded">
                                     <div>
                                         <h3 class="font-semibold text-gray-900">{{ product.title[gummyType] }}</h3>
                                         <span
@@ -1064,25 +1064,25 @@ watch(paymentMethod, (newValue) => {
                             <!-- Total -->
                             <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
                                 <div>
-                                    <p class="font-medium text-gray-700">Total:
+                                    <p class="text-gray font-bold">Total:
                                         <span class="text-sm">Before Taxes</span>
                                     </p>
                                 </div>
 
-                                <div class="flex gap-3 items-baseline">
+                                <div class="flex gap-3 items-baseline font-bold">
                                     <!-- discount % -->
-                                    <span class="font-medium text-sm text-red-500">
+                                    <span class="font-bold text-sm text-red">
                                         -{{ product.percentageOff }}%</span>
 
                                     <!-- final price -->
-                                    <span class="font-medium text-gray-900 text-lg">
+                                    <span class="font-bold text-gray-900 text-lg">
                                         ${{ product.id === 3
                                             ? (product.price + 7.95) : product.price }}
                                     </span>
 
                                     <!-- total price -->
                                     <span
-                                        class="text-md font-medium text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
+                                        class="text-md font-bold text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
                                         ${{ product.id === 3
                                             ? (Number(product.compareAtPrice) + 7.95).toFixed(2)
                                             : Number(product.compareAtPrice).toFixed(2)
@@ -1133,10 +1133,9 @@ watch(paymentMethod, (newValue) => {
         <div class="w-full bg-white shadow rounded-lg lg:p-6 p-3 lg:pt-6 pt-6">
 
             <!-- Section Title -->
-            <h2 class="text-center text-2xl font-bold text-gray-800 mb-6">
+            <h2 class="text-center text-2xl extrablod text-gray-800 mb-6">
                 FREQUENTLY ASKED QUESTIONS
             </h2>
-
             <!-- FAQ Item 1 -->
             <div class="mb-4">
                 <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
