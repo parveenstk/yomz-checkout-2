@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
 import { useFormStore } from '../../stores/formStore';
+import Reviews from '~/components/Reviews.vue';
 
 // Gummy type
 const gummyType = ref('ogGummies');
@@ -24,6 +25,9 @@ const extraProduct = ref(false);
 
 // form store data 
 const { formFields, formSubmit } = useFormStore()
+
+// track screen size
+const isMobile = ref(false)
 
 // carousel slider
 const activeSlide = ref(0)
@@ -71,7 +75,14 @@ const addProductData = (id: number) => {
 };
 
 onMounted(() => {
-    startCountdown()
+    const update = () => {
+        isMobile.value = window.innerWidth < 768
+    }
+
+    update()
+    window.addEventListener('resize', update)
+
+    startCountdown() // timer runs
 })
 
 watch(paymentMethod, (newValue) => {
@@ -158,14 +169,16 @@ watch(paymentMethod, (newValue) => {
                     <!-- Point 1 -->
                     <div class="flex items-start">
                         <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">Fill in Your Family’s Nutrition Gaps and Help Transform Their Lives!
+                        <p class="text-gray-700">Fill in Your Family’s Nutrition Gaps and Help Transform Their
+                            Lives!
                         </p>
                     </div>
 
                     <!-- Point 2 -->
                     <div class="flex items-start">
                         <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">Packed with Vitamins, Antioxidants, and Nutrients from 18 Superfoods
+                        <p class="text-gray-700">Packed with Vitamins, Antioxidants, and Nutrients from 18
+                            Superfoods
                         </p>
                     </div>
 
@@ -179,7 +192,8 @@ watch(paymentMethod, (newValue) => {
                     <!-- Point 4 -->
                     <div class="flex items-start">
                         <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">Crafted to Support: Gut Health, Energy, Focus, Mood, Brain Activity,
+                        <p class="text-gray-700">Crafted to Support: Gut Health, Energy, Focus, Mood, Brain
+                            Activity,
                             Immunity, Heart Function, Vision, Family Nutrition</p>
                     </div>
 
@@ -234,7 +248,8 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Right Text -->
                     <div class="text-center sm:text-center space-y-1">
-                        <p class="text-700 text-[#C91F3F] extrablod text-xl">Your up to 60% Discount Has Been Applied
+                        <p class="text-700 text-[#C91F3F] extrablod text-xl">Your up to 60% Discount Has Been
+                            Applied
                         </p>
                         <p class="text-gray-700">Your Order Today Qualifies for a <span class="extrablod">Bulk
                                 Discount</span></p>
@@ -293,199 +308,12 @@ watch(paymentMethod, (newValue) => {
                     <img v-if="value.id === 1" src="/images/redarrow.svg"
                         class="w-8 lg:w-12 absolute lg:-left-10 -left-5" alt="Best Seller Arrow" />
                 </div>
-
             </div>
 
-            <div name="reviews-section" class="block md:hidden bg-white p-3 rounded-lg shadow mt-3">
-                <h2
-                    class="text-3xl lg:text-2xl font-bold border-b text-centerc border-[#e7e7e7] lg:pb-4 pb-2 pt-4 mb-3 text-center">
-                    <span class="block md:inline">Families Like You</span>
-                    <span class="block md:inline"> Already Trust YOMZ</span>
-                </h2>
-                <!-- Review item -->
-                <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
+            <!-- Mobile Screen -->
+            <!-- <Reviews class="block md:hidden bg-white p-3 rounded-lg shadow mt-3" /> -->
+            <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
 
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-1.jpg" alt="" />
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Deb M.</h3>
-                                <span
-                                    class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                    Buyer</span>
-                            </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <!-- Stars -->
-                                <div class="flex items-center">
-                                    <!-- 5 filled stars -->
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">Perfect for the whole fam!
-                        </h4>
-                        <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            I got YOMZ for my 4yo daughter. It only took a week to get a bag for me lol. I've noticed a
-                            difference in my gut health and my daughter's moods. When my husband gets back from
-                            deployment,
-                            we'll be getting a 3rd bag!
-
-                        </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">10/7/25</time>
-                    </div>
-                </article>
-
-                <!-- Review item -->
-                <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-3.jpg" alt="" />
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Misty C.</h3>
-                                <span
-                                    class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                    Buyer</span>
-                            </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <!-- Stars -->
-                                <div class="flex items-center">
-                                    <!-- 5 filled stars -->
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">All my husband's fault...</h4>
-                        <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            My husband loves gummies, so when he found YOMZ, he had to try, didn't care if it
-                            was
-                            nutritious, just that it tasted good. Once I tried them, I started reading up on
-                            them. I
-                            was
-                            shocked to find out how nutritious they are, so I had to order for me and our 6yo
-                            soccer-crazy daughter.
-                        </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">10/06/25</time>
-                    </div>
-                </article>
-
-                <!-- Review item -->
-                <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
-
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-2.jpg" alt="" />
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-baseline gap-2">
-                                <h3 class="font-semibold text-gray-900 truncate">Sheila T.</h3>
-                                <span
-                                    class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                    Buyer</span>
-                            </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <!-- Stars -->
-                                <div class="flex items-center">
-                                    <!-- 5 filled stars -->
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                    <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path
-                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                    </svg>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-1">
-                        <h4 class="font-semibold text-gray-800">Meets our many needs...</h4>
-                        <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                            We're a very active family. Hubs is into boats, my son football, daughter
-                            volleyball,
-                            and
-                            I'm a runner. So a snack that's nutritious AND convenient is a must. YOMZ is
-                            perfect.
-                            Highly
-                            recommend!
-                        </p>
-                        <time class="text-[#90949c] text-xs text-400 ml-auto">9/29/25</time>
-                    </div>
-                </article>
-            </div>
         </div>
 
         <!-- Right Column -->
@@ -586,133 +414,9 @@ watch(paymentMethod, (newValue) => {
                         </form>
                     </div>
 
-                    <div name="reviews-section" class="hidden md:block">
-                        <h2
-                            class="text-3xl lg:text-2xl font-bold border-b text-centerc border-[#e7e7e7] lg:pb-4 pb-2 pt-4 mb-3 text-center">
-                            <span class="block md:inline">Families Like You</span>
-                            <span class="block md:inline"> Already Trust YOMZ</span>
-                        </h2>
-                        <!-- Review item -->
-                        <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
-
-                            <div class="flex items-center gap-4">
-                                <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-1.jpg" alt="" />
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-baseline gap-2">
-                                        <h3 class="font-semibold text-gray-900 truncate">Deb M.</h3>
-                                        <span
-                                            class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                            Buyer</span>
-                                    </div>
-                                    <div class="mt-1 flex items-center gap-2">
-                                        <!-- Stars -->
-                                        <div class="flex items-center">
-                                            <svg v-for="i in 5" :key=i class="w-4 h-4 text-yellow-400"
-                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-1">
-                                <h4 class="font-semibold text-gray-800">Perfect for the whole fam!
-                                </h4>
-                                <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                                    I got YOMZ for my 4yo daughter. It only took a week to get a bag for me lol. I've
-                                    noticed a difference in my gut health and my daughter's moods. When my husband gets
-                                    back
-                                    from deployment, we'll be getting a 3rd bag!
-                                </p>
-                                <time class="text-[#90949c] text-xs text-400 ml-auto">10/7/25</time>
-                            </div>
-                        </article>
-
-                        <!-- Review item -->
-                        <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
-                            <div class="flex items-center gap-4">
-                                <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-3.jpg" alt="" />
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-baseline gap-2">
-                                        <h3 class="font-semibold text-gray-900 truncate">Misty C.</h3>
-                                        <span
-                                            class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                            Buyer</span>
-                                    </div>
-                                    <div class="mt-1 flex items-center gap-2">
-                                        <!-- Stars -->
-                                        <div class="flex items-center">
-                                            <svg v-for="i in 5" :key="i" class="w-4 h-4 text-yellow-400"
-                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-1">
-                                <h4 class="font-semibold text-gray-800">All my husband's fault...</h4>
-                                <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                                    My husband loves gummies, so when he found YOMZ, he had to try, didn't care if it
-                                    was
-                                    nutritious, just that it tasted good. Once I tried them, I started reading up on
-                                    them. I
-                                    was
-                                    shocked to find out how nutritious they are, so I had to order for me and our 6yo
-                                    soccer-crazy daughter.
-                                </p>
-                                <time class="text-[#90949c] text-xs text-400 ml-auto">10/06/25</time>
-                            </div>
-                        </article>
-
-                        <!-- Review item -->
-                        <article class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
-
-                            <div class="flex items-center gap-4">
-                                <img class="w-12 h-12 rounded-full object-cover" src="/images/rw-2.jpg" alt="" />
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-baseline gap-2">
-                                        <h3 class="font-semibold text-gray-900 truncate">Sheila T.</h3>
-                                        <span
-                                            class="text-sm text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Verified
-                                            Buyer</span>
-                                    </div>
-                                    <div class="mt-1 flex items-center gap-2">
-                                        <!-- Stars -->
-                                        <div class="flex items-center">
-                                            <svg v-for="i in 5" :key=i class="w-4 h-4 text-yellow-400"
-                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-1">
-                                <h4 class="font-semibold text-gray-800">Meets our many needs...</h4>
-                                <p class="mt-2 mb-2 leading-[1.2] text-700 text-[#6b6d76] text-sm">
-                                    We're a very active family. Hubs is into boats, my son football, daughter
-                                    volleyball,
-                                    and
-                                    I'm a runner. So a snack that's nutritious AND convenient is a must. YOMZ is
-                                    perfect.
-                                    Highly
-                                    recommend!
-                                </p>
-                                <time class="text-[#90949c] text-xs text-400 ml-auto">9/29/25</time>
-                            </div>
-                        </article>
-                    </div>
-
+                    <!-- Desktop Screen -->
+                    <!-- <Reviews class="hidden md:block" /> -->
+                    <Reviews v-if="!isMobile" />
                 </div>
 
                 <!-- STEP 5: SHIPPING ADDRESS -->
@@ -954,7 +658,8 @@ watch(paymentMethod, (newValue) => {
 
                         <!-- Description -->
                         <p class="text-gray-700 text-sm">
-                            <span class="font-semibold">One Time Offer:</span> By placing your order today you can have
+                            <span class="font-semibold">One Time Offer:</span> By placing your order today you can
+                            have
                             2 years of protection and replacement warranty for only an additional
                             <span class="font-semibold">$19.97</span>. This extended warranty means your product is
                             covered for 2 years.
@@ -1061,7 +766,8 @@ watch(paymentMethod, (newValue) => {
                                 <span class="font-bold">200% Happiness Guarantee.</span>
                                 If you’re not happy with how
                                 <span class="font-bold">great</span>
-                                you and your family feel, or how improved your energy, focus, and gut issues are, then
+                                you and your family feel, or how improved your energy, focus, and gut issues are,
+                                then
                                 let us know anytime in the next
                                 <span class="font-bold">90 days.</span> We’ll refund <span
                                     class="font-bold">DOUBLE</span>
@@ -1089,8 +795,10 @@ watch(paymentMethod, (newValue) => {
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
                     No, you don’t. Our mission is to end Hidden Hunger for 100 million people by 2030. If it happens
-                    because families take their YOMZ daily for the next 3 years, then great. But if it happens because
-                    by taking YOMZ, you and your family were inspired to transform your lives by overhauling your diet,
+                    because families take their YOMZ daily for the next 3 years, then great. But if it happens
+                    because
+                    by taking YOMZ, you and your family were inspired to transform your lives by overhauling your
+                    diet,
                     exercise routine, nutritional awareness, etc., then that’s great, too. We just want to help you
                     however we can. 
                 </p>
@@ -1102,7 +810,8 @@ watch(paymentMethod, (newValue) => {
                     Will it target gut health, low energy, and decreased focus?
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
-                    Absolutely. We carefully curated the ingredients in YOMZ with an eye toward gut health. We knew, and
+                    Absolutely. We carefully curated the ingredients in YOMZ with an eye toward gut health. We knew,
+                    and
                     research backs this up, that if we help improve the gut health of your family, it would directly
                     lead to better energy and focus.
                 </p>
@@ -1114,8 +823,10 @@ watch(paymentMethod, (newValue) => {
                     How about helping with brain function, immunity, even heart health?
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
-                    Yes. Again, everything starts with improved gut health. In fact, there’s a direct link between gut
-                    health and brain function. Similarly, better gut health is critical for a more robust immune system
+                    Yes. Again, everything starts with improved gut health. In fact, there’s a direct link between
+                    gut
+                    health and brain function. Similarly, better gut health is critical for a more robust immune
+                    system
                     and a stronger heart.
                 </p>
             </div>
@@ -1126,7 +837,8 @@ watch(paymentMethod, (newValue) => {
                     Is it safe for kids?
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
-                    Yes. Family is one of our 3 core values, so it has to be safe for ages 2 to 102. That’s why YOMZ has
+                    Yes. Family is one of our 3 core values, so it has to be safe for ages 2 to 102. That’s why YOMZ
+                    has
                     only 1g of added sugar and no artificial dyes. It’s free of GMOs, gluten, and dairy plus
                     keto-friendly and vegan.
                 </p>
@@ -1138,9 +850,12 @@ watch(paymentMethod, (newValue) => {
                     Will YOMZ help me lose weight?
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
-                    Let’s be clear, YOMZ is not a weight loss gummy. Even if you take 2-3 servings per day. However, if
-                    YOMZ helps you and your family be more active… If it causes you to reduce how much processed foods
-                    you eat… Or if by helping improve your immune system or kids’ growth and development, YOMZ helps you
+                    Let’s be clear, YOMZ is not a weight loss gummy. Even if you take 2-3 servings per day. However,
+                    if
+                    YOMZ helps you and your family be more active… If it causes you to reduce how much processed
+                    foods
+                    you eat… Or if by helping improve your immune system or kids’ growth and development, YOMZ helps
+                    you
                     become stronger… then who knows what other results are possible? 😉
                 </p>
             </div>
@@ -1153,7 +868,8 @@ watch(paymentMethod, (newValue) => {
                 <p class="px-4 py-4 text-gray-700 text-sm">
                     It would be a shame. That’s why we have the most ridiculously iron-clad guarantee you’ll find
                     anywhere. If you don’t absolutely love YOMZ, simply reach out to us within 90 days and we’ll
-                    cheerfully refund double what you paid. It’s the YOMZ 90-Day Picky Momz 200% Happiness Guarantee. We
+                    cheerfully refund double what you paid. It’s the YOMZ 90-Day Picky Momz 200% Happiness
+                    Guarantee. We
                     take on all the risk so you can try it with total peace of mind. The worst that’ll happen is you
                     double your investment in 90 days. Not even Wall St. can guarantee that.
                 </p>
@@ -1165,10 +881,13 @@ watch(paymentMethod, (newValue) => {
                     Will I have to change my family’s diet or meals or snack routine?
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
-                    Not at all. It’s really up to you and your family. If you don’t change anything, you can still rest
-                    easier knowing you’re leveling up your nutrition. That’s a win right there. But there’s a very good
+                    Not at all. It’s really up to you and your family. If you don’t change anything, you can still
+                    rest
+                    easier knowing you’re leveling up your nutrition. That’s a win right there. But there’s a very
+                    good
                     chance that the mere daily routine of filling those nutrition gaps with YOMZ will lead to eating
-                    better. Once you start filling your nutrition needs, cravings for junk vanish. So play it by ear and
+                    better. Once you start filling your nutrition needs, cravings for junk vanish. So play it by ear
+                    and
                     your heart will know if change is good.
                 </p>
             </div>
@@ -1179,8 +898,10 @@ watch(paymentMethod, (newValue) => {
                     How many bags do I need for my family?
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
-                    One bag of YOMZ is filled with 28 packs. Each pack equals a daily serving for 1 person. So 1 family
-                    member = 1 bag of nutrition for 28 days. So how bags you need depends on how many family members you
+                    One bag of YOMZ is filled with 28 packs. Each pack equals a daily serving for 1 person. So 1
+                    family
+                    member = 1 bag of nutrition for 28 days. So how bags you need depends on how many family members
+                    you
                     want to help.
                 </p>
             </div>
@@ -1191,11 +912,16 @@ watch(paymentMethod, (newValue) => {
                     Why is it priced lower than your competitors?
                 </button>
                 <p class="px-4 py-4 text-gray-700 text-sm">
-                    YOMZ has no competition, first and foremost. It’s a unicorn. No other gummy delivers amazing taste
-                    that’s also packed with antioxidants, vitamins, micronutrients, and 9g of fiber. As for price, there
-                    is no middleman. We’re making this offer directly to you. Because we don’t have to pay a middleman
-                    to offer it or sell it to you, we’re passing the savings on to you. On top of that, our mission is
-                    to end Hidden Hunger for 100 million people by 2030. There’s no way we could do that if we jacked up
+                    YOMZ has no competition, first and foremost. It’s a unicorn. No other gummy delivers amazing
+                    taste
+                    that’s also packed with antioxidants, vitamins, micronutrients, and 9g of fiber. As for price,
+                    there
+                    is no middleman. We’re making this offer directly to you. Because we don’t have to pay a
+                    middleman
+                    to offer it or sell it to you, we’re passing the savings on to you. On top of that, our mission
+                    is
+                    to end Hidden Hunger for 100 million people by 2030. There’s no way we could do that if we
+                    jacked up
                     the price. This philosophy will never change. It’s the foundation of YOMZ.
                 </p>
             </div>
@@ -1225,7 +951,6 @@ watch(paymentMethod, (newValue) => {
         </div>
 
     </footer>
-
 </template>
 
 <style scoped>
