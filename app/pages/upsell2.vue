@@ -89,28 +89,50 @@
     </div>
 
 
-    <div class="py-5 bg-gray-100">
-        <div class="max-w-5xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <section class="py-10 bg-gray-100">
+        <div class="max-w-5xl mx-auto px-3">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
+                <!-- Column 1 -->
+                <div class="bg-white p-0 rounded-xl shadow text-center overflow-hidden">
+                    <p class="text-xl p-3 bg-[#65a2b7] text-white font-bold">BASIC</p>
+                    <div class="p-3">
+                        <p class="text-4xl font-black">1 PERSON</p>
+                        <p>28 Day Supply</p>
+                        <img src="/images/desktop-bag-1.png">
 
+                        <p>
+                            <del class="block">$79.99</del>
+                            <span class="block">$48.00</span>
+                        </p>
+                        <p>$1.71 per day</p>
 
-                <div class="flex justify-between  flex-flow-col flex-rows-3 gap-2">
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col text-center py-5 px-3">
-                        <h1>OG Gummies</h1>
-                        <img src="/images/og-bag.png" class="w-18">
-                        <p><span class="font-bold">BEST SELLER
-                            </span><span class="text-gray-800 w-[10%]" data-v-02281a80="">51% OFF: 2 Bags</span></p>
+                        <button type="button" class="block w-full text-center p-4 bg-[#FFEB00] text-black">
+                            <span class="block text-3xl font-extrabold">ADD TO ORDER</span>
+                            <small class="block">90 DAY MONEY BACK GUARANTEE!</small>
+                        </button>
 
-                        <p data-v-02281a80="">$39.00 each</p>
-                        <p class="uppercase" data-v-02281a80="">Incl. FREE Shipping</p>
+                        <p class="text-center font-sm">* Plus applicable sales tax</p>
                     </div>
-                  
-                    
+
+
                 </div>
+
+                <!-- Column 2 -->
+                <div class="bg-white p-6 rounded-xl shadow text-center">
+                    <h3 class="text-xl font-semibold mb-2">Column Two</h3>
+                    <p class="text-gray-600">This is the second column content.</p>
+                </div>
+
+                <!-- Column 3 -->
+                <div class="bg-white p-6 rounded-xl shadow text-center">
+                    <h3 class="text-xl font-semibold mb-2">Column Three</h3>
+                    <p class="text-gray-600">This is the third column content.</p>
+                </div>
+
             </div>
         </div>
-    </div>
+    </section>
 
 
 

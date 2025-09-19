@@ -64,8 +64,8 @@
 
 
 
-         <div ref="wrapper" id="videoWrapper" class="w-full relative cursor-pointer" tabindex="0"
-            @click="togglePlay" @keydown.space.prevent="togglePlay" @mousemove="onMouseMove">
+         <div ref="wrapper" id="videoWrapper" class="w-full relative cursor-pointer" tabindex="0" @click="togglePlay"
+            @keydown.space.prevent="togglePlay" @mousemove="onMouseMove">
             <video ref="video" id="myVideo" class="w-full rounded-lg shadow-lg block" playsinline :poster="poster"
                preload="metadata" style="aspect-ratio:16/9;">
                <source :src="src" type="video/mp4" />
