@@ -93,8 +93,7 @@
       </h3>
       <p class="text-center mx-auto w-full max-w-3xl lg:py-20 py-2 lg:text-lg text-xs">
          <a href="#">No, I'm not interested in learning more about my order. I'm aware I'm going
-            to miss out on
-            important order details and additional One-Time only offer. Take me to the next step.</a>
+            to miss out on important order details and additional One-Time only offer. Take me to the next step.</a>
       </p>
    </div>
    <footer class="bg-[#1EB9F0] lg:py-7 py-3">
