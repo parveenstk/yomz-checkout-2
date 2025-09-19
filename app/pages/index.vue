@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { gummyBagsSelector, gymmyTypeData, productData, slides } from '~/assets/data/checkout';
+import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
+import { useFormStore } from '../../stores/formStore';
 
 // Gummy type
 const gummyType = ref('ogGummies');
-// const cartData: Ref<ProductData[]> = ref([]);
-// const cartData: Ref<ProductData[]> = ref([productData[0]!]);
 let cartData: Ref<ProductData[]> = ref([]);
 if (Array.isArray(productData) && productData[0]) {
     cartData.value[0] = productData[0];
@@ -14,7 +13,7 @@ if (Array.isArray(productData) && productData[0]) {
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('');
+const paymentMethod = ref('creditCard');
 // console.log('paymentMethod:', paymentMethod.value);
 
 // same billing
@@ -22,6 +21,9 @@ const sameBilling = ref(true);
 
 // add extra product
 const extraProduct = ref(false);
+
+// form store data 
+const { formFields, formSubmit } = useFormStore()
 
 // carousel slider
 const activeSlide = ref(0)
@@ -556,16 +558,19 @@ watch(paymentMethod, (newValue) => {
 
                     <div class="bg-white pt-4">
                         <form class="space-y-4">
-                            <!-- First & Last Name -->
+                            <!-- First Name -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input type="text" id="first-name" placeholder="First Name"
+                                <input v-model="formFields.firstName" name="firstName" type="text"
+                                    placeholder="First Name"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
-                                <input type="text" placeholder="Last Name"
+
+                                <!-- Last Name -->
+                                <input v-model="formFields.lastName" name="lastName" type="text" placeholder="Last Name"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
                             </div>
 
                             <!-- Email -->
-                            <input type="email" placeholder="E-mail"
+                            <input v-model="formFields.email" name="email" type="email" placeholder="E-mail"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
 
                             <!-- Phone -->
@@ -574,7 +579,8 @@ watch(paymentMethod, (newValue) => {
                                     <img src="/images/flag.png" alt="US Flag" class="lg:h-5 h-4  mr-1">
                                     <span class="text-gray font-bold">+1</span>
                                 </div>
-                                <input type="tel" placeholder="Phone"
+                                <input v-model="formFields.phoneNumber" nmae="phoneNumber" type="tel"
+                                    placeholder="Phone"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
                             </div>
                         </form>
@@ -601,29 +607,8 @@ watch(paymentMethod, (newValue) => {
                                     <div class="mt-1 flex items-center gap-2">
                                         <!-- Stars -->
                                         <div class="flex items-center">
-                                            <!-- 5 filled stars -->
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
+                                            <svg v-for="i in 5" :key=i class="w-4 h-4 text-yellow-400"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
                                             </svg>
@@ -660,29 +645,8 @@ watch(paymentMethod, (newValue) => {
                                     <div class="mt-1 flex items-center gap-2">
                                         <!-- Stars -->
                                         <div class="flex items-center">
-                                            <!-- 5 filled stars -->
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
+                                            <svg v-for="i in 5" :key="i" class="w-4 h-4 text-yellow-400"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
                                             </svg>
@@ -722,29 +686,8 @@ watch(paymentMethod, (newValue) => {
                                     <div class="mt-1 flex items-center gap-2">
                                         <!-- Stars -->
                                         <div class="flex items-center">
-                                            <!-- 5 filled stars -->
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
+                                            <svg v-for="i in 5" :key=i class="w-4 h-4 text-yellow-400"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.452 2.684c-.785.57-1.84-.197-1.54-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.56 9.387c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.96z" />
                                             </svg>
@@ -780,98 +723,83 @@ watch(paymentMethod, (newValue) => {
                     </h2>
 
                     <form class="space-y-4">
-                        <!-- First & Last Name -->
+                        <!-- Shipping - First Name -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <input type="text" placeholder="First Name"
+                            <input v-model="formFields.shipFirstName" name="shipFirstName" type="text"
+                                placeholder="First Name"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <input type="text" placeholder="Last Name"
+
+                            <!-- Shipping - Last Name -->
+                            <input v-model="formFields.shipLastName" name="shipLastName" type="text"
+                                placeholder="Last Name"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                         </div>
 
-                        <!-- Email -->
-                        <input type="text" placeholder="Street Address"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <input type="text" placeholder="Apartment or Suite (Optional)"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <input type="text" placeholder="City"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <input type="text" placeholder="Street Address"
+                        <!-- Shipping - Street Address -->
+                        <input v-model="formFields.shipStreetAddress" name="shipStreetAddress" type="text"
+                            placeholder="Street Address"
                             class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
 
-                        <select
+                        <!-- Shipping -  Apartment or Suite (Optional) -->
+                        <input v-model="formFields.shipApptsAddress" name="shipApptsAddress" type="text"
+                            placeholder="Apartment or Suite (Optional)"
                             class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+
+                        <!-- Shipping - City -->
+                        <input v-model="formFields.shipCity" name="shipCity" type="text" placeholder="City"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+
+                        <!-- Shipping - Country -->
+                        <select v-model="formFields.shipCounty" name="shipCounty"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <option value="">-- Choose Country --</option>
                             <option value="us">United States</option>
                             <option value="ca">Canada</option>
                         </select>
 
+                        <!--  Shipping - States -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <select
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                <option value="us">-- Choose State --</option>
-                                <option value="us">United States</option>
-                                <option value="ca">Canada</option>
+                            <select v-model="formFields.shipState" name="shipState"
+                                class="w-full p-3 rounded-md bg-gray-100 h-[60px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">-- Choose State --</option>
+                                <option v-for="state in usStates" :key="state.code" :value="state.code">
+                                    {{ state.name }}
+                                </option>
                             </select>
 
-                            <input type="text" placeholder="Postal Code"
+                            <!--  Shipping - Postal Code -->
+                            <input v-model="formFields.shipPostalCode" name="shipPostalCode" type="text"
+                                placeholder="Postal Code"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                         </div>
 
-                        <input type="text" placeholder="Credit Card Number"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                        <input type="text" placeholder="Security Code (3-4 Digits)"
+                        <!-- Credit Card Number -->
+                        <input v-model="formFields.creditCardNumber" name="creditCardNumber" type="text"
+                            placeholder="Credit Card Number"
                             class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
 
+                        <!-- Security Code (3-4 Digits) -->
+                        <input v-model="formFields.cardCVV" name="cardCVV" type="text"
+                            placeholder="Security Code (3-4 Digits)"
+                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+
+                        <!-- Card Expiry Month -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                            <select
+                            <select v-model="formFields.expiryMonth" name="expiryMonth"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                <option>
-                                    Card Month</option>
-                                <option value="01">
-                                    01 - January</option>
-                                <option value="02">
-                                    02 - February</option>
-                                <option value="03">
-                                    03 - March</option>
-                                <option value="04">
-                                    04 - April</option>
-                                <option value="05">
-                                    05 - May</option>
-                                <option value="06">
-                                    06 - June</option>
-                                <option value="07">
-                                    07 - July</option>
-                                <option value="08">
-                                    08 - August</option>
-                                <option value="09">
-                                    09 - September</option>
-                                <option value="10">
-                                    10 - October</option>
-                                <option value="11">
-                                    11 - November</option>
-                                <option value="12">
-                                    12 - December</option>
+                                <option value="">Card Month</option>
+                                <option v-for="month in cardExpiryMonths" :key=month.code :value=month.code>{{
+                                    month.name }}
+                                </option>
                             </select>
 
-                            <select
+                            <!-- Card Expiry Year -->
+                            <select v-model="formFields.expiryYear"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                <option value="">Exp Year</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2028">2028</option>
-                                <option value="2029">2029</option>
-                                <option value="2030">2030</option>
-                                <option value="2031">2031</option>
-                                <option value="2032">2032</option>
-                                <option value="2033">2033</option>
-                                <option value="2034">2034</option>
-                                <option value="2035">2035</option>
-                                <option value="2036">2036</option>
-                                <option value="2037">2037</option>
-                                <option value="2038">2038</option>
-                                <option value="2039">2039</option>
-                                <option value="2040">2040</option>
+                                <option value="">Expiry Year</option>
+                                <option v-for="year in cardExpiryYears" :key="year.value" :value=year.value>
+                                    {{ year.name }}
+                                </option>
                             </select>
                         </div>
 
@@ -920,41 +848,51 @@ watch(paymentMethod, (newValue) => {
 
                     <Transition name="sameName">
                         <form v-if="!sameBilling" class="space-y-4 mt-5">
-                            <!-- First & Last Name -->
-
+                            <!-- Billing - First Name -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input type="text" placeholder="First Name"
+                                <input v-model="formFields.billingFirstName" name="billingFirstName" type="text"
+                                    placeholder="First Name"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                <input type="text" placeholder="Last Name"
+
+                                <!-- Billing - Last Name -->
+                                <input v-model="formFields.billingLastName" type="text" placeholder="Last Name"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                             </div>
 
-                            <!-- Email -->
-                            <input type="text" placeholder="Street Address"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <input type="text" placeholder="Apartment or Suite (Optional)"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <input type="text" placeholder="City"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <input type="text" placeholder="Street Address"
+                            <!-- Billing - Street Address -->
+                            <input v-model="formFields.billingStreetAddress" type="text" placeholder="Street Address"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
 
-                            <select
+                            <!-- Billing - Apartment or Suite (Optional) -->
+                            <input v-model="formFields.billingApptsAddress" type="text"
+                                placeholder="Apartment or Suite (Optional)"
                                 class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+
+                            <!-- Billing - City -->
+                            <input v-model="formFields.billingCity" type="text"
+                                placeholder="Apartment or Suite (Optional)"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+
+                            <!-- Billing - Country -->
+                            <select v-model="formFields.billingCounty"
+                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <option value="">-- Choose Country --</option>
                                 <option value="us">United States</option>
                                 <option value="ca">Canada</option>
                             </select>
 
+                            <!-- Billing - States -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                                <select
+                                <select v-model="formFields.billingState"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                    <option value="us">-- Choose State --</option>
-                                    <option value="us">United States</option>
-                                    <option value="ca">Canada</option>
+                                    <option value="">-- Choose State --</option>
+                                    <option v-for="state in usStates" :key="state.code" :value="state.code">
+                                        {{ state.name }}
+                                    </option>
                                 </select>
 
-                                <input type="text" placeholder="Postal Code"
+                                <!-- Billing - Postal Code -->
+                                <input v-model="formFields.billingPostalCode" type="text" placeholder="Postal Code"
                                     class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                             </div>
                         </form>
@@ -1106,7 +1044,7 @@ watch(paymentMethod, (newValue) => {
                         </div>
 
                         <!-- Checkout Button -->
-                        <button
+                        <button @click="formSubmit"
                             :class="['w-full flex justify-center items-center  font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
                             {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
                             <img v-if="paymentMethod === 'payPal'"
