@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full border-b border-gray-200 bg-white py-4 lg:px-4 px-1">
+    <div class="w-full bg-white py-4 lg:px-4 px-1">
         <div class="mx-auto flex items-center justify-center lg:px-2 px-0 py-2 lg:py-2">
             <div class="flex items-center justify-center bg-[#F1F1F1] border-2 border-[#DFDFDF] rounded-xl w-fit">
                 <!-- Step 1 -->
@@ -89,56 +89,120 @@
     </div>
 
 
-    <section class="py-10 bg-gray-100">
+    <section class="lg:py-10 py-4 bg-white">
+
+        <h2 class="lg:text-5xl text-4xl extrablod lg:mb-16 lg:mt-20 mb-4 mt-4 text-center">CHOOSE YOUR PACKAGE</h2>
         <div class="max-w-5xl mx-auto px-3">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 <!-- Column 1 -->
-                <div class="bg-white p-0 rounded-xl shadow text-center overflow-hidden">
+                <div class="bg-gray-100 p-0 rounded-xl shadow text-center overflow-hidden 
+            transform transition duration-300 
+            hover:scale-105 hover:shadow-xl cursor-pointer">
                     <p class="text-xl p-3 bg-[#65a2b7] text-white font-bold">BASIC</p>
                     <div class="p-3">
-                        <p class="text-4xl font-black">1 PERSON</p>
-                        <p>28 Day Supply</p>
-                        <img src="/images/desktop-bag-1.png">
+                        <p class="text-5xl extrablod text-[#65a2b7]">1 PERSON</p>
+                        <p class="text-2xl font-black mb-2">28 Day Supply</p>
+                        <img src="/images/desktop-bag-1.png" class="mb-3">
 
-                        <p>
-                            <del class="block">$79.99</del>
-                            <span class="block">$48.00</span>
+
+                        <del class="block text-3xl  text-gray-500">$79.99</del>
+                        <p class="flex gap-3 items-center justify-center">
+                            <span class="block text-5xl extrablod">$48.00</span>
+                            <span class="block text-sm font-black rounded-sm bg-[#E6193C] p-1 text-white">SAVE
+                                40%</span>
+
                         </p>
-                        <p>$1.71 per day</p>
 
-                        <button type="button" class="block w-full text-center p-4 bg-[#FFEB00] text-black">
-                            <span class="block text-3xl font-extrabold">ADD TO ORDER</span>
-                            <small class="block">90 DAY MONEY BACK GUARANTEE!</small>
+                        <p class="block text-lg font-black my-2">$1.71 per day</p>
+
+                        <button type="button"
+                            class="rounded-xl block w-full text-center lg:mt-20 mt-3 p-3 bg-[#FFEB00] text-black">
+                            <span class="block text-3xl extrablod">ADD TO ORDER</span>
+                            <span class="block font-extrabold text-xs">90 DAY MONEY BACK GUARANTEE!</span>
                         </button>
 
-                        <p class="text-center font-sm">* Plus applicable sales tax</p>
+                        <!-- <p class="text-center font-sm mt-1">* Plus applicable sales tax</p> -->
                     </div>
 
 
                 </div>
 
                 <!-- Column 2 -->
-                <div class="bg-white p-6 rounded-xl shadow text-center">
-                    <h3 class="text-xl font-semibold mb-2">Column Two</h3>
-                    <p class="text-gray-600">This is the second column content.</p>
+                <div class="bg-gray-100 p-0 rounded-xl shadow text-center overflow-hidden 
+            transform transition duration-300 
+            hover:scale-105 hover:shadow-xl cursor-pointer">
+                    <p class="text-xl p-3 bg-[#196580] text-white font-bold">MOST POPULAR</p>
+                    <div class="p-3">
+                        <p class="text-5xl extrablod text-[#196580]">3 PERSON</p>
+                        <p class="text-2xl font-black mb-2">28 Day Supply Each</p>
+                        <img src="/images/desktop-bag-3.png" class="mb-3">
+
+                        <del class="block text-3xl  text-gray-500">$239.97</del>
+                        <p class="flex gap-3 items-center justify-center">
+                            <span class="block text-5xl extrablod">$96.00</span>
+                            <span class="block text-sm font-black rounded-sm bg-[#E6193C] p-1 text-white">
+                                SAVE
+                                60%</span>
+                        </p>
+                        <p class="block text-lg font-black my-1">$1.14 per day</p>
+                        <p
+                            class="flex w-full items-center justify-start gap-1 bg-[#E6193C] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
+                            <img src="/images/white-check.svg" class="h-6">4 FREE BONUSES!
+                        </p>
+                        <p
+                            class="flex w-full items-center justify-start gap-1 bg-[#196580] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
+                            <img src="/images/white-check.svg" class="h-6">FREE US SHIPPING!
+                        </p>
+                        <button type="button" class="rounded-xl block w-full text-center p-3 bg-[#FFEB00] text-black">
+                            <span class="block text-3xl extrablod">ADD TO ORDER</span>
+                            <span class="block font-extrabold text-xs">90 DAY MONEY BACK GUARANTEE!</span>
+                        </button>
+                        <!-- <p class="text-center font-sm mt-1">* Plus applicable sales tax</p> -->
+                    </div>
                 </div>
 
                 <!-- Column 3 -->
-                <div class="bg-white p-6 rounded-xl shadow text-center">
-                    <h3 class="text-xl font-semibold mb-2">Column Three</h3>
-                    <p class="text-gray-600">This is the third column content.</p>
+                <div class="bg-gray-100 p-0 rounded-xl shadow text-center overflow-hidden 
+            transform transition duration-300 
+            hover:scale-105 hover:shadow-xl cursor-pointer">
+                    <p class="text-xl p-3 bg-[#1f94bd] text-white font-bold">BUNDLE</p>
+                    <div class="p-3 py-4">
+                        <p class="text-5xl extrablod text-[#1f94bd]">2 PERSON</p>
+                        <p class="text-2xl font-black mb-2">28 Day Supply Each</p>
+                        <img src="/images/desktop-bag-2.png" class="mb-3">
+
+                        <del class="block text-3xl  text-gray-500">$159.98</del>
+                        <p class="flex gap-3 items-center justify-center">
+                            <span class="block text-5xl extrablod">$78.00</span>
+                            <span class="block text-sm font-black rounded-sm bg-[#E6193C] p-1 text-white">SAVE
+                                51%</span>
+                        </p>
+                        <p class="block text-lg font-black my-1">$1.39 per day</p>
+                        <p
+                            class="flex w-full items-center justify-start gap-1 bg-[#E6193C] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
+                            <img src="/images/white-check.svg" class="h-6">4 FREE BONUSES!
+                        </p>
+                        <p
+                            class="flex w-full items-center justify-start gap-1 bg-[#196580] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
+                            <img src="/images/white-check.svg" class="h-6">FREE US SHIPPING!
+                        </p>
+                        <button type="button" class="rounded-xl block w-full text-center p-3 bg-[#FFEB00] text-black">
+                            <span class="block text-3xl extrablod">ADD TO ORDER</span>
+                            <span class="block font-extrabold text-xs">90 DAY MONEY BACK GUARANTEE!</span>
+                        </button>
+                        <!-- <p class="text-center font-sm mt-1">* Plus applicable sales tax</p> -->
+                    </div>
                 </div>
 
             </div>
         </div>
+
+        <p class="text-center mx-auto w-full max-w-3xl lg:py-20 py-6 lg:text-lg text-xs lg:px-0 px-4">
+            <a href="#">No, I'm not interested in learning more about my order. I'm aware I'm going
+                to miss out on important order details and additional One-Time only offer. Take me to the next step.</a>
+        </p>
     </section>
-
-
-
-
-
-
 
 
     <footer class="bg-[#1EB9F0] lg:py-7 py-3">
