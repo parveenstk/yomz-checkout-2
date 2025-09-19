@@ -13,7 +13,7 @@ if (Array.isArray(productData) && productData[0]) {
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('creditCard');
+const paymentMethod = ref('');
 // console.log('paymentMethod:', paymentMethod.value);
 
 // same billing
