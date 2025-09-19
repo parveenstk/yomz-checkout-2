@@ -490,7 +490,7 @@ watch(paymentMethod, (newValue) => {
         <div class="">
             <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
                 <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 uppercase">
-                    STEP 2: PAYMENT METHOD
+                    STEP 3: PAYMENT METHOD
                 </h2>
 
                 <!-- PayPal Method -->
@@ -548,11 +548,10 @@ watch(paymentMethod, (newValue) => {
 
             <section v-if="paymentMethod === 'creditCard' || paymentMethod === 'payPal'" class="lg:m-0 m-2">
 
-                <!-- STEP 3: CONTACT INFORMATION -->
+                <!-- STEP 4: CONTACT INFORMATION -->
                 <div class="bg-white p-4 rounded-lg shadow mt-3">
-                    <!-- <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3"> -->
                     <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
-                        STEP 3: CONTACT INFORMATION
+                        STEP 4: CONTACT INFORMATION
                     </h2>
 
                     <div class="bg-white pt-4">
@@ -773,11 +772,11 @@ watch(paymentMethod, (newValue) => {
 
                 </div>
 
-                <!-- STEP 4: SHIPPING ADDRESS -->
+                <!-- STEP 5: SHIPPING ADDRESS -->
                 <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
 
                     <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
-                        STEP 4: SHIPPING ADDRESS
+                        STEP 5: SHIPPING ADDRESS
                     </h2>
 
                     <form class="space-y-4">
@@ -879,10 +878,10 @@ watch(paymentMethod, (newValue) => {
                     </form>
                 </div>
 
-                <!-- STEP 5: BILLING ADDRESS -->
+                <!-- STEP 6: BILLING ADDRESS -->
                 <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
                     <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
-                        STEP 5: BILLING ADDRESS
+                        STEP 6: BILLING ADDRESS
                     </h2>
 
                     <!-- Option: Same as shipping address -->
@@ -964,7 +963,7 @@ watch(paymentMethod, (newValue) => {
                 <!-- ORDER SUMMARY -->
                 <div class="bg-white p-4 rounded-lg shadow mt-3">
                     <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
-                        {{ paymentMethod === 'payPal' ? 'STEP 4' : 'STEP 6' }}: ORDER SUMMARY
+                        {{ paymentMethod === 'payPal' ? 'STEP 5' : 'STEP 7' }}: ORDER SUMMARY
                     </h2>
 
                     <div @click="extraProduct = !extraProduct"
