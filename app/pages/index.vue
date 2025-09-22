@@ -311,7 +311,6 @@ watch(paymentMethod, (newValue) => {
             </div>
 
             <!-- Mobile Screen -->
-            <!-- <Reviews class="block md:hidden bg-white p-3 rounded-lg shadow mt-3" /> -->
             <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
 
         </div>
@@ -415,7 +414,6 @@ watch(paymentMethod, (newValue) => {
                     </div>
 
                     <!-- Desktop Screen -->
-                    <!-- <Reviews class="hidden md:block" /> -->
                     <Reviews v-if="!isMobile" />
                 </div>
 
