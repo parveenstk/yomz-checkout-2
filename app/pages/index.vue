@@ -14,17 +14,17 @@ if (Array.isArray(productData) && productData[0]) {
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('');
-// console.log('paymentMethod:', paymentMethod.value);
+const paymentMethod = ref('creditCard');
 
 // same billing
 const sameBilling = ref(true);
+// const sameBilling = ref(false);
 
 // add extra product
 const extraProduct = ref(false);
 
 // form store data 
-const { formFields, formSubmit } = useFormStore()
+const { formFields, formSubmit, errors, validateField } = useFormStore()
 
 // track screen size
 const isMobile = ref(false)
@@ -264,7 +264,8 @@ watch(paymentMethod, (newValue) => {
                 <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
                     <!-- Gummy Selectors -->
                     <div v-for="value in gymmyTypeData" :key="value.id"
-                        class="flex items-center space-x-1 cursor-pointer relative" @click="gummyType = value.id">
+                        class="flex items-center space-x-1 cursor-pointer relative select-none"
+                        @click="gummyType = value.id">
                         <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3"
                             :class="{ 'bg-[#172969] ': gummyType === value.id }">
                             <NuxtImg v-if="gummyType === value.id" src="/images/whiteTick.svg" alt="white-tick" />
@@ -283,7 +284,7 @@ watch(paymentMethod, (newValue) => {
                 </h2>
 
                 <div v-for="value in gummyBagsSelector" :key="value.id" @click="addProductData(value.id)" :class="[
-                    'flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer transition relative',
+                    'flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer transition relative select-none',
                     value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
                     <div class="flex items-center space-x-3">
                         <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2"
@@ -347,7 +348,7 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- Credit Card Method -->
                 <label @click="paymentMethod = 'creditCard'"
-                    class="flex items-center justify-between pl-0 pt-4 pr-4 pb-4  lg:pt-6 lg:pr-6 lg:pb-6 cursor-pointer">
+                    class="flex items-center justify-between pl-0 pt-4 pr-4 pb-4  lg:pt-6 lg:pr-6 lg:pb-6 cursor-pointer select-none">
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
@@ -387,29 +388,62 @@ watch(paymentMethod, (newValue) => {
                         <form class="space-y-4">
                             <!-- First Name -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input v-model="formFields.firstName" name="firstName" type="text"
-                                    placeholder="First Name"
-                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                                <div>
+                                    <input v-model="formFields.firstName" name="firstName" type="text"
+                                        @blur="validateField('firstName')" placeholder="First Name" :class="[
+                                            'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                            errors.firstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500'
+                                        ]" />
+                                    <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
+                                    <span v-if="errors.firstName" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.firstName }}
+                                    </span>
+                                </div>
 
                                 <!-- Last Name -->
-                                <input v-model="formFields.lastName" name="lastName" type="text" placeholder="Last Name"
-                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                                <div>
+                                    <input v-model="formFields.lastName" name="lastName" type="text"
+                                        @blur="validateField('lastName')" placeholder="Last Name"
+                                        :class="[
+                                            'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                            errors.lastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                                    <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
+                                    <span v-if="errors.lastName" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.lastName }}
+                                    </span>
+                                </div>
+
                             </div>
 
                             <!-- Email -->
-                            <input v-model="formFields.email" name="email" type="email" placeholder="E-mail"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                            <input v-model="formFields.email" name="email-address" type="email" placeholder="E-mail"
+                                :class="[
+                                    'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                    // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                    errors.email ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                            <span v-if="errors.email" class="ml-2 text-sm text-[#e6193c]">
+                                {{ errors.email }}
+                            </span>
 
                             <!-- Phone -->
-                            <div class="flex items-center w-full">
-                                <div class="flex items-center bg-white shadow-md px-3 py-2 rounded-md mr-2 h-[60px]">
+                            <div class="flex items-center justify-center gap-3 w-full mt-4 m-0">
+                                <div class="flex items-center bg-white shadow-md px-4 rounded-md h-[58px]">
                                     <img src="/images/flag.png" alt="US Flag" class="lg:h-5 h-4  mr-1">
                                     <span class="text-gray font-bold">+1</span>
                                 </div>
-                                <input v-model="formFields.phoneNumber" nmae="phoneNumber" type="tel"
+                                <input v-model="formFields.phoneNumber" name="phoneNumber" type="tel"
                                     placeholder="Phone"
-                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]" />
+                                    :class="[
+                                        'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                        errors.phoneNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
                             </div>
+                            <span v-if="errors.phoneNumber" class="ml-22 md:ml-25 text-sm text-[#e6193c]">
+                                {{ errors.phoneNumber }}
+                            </span>
+
                         </form>
                     </div>
 
@@ -427,82 +461,162 @@ watch(paymentMethod, (newValue) => {
                     <form class="space-y-4">
                         <!-- Shipping - First Name -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <input v-model="formFields.shipFirstName" name="shipFirstName" type="text"
-                                placeholder="First Name"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <div>
+                                <input v-model="formFields.shipFirstName" name="shipFirstName" type="text"
+                                    placeholder="First Name"
+                                    :class="[
+                                        'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                        errors.shipFirstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                                <span v-if="errors.shipFirstName" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.shipFirstName }}
+                                </span>
+                            </div>
 
                             <!-- Shipping - Last Name -->
-                            <input v-model="formFields.shipLastName" name="shipLastName" type="text"
-                                placeholder="Last Name"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <div>
+                                <input v-model="formFields.shipLastName" name="shipLastName" type="text"
+                                    placeholder="Last Name"
+                                    :class="[
+                                        'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                        errors.shipLastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                                <span v-if="errors.shipLastName" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.shipLastName }}
+                                </span>
+                            </div>
                         </div>
 
                         <!-- Shipping - Street Address -->
                         <input v-model="formFields.shipStreetAddress" name="shipStreetAddress" type="text"
                             placeholder="Street Address"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            :class="[
+                                'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                errors.shipStreetAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                        <span v-if="errors.shipStreetAddress" class="ml-2 text-sm text-[#e6193c]">
+                            {{ errors.shipStreetAddress }}
+                        </span>
 
                         <!-- Shipping -  Apartment or Suite (Optional) -->
                         <input v-model="formFields.shipApptsAddress" name="shipApptsAddress" type="text"
                             placeholder="Apartment or Suite (Optional)"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            :class="[
+                                'w-full mb-4 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                errors.shipApptsAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                        <span v-if="errors.shipApptsAddress" class="ml-2 text-sm text-[#e6193c]">
+                            {{ errors.shipApptsAddress }}
+                        </span>
 
                         <!-- Shipping - City -->
-                        <input v-model="formFields.shipCity" name="shipCity" type="text" placeholder="City"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                        <input v-model="formFields.shipCity" name="shipCity" type="text" placeholder="City" :class="[
+                            'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                            errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                        <span v-if="errors.shipCity" class="ml-2 text-sm text-[#e6193c]">
+                            {{ errors.shipCity }}
+                        </span>
 
                         <!-- Shipping - Country -->
-                        <select v-model="formFields.shipCounty" name="shipCounty"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                        <select v-model="formFields.shipCounty" name="shipCounty" :class="[
+                            'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                            errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                             <option value="">-- Choose Country --</option>
                             <option value="us">United States</option>
                             <option value="ca">Canada</option>
                         </select>
+                        <span v-if="errors.shipCounty" class="ml-2 text-sm text-[#e6193c]">
+                            {{ errors.shipCounty }}
+                        </span>
 
-                        <!--  Shipping - States -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <select v-model="formFields.shipState" name="shipState"
-                                class="w-full p-3 rounded-md bg-gray-100 h-[60px] focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">-- Choose State --</option>
-                                <option v-for="state in usStates" :key="state.code" :value="state.code">
-                                    {{ state.name }}
-                                </option>
-                            </select>
+                        <!-- Shipping - States -->
+                        <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <select v-model="formFields.shipState" name="shipState" :class="[
+                                    'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                    // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                    errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                    <option value="">-- Choose State --</option>
+                                    <option v-for="state in usStates" :key="state.code" :value="state.code">
+                                        {{ state.name }}
+                                    </option>
+                                </select>
+                                <span v-if="errors.shipState" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.shipState }}
+                                </span>
+                            </div>
 
                             <!--  Shipping - Postal Code -->
-                            <input v-model="formFields.shipPostalCode" name="shipPostalCode" type="text"
-                                placeholder="Postal Code"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <div>
+                                <input v-model="formFields.shipPostalCode" name="shipPostalCode" type="text"
+                                    placeholder="Postal Code"
+                                    :class="[
+                                        'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                        errors.shipPostalCode ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                                <span v-if="errors.shipPostalCode" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.shipPostalCode }}
+                                </span>
+                            </div>
                         </div>
 
                         <!-- Credit Card Number -->
                         <input v-model="formFields.creditCardNumber" name="creditCardNumber" type="text"
                             placeholder="Credit Card Number"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            :class="[
+                                'w-full m-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                errors.creditCardNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                        <span v-if="errors.creditCardNumber" class="ml-2 text-sm text-[#e6193c]">
+                            {{ errors.creditCardNumber }}
+                        </span>
 
                         <!-- Security Code (3-4 Digits) -->
                         <input v-model="formFields.cardCVV" name="cardCVV" type="text"
-                            placeholder="Security Code (3-4 Digits)"
-                            class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            placeholder="Security Code (3-4 Digits)" :class="[
+                                'w-full m-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                errors.cardCVV ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
+                        <span v-if="errors.cardCVV" class="ml-2 text-sm text-[#e6193c]">
+                            {{ errors.cardCVV }}
+                        </span>
 
                         <!-- Card Expiry Month -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <select v-model="formFields.expiryMonth" name="expiryMonth"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                <option value="">Card Month</option>
-                                <option v-for="month in cardExpiryMonths" :key=month.code :value=month.code>{{
-                                    month.name }}
-                                </option>
-                            </select>
+                        <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <select v-model="formFields.expiryMonth" name="expiryMonth"
+                                    :class="[
+                                        'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                        errors.expiryMonth ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                    <option value="">Card Month</option>
+                                    <option v-for="month in cardExpiryMonths" :key=month.code :value=month.code>{{
+                                        month.name }}
+                                    </option>
+                                </select>
+                                <span v-if="errors.expiryMonth" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.expiryMonth }}
+                                </span>
+                            </div>
 
                             <!-- Card Expiry Year -->
-                            <select v-model="formFields.expiryYear"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                <option value="">Expiry Year</option>
-                                <option v-for="year in cardExpiryYears" :key="year.value" :value=year.value>
-                                    {{ year.name }}
-                                </option>
-                            </select>
+                            <div>
+                                <select v-model="formFields.expiryYear" name="expiryYear"
+                                    :class="[
+                                        'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
+                                        errors.expiryYear ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                    <option value="">Expiry Year</option>
+                                    <option v-for="year in cardExpiryYears" :key="year.value" :value=year.value>
+                                        {{ year.name }}
+                                    </option>
+                                </select>
+                                <span v-if="errors.expiryYear" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.expiryYear }}
+                                </span>
+                            </div>
                         </div>
 
                     </form>
@@ -551,51 +665,71 @@ watch(paymentMethod, (newValue) => {
                     <Transition name="sameName">
                         <form v-if="!sameBilling" class="space-y-4 mt-5">
                             <!-- Billing - First Name -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input v-model="formFields.billingFirstName" name="billingFirstName" type="text"
-                                    placeholder="First Name"
-                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <input v-model="formFields.billingFirstName" name="billingFirstName" type="text"
+                                        placeholder="First Name"
+                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                </div>
 
                                 <!-- Billing - Last Name -->
-                                <input v-model="formFields.billingLastName" type="text" placeholder="Last Name"
-                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <div>
+                                    <input v-model="formFields.billingLastName" name="billingLastName" type="text"
+                                        placeholder="Last Name"
+                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                </div>
                             </div>
 
                             <!-- Billing - Street Address -->
-                            <input v-model="formFields.billingStreetAddress" type="text" placeholder="Street Address"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <input v-model="formFields.billingStreetAddress" name="billingStreetAddress" type="text"
+                                placeholder="Street Address"
+                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
 
                             <!-- Billing - Apartment or Suite (Optional) -->
-                            <input v-model="formFields.billingApptsAddress" type="text"
+                            <input v-model="formFields.billingApptsAddress" name="billingApptsAddress" type="text"
                                 placeholder="Apartment or Suite (Optional)"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
 
                             <!-- Billing - City -->
-                            <input v-model="formFields.billingCity" type="text"
+                            <input v-model="formFields.billingCity" name="billingCity" type="text"
                                 placeholder="Apartment or Suite (Optional)"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
 
                             <!-- Billing - Country -->
-                            <select v-model="formFields.billingCounty"
-                                class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <select v-model="formFields.billingCounty" name="billingCounty"
+                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
                                 <option value="">-- Choose Country --</option>
                                 <option value="us">United States</option>
                                 <option value="ca">Canada</option>
                             </select>
+                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
 
                             <!-- Billing - States -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <select v-model="formFields.billingState"
-                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                    <option value="">-- Choose State --</option>
-                                    <option v-for="state in usStates" :key="state.code" :value="state.code">
-                                        {{ state.name }}
-                                    </option>
-                                </select>
+                            <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <select v-model="formFields.billingState" name="billingState"
+                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                        <option value="">-- Choose State --</option>
+                                        <option v-for="state in usStates" :key="state.code" :value="state.code">
+                                            {{ state.name }}
+                                        </option>
+                                    </select>
+                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                </div>
 
                                 <!-- Billing - Postal Code -->
-                                <input v-model="formFields.billingPostalCode" type="text" placeholder="Postal Code"
-                                    class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                <div>
+                                    <input v-model="formFields.billingPostalCode" name="billingPostalCode" type="text"
+                                        placeholder="Postal Code"
+                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                </div>
+
                             </div>
                         </form>
                     </Transition>
@@ -616,42 +750,18 @@ watch(paymentMethod, (newValue) => {
                             </span>
                         </div>
 
-                        <!-- STEP 6: ORDER SUMMARY -->
+                        <!-- Yes, I want 2 Years of Protection. -->
                         <div class="flex justify-center items-center">
-
-                            <label class="flex items-center cursor-pointer justify-center w-fit">
-                                <img data-v-02281a80="" src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative">
-                                <!-- <input type="radio" name="YOMZ" class="peer hidden">
-                                <div
-                                    class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-0">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                        stroke="#ffffff">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
-                                                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                        </g>
-                                    </svg>
-                                </div> -->
-
-                                <!-- <div
-                                    class="w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3">
-                                    <NuxtImg src="/images/whiteTick.svg" alt="white-tick" />
-                                </div> -->
-
-                                <div :class="[
-                                    'w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3 cursor-pointer',
+                            <div class="flex items-center cursor-pointer justify-center w-fit">
+                                <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
+                                <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3',
                                     extraProduct ? 'bg-[#172969]' : 'bg-transparent']">
                                     <NuxtImg v-if="extraProduct" src="/images/whiteTick.svg" alt="white-tick" />
                                 </div>
-
                                 <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
                                     Yes, I want 2 Years of Protection.
                                 </span>
-                            </label>
+                            </div>
                         </div>
 
                         <!-- Description -->
@@ -696,15 +806,18 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Free Shipping -->
                             <div class="flex justify-between items-center mb-2">
-                                <div class="flex items-center space-x-2">
+                                <div v-if="product.id === 3" class="flex items-center space-x-2">
+                                    <p class="text-lg font-semibold text-gray-800">Shipping Price</p>
+                                </div>
+                                <div v-else class="flex items-center space-x-2">
                                     <img class="w-5" src="/images/check-icons.png">
-                                    <p class="text-lg font-semibold text-gray-800">Free shipping</p>
+                                    <p class="text-lg font-semibold text-gray-800">Free Shipping</p>
                                 </div>
                                 <div v-if="product.id === 3">
-                                    <span class="text-md font-bold">$7.95</span>
+                                    <span class="text-md font-bold">$7.99</span>
                                 </div>
                                 <div v-else class="flex gap-1">
-                                    <span class="text-md font-semibold line-through text-red-500">$7.95</span>
+                                    <span class="text-md font-semibold line-through text-red-500">$7.99</span>
                                     <span class="text-md font-semibold text-green-600 ">Free</span>
                                 </div>
 
@@ -726,16 +839,13 @@ watch(paymentMethod, (newValue) => {
                                     <!-- final price -->
                                     <span class="font-bold text-gray-900 text-lg">
                                         ${{ product.id === 3
-                                            ? (product.price + 7.95).toFixed(2) : product.price.toFixed(2) }}
+                                            ? (product.price + 7.99).toFixed(2) : product.price.toFixed(2) }}
                                     </span>
 
                                     <!-- total price -->
                                     <span
                                         class="text-md font-bold text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
-                                        ${{ product.id === 3
-                                            ? (Number(product.compareAtPrice) + 7.95).toFixed(2)
-                                            : Number(product.compareAtPrice).toFixed(2)
-                                        }}
+                                        ${{ (Number(product.compareAtPrice) + 7.99).toFixed(2) }}
                                     </span>
 
                                 </div>
