@@ -40,34 +40,45 @@ export const useFormStore = defineStore('formStore', () => {
     })
 
     // Zod schema
+    const nameRegex = /^[A-Za-zÀ-ÿ\-'\s]{2,15}$/
+    const cityRegex = /^[A-Za-zÀ-ÿ\s\-]{2,50}$/
+    const stateRegex = /^[A-Z]{2}$/
+    const postalCodeRegex = /^\d{5}(-\d{4})?$/
+    const phoneRegex = /^\+?[0-9\s\-]{10,15}$/
+    const streetRegex = /^[A-Za-z0-9À-ÿ\s,'\-\.]{5,100}$/
+
     const schema = z.object({
-        firstName: z.string().min(1, 'First name is required'),
-        lastName: z.string().min(1, 'Last name is required'),
+        // Basic
+        firstName: z.string().regex(nameRegex, 'Invalid first name'),
+        lastName: z.string().optional(),
         email: z.email('Invalid email address'),
-        phoneNumber: z.string().regex(/^\+?[0-9\s\-]{7,15}$/, 'Invalid phone number'),
+        phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number'),
 
-        shipFirstName: z.string().min(1, 'Shipping first name is required'),
-        shipLastName: z.string().min(1, 'Shipping last name is required'),
-        shipStreetAddress: z.string().min(1, 'Street address is required'),
+        // Shipping
+        shipFirstName: z.string().regex(nameRegex, 'Invalid shipping first name'),
+        shipLastName: z.string().optional(),
+        shipStreetAddress: z.string().regex(streetRegex, 'Invalid street address'),
         shipApptsAddress: z.string().optional(),
-        shipCity: z.string().min(1, 'City is required'),
-        shipCounty: z.string().min(1, 'County is required'),
-        shipState: z.string().min(1, 'State is required'),
-        shipPostalCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid postal code'),
+        shipCity: z.string().regex(cityRegex, 'Invalid city'),
+        shipCounty: z.string().regex(cityRegex, 'Invalid county'),
+        shipState: z.string().regex(stateRegex, 'Invalid state (use 2-letter code)'),
+        shipPostalCode: z.string().regex(postalCodeRegex, 'Invalid postal code'),
 
+        // Credit card
         creditCardNumber: z.string().regex(/^\d{13,19}$/, 'Invalid credit card number'),
         cardCVV: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
-        expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Invalid month (01-12)'),
+        expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Invalid month'),
         expiryYear: z.string().regex(/^\d{4}$/, 'Invalid year'),
 
-        billingFirstName: z.string().min(1, 'Billing first name is required'),
-        billingLastName: z.string().min(1, 'Billing last name is required'),
-        billingStreetAddress: z.string().min(1, 'Billing address is required'),
+        // Billing
+        billingFirstName: z.string().regex(nameRegex, 'Invalid billing first name'),
+        billingLastName: z.string().optional(),
+        billingStreetAddress: z.string().regex(streetRegex, 'Invalid billing street'),
         billingApptsAddress: z.string().optional(),
-        billingCity: z.string().min(1, 'City is required'),
-        billingCounty: z.string().min(1, 'County is required'),
-        billingState: z.string().min(1, 'State is required'),
-        billingPostalCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid postal code'),
+        billingCity: z.string().regex(cityRegex, 'Invalid city'),
+        billingCounty: z.string().regex(cityRegex, 'Invalid county'),
+        billingState: z.string().regex(stateRegex, 'Invalid state (use 2-letter code)'),
+        billingPostalCode: z.string().regex(postalCodeRegex, 'Invalid postal code')
     })
 
     // error Define
@@ -98,21 +109,6 @@ export const useFormStore = defineStore('formStore', () => {
         billingPostalCode: '',
     })
 
-    // check validation
-    const validateField = (fieldName: keyof FormFields) => {
-        console.log('Validating field:', fieldName, formFields[fieldName])
-
-        try {
-            const fieldSchema = schema.shape[fieldName]
-            fieldSchema.parse(formFields[fieldName])
-            errors[fieldName] = ''
-        } catch (err) {
-            if (err instanceof ZodError) {
-                errors[fieldName] = err.issues[0]?.message || 'Invalid input'
-            }
-        }
-    };
-
     // Submit method
     const formSubmit = () => {
         const result = schema.safeParse(formFields)
@@ -134,7 +130,6 @@ export const useFormStore = defineStore('formStore', () => {
                 }
             })
             console.log('errors:', JSON.stringify(errors, null, 2));
-            // resetForm();
             return false
         }
 
@@ -151,11 +146,38 @@ export const useFormStore = defineStore('formStore', () => {
         console.log("🗑️ : All fields are clean now.");
     };
 
+    // check validation on input
+    const validateField = <K extends keyof typeof schema.shape>(key: K, value: string | number) => {
+        const fieldSchema = schema.shape[key]
+
+        try {
+            fieldSchema.parse(value)
+            errors[key] = '' // Clear previous error
+        } catch (err: any) {
+            if (err instanceof z.ZodError) {
+                errors[key] = err.issues[0]?.message || 'Invalid input'
+            }
+        }
+    };
+
+    // bill details same
+    const billSame = () => {
+        formFields.shipFirstName = formFields.billingFirstName
+        formFields.shipLastName = formFields.billingLastName
+        formFields.shipStreetAddress = formFields.billingStreetAddress
+        formFields.shipApptsAddress = formFields.billingApptsAddress
+        formFields.shipCity = formFields.billingCity
+        formFields.shipCounty = formFields.billingCounty
+        formFields.shipState = formFields.billingState
+        formFields.shipPostalCode = formFields.billingPostalCode
+    };
+
     return {
         form,
         formFields,
         errors,
         formSubmit,
-        validateField
+        validateField,
+        billSame
     }
-})
+});

@@ -14,7 +14,7 @@ if (Array.isArray(productData) && productData[0]) {
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('');
+const paymentMethod = ref('creditCard');
 
 // same billing
 const sameBilling = ref(true);
@@ -24,7 +24,10 @@ const sameBilling = ref(true);
 const extraProduct = ref(false);
 
 // form store data 
-const { formFields, formSubmit, errors, validateField } = useFormStore()
+const { formFields, formSubmit, errors, validateField, billSame } = useFormStore()
+if (sameBilling.value) {
+    billSame()
+};
 
 // track screen size
 const isMobile = ref(false)
@@ -319,7 +322,7 @@ watch(paymentMethod, (newValue) => {
         <!-- Right Column -->
         <div class="">
             <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
-                <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 uppercase">
+                <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
 
@@ -378,512 +381,564 @@ watch(paymentMethod, (newValue) => {
 
             <section v-if="paymentMethod === 'creditCard' || paymentMethod === 'payPal'" class="lg:m-0 m-2">
 
-                <!-- STEP 4: CONTACT INFORMATION -->
-                <div class="bg-white p-4 rounded-lg shadow mt-3">
-                    <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
-                        STEP 4: CONTACT INFORMATION
-                    </h2>
+                <form @submit.prevent="() => formSubmit()">
 
-                    <div class="bg-white pt-4">
-                        <form class="space-y-4">
-                            <!-- First Name -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <input v-model="formFields.firstName" name="firstName" type="text"
-                                        @blur="validateField('firstName')" placeholder="First Name" :class="[
-                                            'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                            errors.firstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500'
-                                        ]" />
-                                    <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
-                                    <span v-if="errors.firstName" class="ml-2 text-sm text-[#e6193c]">
-                                        {{ errors.firstName }}
-                                    </span>
+                    <!-- STEP 4: CONTACT INFORMATION -->
+                    <div class="bg-white p-4 rounded-lg shadow mt-3">
+                        <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
+                            STEP 4: CONTACT INFORMATION
+                        </h2>
+
+                        <div class="bg-white pt-4">
+                            <div class="space-y-4">
+                                <!-- First Name -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <input v-model="formFields.firstName" name="firstName" type="text"
+                                            @input="validateField('firstName', ($event.target as HTMLInputElement).value)"
+                                            placeholder="First Name" :class="[
+                                                'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                                errors.firstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500'
+                                            ]" maxlength="12" />
+                                        <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
+                                        <span v-if="errors.firstName" class="ml-2 text-sm text-[#e6193c]">
+                                            {{ errors.firstName }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Last Name -->
+                                    <div>
+                                        <input v-model="formFields.lastName" name="lastName" type="text"
+                                            placeholder="Last Name"
+                                            :class="[
+                                                'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                                errors.lastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                            maxlength="12" />
+                                        <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
+                                        <span v-if="errors.lastName" class="ml-2 text-sm text-[#e6193c]">
+                                            {{ errors.lastName }}
+                                        </span>
+                                    </div>
+
                                 </div>
 
-                                <!-- Last Name -->
-                                <div>
-                                    <input v-model="formFields.lastName" name="lastName" type="text"
-                                        @blur="validateField('lastName')" placeholder="Last Name"
+                                <!-- Email -->
+                                <input v-model="formFields.email" name="email-address" type="email" placeholder="E-mail"
+                                    @input="validateField('email', ($event.target as HTMLInputElement).value)" :class="[
+                                        'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        errors.email ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                    maxlength="30" />
+                                <span v-if="errors.email" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.email }}
+                                </span>
+
+                                <!-- Phone -->
+                                <div class="flex items-center justify-center gap-3 w-full mt-4 m-0">
+                                    <div class="flex items-center bg-white shadow-md px-4 rounded-md h-[58px]">
+                                        <img src="/images/flag.png" alt="US Flag" class="lg:h-5 h-4  mr-1">
+                                        <span class="text-gray font-bold">+1</span>
+                                    </div>
+                                    <input v-model="formFields.phoneNumber" name="phoneNumber" type="tel"
+                                        @input="validateField('phoneNumber', ($event.target as HTMLInputElement).value)"
+                                        placeholder="Phone"
                                         :class="[
-                                            'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                            errors.lastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                                    <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
-                                    <span v-if="errors.lastName" class="ml-2 text-sm text-[#e6193c]">
-                                        {{ errors.lastName }}
+                                            'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                            errors.phoneNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                        maxlength="15" />
+                                </div>
+                                <span v-if="errors.phoneNumber" class="ml-22 md:ml-25 text-sm text-[#e6193c]">
+                                    {{ errors.phoneNumber }}
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <!-- Desktop Screen -->
+                        <Reviews v-if="!isMobile" />
+                    </div>
+
+                    <!-- STEP 5: SHIPPING ADDRESS -->
+                    <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
+
+                        <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
+                            STEP 5: SHIPPING ADDRESS
+                        </h2>
+
+                        <div class="space-y-4">
+                            <!-- Shipping - First Name -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <input v-model="formFields.shipFirstName" name="shipFirstName" type="text"
+                                        @input="validateField('shipFirstName', ($event.target as HTMLInputElement).value)"
+                                        placeholder="First Name"
+                                        :class="[
+                                            'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+
+                                            errors.shipFirstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                        maxlength="12" />
+                                    <span v-if="errors.shipFirstName" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.shipFirstName }}
                                     </span>
                                 </div>
 
-                            </div>
-
-                            <!-- Email -->
-                            <input v-model="formFields.email" name="email-address" type="email" placeholder="E-mail"
-                                :class="[
-                                    'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                    // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                    errors.email ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                            <span v-if="errors.email" class="ml-2 text-sm text-[#e6193c]">
-                                {{ errors.email }}
-                            </span>
-
-                            <!-- Phone -->
-                            <div class="flex items-center justify-center gap-3 w-full mt-4 m-0">
-                                <div class="flex items-center bg-white shadow-md px-4 rounded-md h-[58px]">
-                                    <img src="/images/flag.png" alt="US Flag" class="lg:h-5 h-4  mr-1">
-                                    <span class="text-gray font-bold">+1</span>
-                                </div>
-                                <input v-model="formFields.phoneNumber" name="phoneNumber" type="tel"
-                                    placeholder="Phone"
-                                    :class="[
-                                        'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                        errors.phoneNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                            </div>
-                            <span v-if="errors.phoneNumber" class="ml-22 md:ml-25 text-sm text-[#e6193c]">
-                                {{ errors.phoneNumber }}
-                            </span>
-
-                        </form>
-                    </div>
-
-                    <!-- Desktop Screen -->
-                    <Reviews v-if="!isMobile" />
-                </div>
-
-                <!-- STEP 5: SHIPPING ADDRESS -->
-                <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
-
-                    <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
-                        STEP 5: SHIPPING ADDRESS
-                    </h2>
-
-                    <form class="space-y-4">
-                        <!-- Shipping - First Name -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <div>
-                                <input v-model="formFields.shipFirstName" name="shipFirstName" type="text"
-                                    placeholder="First Name"
-                                    :class="[
-                                        'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                        errors.shipFirstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                                <span v-if="errors.shipFirstName" class="ml-2 text-sm text-[#e6193c]">
-                                    {{ errors.shipFirstName }}
-                                </span>
-                            </div>
-
-                            <!-- Shipping - Last Name -->
-                            <div>
-                                <input v-model="formFields.shipLastName" name="shipLastName" type="text"
-                                    placeholder="Last Name"
-                                    :class="[
-                                        'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                        errors.shipLastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                                <span v-if="errors.shipLastName" class="ml-2 text-sm text-[#e6193c]">
-                                    {{ errors.shipLastName }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Shipping - Street Address -->
-                        <input v-model="formFields.shipStreetAddress" name="shipStreetAddress" type="text"
-                            placeholder="Street Address"
-                            :class="[
-                                'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                errors.shipStreetAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                        <span v-if="errors.shipStreetAddress" class="ml-2 text-sm text-[#e6193c]">
-                            {{ errors.shipStreetAddress }}
-                        </span>
-
-                        <!-- Shipping -  Apartment or Suite (Optional) -->
-                        <input v-model="formFields.shipApptsAddress" name="shipApptsAddress" type="text"
-                            placeholder="Apartment or Suite (Optional)"
-                            :class="[
-                                'w-full mb-4 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                errors.shipApptsAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                        <span v-if="errors.shipApptsAddress" class="ml-2 text-sm text-[#e6193c]">
-                            {{ errors.shipApptsAddress }}
-                        </span>
-
-                        <!-- Shipping - City -->
-                        <input v-model="formFields.shipCity" name="shipCity" type="text" placeholder="City" :class="[
-                            'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                            errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                        <span v-if="errors.shipCity" class="ml-2 text-sm text-[#e6193c]">
-                            {{ errors.shipCity }}
-                        </span>
-
-                        <!-- Shipping - Country -->
-                        <select v-model="formFields.shipCounty" name="shipCounty" :class="[
-                            'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                            // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                            errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
-                            <option value="">-- Choose Country --</option>
-                            <option value="us">United States</option>
-                            <option value="ca">Canada</option>
-                        </select>
-                        <span v-if="errors.shipCounty" class="ml-2 text-sm text-[#e6193c]">
-                            {{ errors.shipCounty }}
-                        </span>
-
-                        <!-- Shipping - States -->
-                        <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <select v-model="formFields.shipState" name="shipState" :class="[
-                                    'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                    // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                    errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
-                                    <option value="">-- Choose State --</option>
-                                    <option v-for="state in usStates" :key="state.code" :value="state.code">
-                                        {{ state.name }}
-                                    </option>
-                                </select>
-                                <span v-if="errors.shipState" class="ml-2 text-sm text-[#e6193c]">
-                                    {{ errors.shipState }}
-                                </span>
-                            </div>
-
-                            <!--  Shipping - Postal Code -->
-                            <div>
-                                <input v-model="formFields.shipPostalCode" name="shipPostalCode" type="text"
-                                    placeholder="Postal Code"
-                                    :class="[
-                                        'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                        errors.shipPostalCode ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                                <span v-if="errors.shipPostalCode" class="ml-2 text-sm text-[#e6193c]">
-                                    {{ errors.shipPostalCode }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Credit Card Number -->
-                        <input v-model="formFields.creditCardNumber" name="creditCardNumber" type="text"
-                            placeholder="Credit Card Number"
-                            :class="[
-                                'w-full m-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                errors.creditCardNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                        <span v-if="errors.creditCardNumber" class="ml-2 text-sm text-[#e6193c]">
-                            {{ errors.creditCardNumber }}
-                        </span>
-
-                        <!-- Security Code (3-4 Digits) -->
-                        <input v-model="formFields.cardCVV" name="cardCVV" type="text"
-                            placeholder="Security Code (3-4 Digits)" :class="[
-                                'w-full m-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                errors.cardCVV ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" />
-                        <span v-if="errors.cardCVV" class="ml-2 text-sm text-[#e6193c]">
-                            {{ errors.cardCVV }}
-                        </span>
-
-                        <!-- Card Expiry Month -->
-                        <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <select v-model="formFields.expiryMonth" name="expiryMonth"
-                                    :class="[
-                                        'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                        errors.expiryMonth ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
-                                    <option value="">Card Month</option>
-                                    <option v-for="month in cardExpiryMonths" :key=month.code :value=month.code>{{
-                                        month.name }}
-                                    </option>
-                                </select>
-                                <span v-if="errors.expiryMonth" class="ml-2 text-sm text-[#e6193c]">
-                                    {{ errors.expiryMonth }}
-                                </span>
-                            </div>
-
-                            <!-- Card Expiry Year -->
-                            <div>
-                                <select v-model="formFields.expiryYear" name="expiryYear"
-                                    :class="[
-                                        'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                        // errors.firstName ? 'border border-red-500 ring-1 ring-[#e6193c]' : 'border border-[#278f5a] focus:ring-[#278f5a]'
-                                        errors.expiryYear ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
-                                    <option value="">Expiry Year</option>
-                                    <option v-for="year in cardExpiryYears" :key="year.value" :value=year.value>
-                                        {{ year.name }}
-                                    </option>
-                                </select>
-                                <span v-if="errors.expiryYear" class="ml-2 text-sm text-[#e6193c]">
-                                    {{ errors.expiryYear }}
-                                </span>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-
-                <!-- STEP 6: BILLING ADDRESS -->
-                <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
-                    <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
-                        STEP 6: BILLING ADDRESS
-                    </h2>
-
-                    <!-- Option: Same as shipping address -->
-                    <div class="flex items-center justify-between pb-4 ">
-                        <div class="flex items-center space-x-3">
-                            <div @click="sameBilling = true"
-                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
-                                :class="{ 'bg-[#172969]': sameBilling }">
-                                <svg v-if="sameBilling" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                            <span class="cursor-pointer select-none" @click="sameBilling = true">
-                                Same as shipping address</span>
-                        </div>
-                    </div>
-
-                    <!-- Option: Use a different billing address -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div @click="sameBilling = false"
-                                class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
-                                :class="{ 'bg-[#172969]': !sameBilling }">
-                                <svg v-if="!sameBilling" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                            <span @click="sameBilling = false" class="cursor-pointer select-none">
-                                Use a different billing address</span>
-                        </div>
-                    </div>
-
-                    <Transition name="sameName">
-                        <form v-if="!sameBilling" class="space-y-4 mt-5">
-                            <!-- Billing - First Name -->
-                            <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Shipping - Last Name -->
                                 <div>
-                                    <input v-model="formFields.billingFirstName" name="billingFirstName" type="text"
-                                        placeholder="First Name"
-                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
-                                </div>
-
-                                <!-- Billing - Last Name -->
-                                <div>
-                                    <input v-model="formFields.billingLastName" name="billingLastName" type="text"
+                                    <input v-model="formFields.shipLastName" name="shipLastName" type="text"
+                                        @input="validateField('shipLastName', ($event.target as HTMLInputElement).value)"
                                         placeholder="Last Name"
-                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                        :class="[
+                                            'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+
+                                            errors.shipLastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                        maxlength="12" />
+                                    <span v-if="errors.shipLastName" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.shipLastName }}
+                                    </span>
                                 </div>
                             </div>
 
-                            <!-- Billing - Street Address -->
-                            <input v-model="formFields.billingStreetAddress" name="billingStreetAddress" type="text"
+                            <!-- Shipping - Street Address -->
+                            <input v-model="formFields.shipStreetAddress" name="shipStreetAddress" type="text"
+                                @input="validateField('shipStreetAddress', ($event.target as HTMLInputElement).value)"
                                 placeholder="Street Address"
-                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                :class="[
+                                    'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                    errors.shipStreetAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="50" />
+                            <span v-if="errors.shipStreetAddress" class="ml-2 text-sm text-[#e6193c]">
+                                {{ errors.shipStreetAddress }}
+                            </span>
 
-                            <!-- Billing - Apartment or Suite (Optional) -->
-                            <input v-model="formFields.billingApptsAddress" name="billingApptsAddress" type="text"
+                            <!-- Shipping -  Apartment or Suite (Optional) -->
+                            <input v-model="formFields.shipApptsAddress" name="shipApptsAddress" type="text"
                                 placeholder="Apartment or Suite (Optional)"
-                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                :class="[
+                                    'w-full mb-4 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                    errors.shipApptsAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="50" />
+                            <span v-if="errors.shipApptsAddress" class="ml-2 text-sm text-[#e6193c]">
+                                {{ errors.shipApptsAddress }}
+                            </span>
 
-                            <!-- Billing - City -->
-                            <input v-model="formFields.billingCity" name="billingCity" type="text"
-                                placeholder="Apartment or Suite (Optional)"
-                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                            <!-- Shipping - City -->
+                            <input v-model="formFields.shipCity" name="shipCity" type="text" placeholder="City"
+                                @input="validateField('shipCity', ($event.target as HTMLInputElement).value)" :class="[
+                                    'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                    errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                maxlength="20" />
+                            <span v-if="errors.shipCity" class="ml-2 text-sm text-[#e6193c]">
+                                {{ errors.shipCity }}
+                            </span>
 
-                            <!-- Billing - Country -->
-                            <select v-model="formFields.billingCounty" name="billingCounty"
-                                class="mb-0 mt-4 w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                            <!-- Shipping - Country -->
+                            <select v-model="formFields.shipCounty" name="shipCounty"
+                                @input="validateField('shipCounty', ($event.target as HTMLInputElement).value)" :class="[
+                                    'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                    errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                 <option value="">-- Choose Country --</option>
                                 <option value="us">United States</option>
                                 <option value="ca">Canada</option>
                             </select>
-                            <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                            <span v-if="errors.shipCounty" class="ml-2 text-sm text-[#e6193c]">
+                                {{ errors.shipCounty }}
+                            </span>
 
-                            <!-- Billing - States -->
+                            <!-- Shipping - States -->
                             <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <select v-model="formFields.billingState" name="billingState"
-                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
+                                    <select v-model="formFields.shipState" name="shipState"
+                                        @input="validateField('shipState', ($event.target as HTMLInputElement).value)"
+                                        :class="[
+                                            'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                            errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                         <option value="">-- Choose State --</option>
                                         <option v-for="state in usStates" :key="state.code" :value="state.code">
                                             {{ state.name }}
                                         </option>
                                     </select>
-                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                    <span v-if="errors.shipState" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.shipState }}
+                                    </span>
                                 </div>
 
-                                <!-- Billing - Postal Code -->
+                                <!--  Shipping - Postal Code -->
                                 <div>
-                                    <input v-model="formFields.billingPostalCode" name="billingPostalCode" type="text"
+                                    <input v-model="formFields.shipPostalCode" name="shipPostalCode" type="text"
+                                        @input="validateField('shipPostalCode', ($event.target as HTMLInputElement).value)"
                                         placeholder="Postal Code"
-                                        class="w-full p-3 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-[60px]">
-                                    <span class="hidden ml-2 text-sm text-[#e6193c]"></span>
+                                        :class="[
+                                            'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                            errors.shipPostalCode ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                        maxlength="9" />
+                                    <span v-if="errors.shipPostalCode" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.shipPostalCode }}
+                                    </span>
                                 </div>
-
                             </div>
-                        </form>
-                    </Transition>
-                </div>
-                <!-- ORDER SUMMARY -->
-                <div class="bg-white p-4 rounded-lg shadow mt-3">
-                    <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
-                        {{ paymentMethod === 'payPal' ? 'STEP 5' : 'STEP 7' }}: ORDER SUMMARY
-                    </h2>
 
-                    <div @click="extraProduct = !extraProduct"
-                        class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
-
-                        <!-- Icon at top -->
-                        <div class="flex justify-center">
-                            <span class="text-4xl">
-                                <img src="/images/funds.png" class="h-16">
+                            <!-- Credit Card Number -->
+                            <input v-model="formFields.creditCardNumber" name="creditCardNumber" type="text"
+                                @input="validateField('creditCardNumber', ($event.target as HTMLInputElement).value)"
+                                placeholder="Credit Card Number"
+                                :class="[
+                                    'w-full m-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                    errors.creditCardNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="16">
+                            <span v-if="errors.creditCardNumber" class="ml-2 text-sm text-[#e6193c]">
+                                {{ errors.creditCardNumber }}
                             </span>
-                        </div>
 
-                        <!-- Yes, I want 2 Years of Protection. -->
-                        <div class="flex justify-center items-center">
-                            <div class="flex items-center cursor-pointer justify-center w-fit">
-                                <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
-                                <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3',
-                                    extraProduct ? 'bg-[#172969]' : 'bg-transparent']">
-                                    <NuxtImg v-if="extraProduct" src="/images/whiteTick.svg" alt="white-tick" />
+                            <!-- Security Code (3-4 Digits) -->
+                            <input v-model="formFields.cardCVV" name="cardCVV" type="text"
+                                @input="validateField('cardCVV', ($event.target as HTMLInputElement).value)"
+                                placeholder="Security Code (3-4 Digits)" :class="[
+                                    'w-full m-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+
+                                    errors.cardCVV ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
+                                maxlength="4" />
+                            <span v-if="errors.cardCVV" class="ml-2 text-sm text-[#e6193c]">
+                                {{ errors.cardCVV }}
+                            </span>
+
+                            <!-- Card Expiry Month -->
+                            <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <select v-model="formFields.expiryMonth" name="expiryMonth"
+                                        @input="validateField('expiryMonth', ($event.target as HTMLInputElement).value)"
+                                        :class="[
+                                            'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                            errors.expiryMonth ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                        <option value="">Card Month</option>
+                                        <option v-for="month in cardExpiryMonths" :key=month.code :value=month.code>{{
+                                            month.name }}
+                                        </option>
+                                    </select>
+                                    <span v-if="errors.expiryMonth" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.expiryMonth }}
+                                    </span>
                                 </div>
-                                <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
-                                    Yes, I want 2 Years of Protection.
-                                </span>
-                            </div>
-                        </div>
 
-                        <!-- Description -->
-                        <p class="text-gray-700 text-sm">
-                            <span class="font-semibold">One Time Offer:</span> By placing your order today you can
-                            have
-                            2 years of protection and replacement warranty for only an additional
-                            <span class="font-semibold">$19.97</span>. This extended warranty means your product is
-                            covered for 2 years.
-                        </p>
+                                <!-- Card Expiry Year -->
+                                <div>
+                                    <select v-model="formFields.expiryYear" name="expiryYear"
+                                        @input="validateField('expiryYear', ($event.target as HTMLInputElement).value)"
+                                        :class="[
+                                            'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                            errors.expiryYear ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                        <option value="">Expiry Year</option>
+                                        <option v-for="year in cardExpiryYears" :key="year.value" :value=year.value>
+                                            {{ year.name }}
+                                        </option>
+                                    </select>
+                                    <span v-if="errors.expiryYear" class="ml-2 text-sm text-[#e6193c]">
+                                        {{ errors.expiryYear }}
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <!-- Product Section -->
-                    <div v-for="product in cartData" :key="product.id" class=" w-full pt-6 space-y-6">
+                    <!-- STEP 6: BILLING ADDRESS -->
+                    <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
+                        <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+                            STEP 6: BILLING ADDRESS
+                        </h2>
 
-                        <div name="product-details">
-                            <div class="flex justify-between items-center mb-2">
-                                <div class="flex items-center space-x-2">
-                                    <p class="text-800 text-lg font-bold">Product</p>
+                        <!-- Option: Same as shipping address -->
+                        <div class="flex items-center justify-between pb-4 ">
+                            <div class="flex items-center space-x-3">
+                                <div @click="sameBilling = true"
+                                    class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
+                                    :class="{ 'bg-[#172969]': sameBilling }">
+                                    <svg v-if="sameBilling" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
                                 </div>
-                                <p class="text-gray-800 text-lg font-bold">Price</p>
+                                <span class="cursor-pointer select-none" @click="sameBilling = true">
+                                    Same as shipping address</span>
                             </div>
+                        </div>
 
-                            <div class="flex justify-between items-start mb-2">
-                                <div class="flex items-start space-x-4">
-                                    <img :src="product.img[gummyType]" alt="Product"
-                                        class="w-20 h-20 object-contain border rounded">
+                        <!-- Option: Use a different billing address -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div @click="sameBilling = false"
+                                    class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
+                                    :class="{ 'bg-[#172969]': !sameBilling }">
+                                    <svg v-if="!sameBilling" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                                        <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <span @click="sameBilling = false" class="cursor-pointer select-none">
+                                    Use a different billing address</span>
+                            </div>
+                        </div>
+
+                        <Transition name="sameName">
+                            <div v-if="!sameBilling" class="space-y-4 mt-5">
+                                <!-- Billing - First Name -->
+                                <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <h3 class="font-semibold text-gray-900">{{ product.title[gummyType] }}</h3>
-                                        <span
-                                            class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full font-semibold">
-                                            {{ product.bagQty }} Bags
+                                        <input v-model="formFields.billingFirstName" name="billingFirstName" type="text"
+                                            @input="validateField('billingFirstName', ($event.target as HTMLInputElement).value)"
+                                            placeholder="First Name" maxlength="12"
+                                            :class="[
+                                                'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                                errors.billingFirstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                        <span v-if="errors.billingFirstName" class="ml-2 text-sm text-[#e6193c]">
+                                            {{ errors.billingFirstName }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Billing - Last Name -->
+                                    <div>
+                                        <input v-model="formFields.billingLastName" name="billingLastName" type="text"
+                                            @input="validateField('billingLastName', ($event.target as HTMLInputElement).value)"
+                                            placeholder="Last Name" maxlength="12"
+                                            :class="[
+                                                'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                                errors.billingLastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                        <span v-if="errors.billingLastName" class="ml-2 text-sm text-[#e6193c]">
+                                            {{ errors.billingLastName }}
                                         </span>
                                     </div>
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-red-500 line-through font-semibold">
-                                        Regular ${{ product.compareAtPrice }}</p>
-                                    <p class="text-gray-900 font-semibold">${{ product.price.toFixed(2) }}</p>
+
+                                <!-- Billing - Street Address -->
+                                <input v-model="formFields.billingStreetAddress" name="billingStreetAddress" type="text"
+                                    @input="validateField('billingStreetAddress', ($event.target as HTMLInputElement).value)"
+                                    placeholder="Street Address" maxlength="50"
+                                    :class="[
+                                        'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        errors.billingStreetAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                <span v-if="errors.billingStreetAddress" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.billingStreetAddress }}
+                                </span>
+
+                                <!-- Billing - Apartment or Suite (Optional) -->
+                                <input v-model="formFields.billingApptsAddress" name="billingApptsAddress" type="text"
+                                    placeholder="Apartment or Suite (Optional)" maxlength="50"
+                                    :class="[
+                                        'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        errors.billingApptsAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                <span v-if="errors.billingApptsAddress" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.billingApptsAddress }}
+                                </span>
+
+                                <!-- Billing - City -->
+                                <input v-model="formFields.billingCity" name="billingCity" type="text"
+                                    @input="validateField('billingCity', ($event.target as HTMLInputElement).value)"
+                                    placeholder="City" maxlength="20"
+                                    :class="[
+                                        'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        errors.billingCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                <span v-if="errors.billingCity" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.billingCity }}
+                                </span>
+
+                                <!-- Billing - Country -->
+                                <select v-model="formFields.billingCounty" name="billingCounty"
+                                    @input="validateField('billingCounty', ($event.target as HTMLInputElement).value)"
+                                    :class="[
+                                        'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                        errors.billingCounty ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                    <option value="">-- Choose Country --</option>
+                                    <option value="us">United States</option>
+                                    <option value="ca">Canada</option>
+                                </select>
+                                <span v-if="errors.billingCounty" class="ml-2 text-sm text-[#e6193c]">
+                                    {{ errors.billingCounty }}
+                                </span>
+
+                                <!-- Billing - States -->
+                                <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <select v-model="formFields.billingState" name="billingState"
+                                            @input="validateField('billingState', ($event.target as HTMLInputElement).value)"
+                                            :class="[
+                                                'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                                errors.billingState ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                            <option value="">-- Choose State --</option>
+                                            <option v-for="state in usStates" :key="state.code" :value="state.code">
+                                                {{ state.name }}
+                                            </option>
+                                        </select>
+                                        <span v-if="errors.billingState" class="ml-2 text-sm text-[#e6193c]">
+                                            {{ errors.billingState }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Billing - Postal Code -->
+                                    <div>
+                                        <input v-model="formFields.billingPostalCode" name="billingPostalCode"
+                                            @input="validateField('billingPostalCode', ($event.target as HTMLInputElement).value)"
+                                            type="text" placeholder="Postal Code" maxlength="9"
+                                            :class="[
+                                                'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                                errors.billingPostalCode ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                        <span v-if="errors.billingPostalCode" class="ml-2 text-sm text-[#e6193c]">
+                                            {{ errors.billingPostalCode }}
+                                        </span>
+                                    </div>
+
                                 </div>
                             </div>
+                        </Transition>
+                    </div>
 
-                            <!-- Free Shipping -->
-                            <div class="flex justify-between items-center mb-2">
-                                <div v-if="product.id === 3" class="flex items-center space-x-2">
-                                    <p class="text-lg font-semibold text-gray-800">Shipping Price</p>
-                                </div>
-                                <div v-else class="flex items-center space-x-2">
-                                    <img class="w-5" src="/images/check-icons.png">
-                                    <p class="text-lg font-semibold text-gray-800">Free Shipping</p>
-                                </div>
-                                <div v-if="product.id === 3">
-                                    <span class="text-md font-bold">$7.99</span>
-                                </div>
-                                <div v-else class="flex gap-1">
-                                    <span class="text-md font-semibold line-through text-red-500">$7.99</span>
-                                    <span class="text-md font-semibold text-green-600 ">Free</span>
-                                </div>
+                    <!-- ORDER SUMMARY -->
+                    <div class="bg-white p-4 rounded-lg shadow mt-3">
+                        <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
+                            {{ paymentMethod === 'payPal' ? 'STEP 5' : 'STEP 7' }}: ORDER SUMMARY
+                        </h2>
 
+                        <div @click="extraProduct = !extraProduct"
+                            class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
+
+                            <!-- Icon at top -->
+                            <div class="flex justify-center">
+                                <span class="text-4xl">
+                                    <img src="/images/funds.png" class="h-16">
+                                </span>
                             </div>
 
-                            <!-- Total -->
-                            <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
-                                <div>
-                                    <p class="text-gray font-bold">Total:
-                                        <span class="text-sm">Before Taxes</span>
-                                    </p>
-                                </div>
-
-                                <div class="flex gap-3 items-baseline font-bold">
-                                    <!-- discount % -->
-                                    <span class="font-bold text-sm text-red">
-                                        -{{ product.percentageOff }}%</span>
-
-                                    <!-- final price -->
-                                    <span class="font-bold text-gray-900 text-lg">
-                                        ${{ product.id === 3
-                                            ? (product.price + 7.99).toFixed(2) : product.price.toFixed(2) }}
+                            <!-- Yes, I want 2 Years of Protection. -->
+                            <div class="flex justify-center items-center">
+                                <div class="flex items-center cursor-pointer justify-center w-fit">
+                                    <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
+                                    <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3',
+                                        extraProduct ? 'bg-[#172969]' : 'bg-transparent']">
+                                        <NuxtImg v-if="extraProduct" src="/images/whiteTick.svg" alt="white-tick" />
+                                    </div>
+                                    <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
+                                        Yes, I want 2 Years of Protection.
                                     </span>
-
-                                    <!-- total price -->
-                                    <span
-                                        class="text-md font-bold text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
-                                        ${{ (Number(product.compareAtPrice) + 7.99).toFixed(2) }}
-                                    </span>
-
                                 </div>
                             </div>
 
-                            <p class="text-center text-[0.9rem] font-medium">
-                                🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.
+                            <!-- Description -->
+                            <p class="text-gray-700 text-sm">
+                                <span class="font-semibold">One Time Offer:</span> By placing your order today you can
+                                have
+                                2 years of protection and replacement warranty for only an additional
+                                <span class="font-semibold">$19.97</span>. This extended warranty means your product is
+                                covered for 2 years.
                             </p>
                         </div>
 
-                        <!-- Checkout Button -->
-                        <button @click="formSubmit"
-                            :class="['w-full flex justify-center items-center  font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
-                            {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
-                            <img v-if="paymentMethod === 'payPal'"
-                                src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal"
-                                class="h-6 ml-2">
-                        </button>
+                        <!-- Product Section -->
+                        <div v-for="product in cartData" :key="product.id" class=" w-full pt-6 space-y-6">
 
-                        <div
-                            class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
-                            <img src="/images/guarantee.png" alt=""
-                                class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
-                            <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
-                                Your order today is protected by our ridiculously iron-clad Picky Momz 90-day
-                                <span class="font-bold">200% Happiness Guarantee.</span>
-                                If you’re not happy with how
-                                <span class="font-bold">great</span>
-                                you and your family feel, or how improved your energy, focus, and gut issues are,
-                                then
-                                let us know anytime in the next
-                                <span class="font-bold">90 days.</span> We’ll refund <span
-                                    class="font-bold">DOUBLE</span>
-                                what you paid.
-                            </p>
+                            <div name="product-details">
+                                <div class="flex justify-between items-center mb-2">
+                                    <div class="flex items-center space-x-2">
+                                        <p class="text-800 text-lg font-bold">Product</p>
+                                    </div>
+                                    <p class="text-gray-800 text-lg font-bold">Price</p>
+                                </div>
+
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="flex items-start space-x-4">
+                                        <img :src="product.img[gummyType]" alt="Product"
+                                            class="w-20 h-20 object-contain border rounded">
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900">{{ product.title[gummyType] }}</h3>
+                                            <span
+                                                class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full font-semibold">
+                                                {{ product.bagQty }} Bags
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-red-500 line-through font-semibold">
+                                            Regular ${{ product.compareAtPrice }}</p>
+                                        <p class="text-gray-900 font-semibold">${{ product.price.toFixed(2) }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Free Shipping -->
+                                <div class="flex justify-between items-center mb-2">
+                                    <div v-if="product.id === 3" class="flex items-center space-x-2">
+                                        <p class="text-lg font-semibold text-gray-800">Shipping Price</p>
+                                    </div>
+                                    <div v-else class="flex items-center space-x-2">
+                                        <img class="w-5" src="/images/check-icons.png">
+                                        <p class="text-lg font-semibold text-gray-800">Free Shipping</p>
+                                    </div>
+                                    <div v-if="product.id === 3">
+                                        <span class="text-md font-bold">$7.99</span>
+                                    </div>
+                                    <div v-else class="flex gap-1">
+                                        <span class="text-md font-semibold line-through text-red-500">$7.99</span>
+                                        <span class="text-md font-semibold text-green-600 ">Free</span>
+                                    </div>
+
+                                </div>
+
+                                <!-- Total -->
+                                <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
+                                    <div>
+                                        <p class="text-gray font-bold">Total:
+                                            <span class="text-sm">Before Taxes</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="flex gap-3 items-baseline font-bold">
+                                        <!-- discount % -->
+                                        <span class="font-bold text-sm text-red">
+                                            -{{ product.percentageOff }}%</span>
+
+                                        <!-- final price -->
+                                        <span class="font-bold text-gray-900 text-lg">
+                                            ${{ product.id === 3
+                                                ? (product.price + 7.99).toFixed(2) : product.price.toFixed(2) }}
+                                        </span>
+
+                                        <!-- total price -->
+                                        <span
+                                            class="text-md font-bold text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
+                                            ${{ (Number(product.compareAtPrice) + 7.99).toFixed(2) }}
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <p class="text-center text-[0.9rem] font-medium">
+                                    🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.
+                                </p>
+                            </div>
+
+                            <!-- Checkout Button -->
+                            <button type="submit"
+                                :class="['w-full flex justify-center items-center  font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
+                                {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
+                                <img v-if="paymentMethod === 'payPal'"
+                                    src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png"
+                                    alt="PayPal" class="h-6 ml-2">
+                            </button>
+
+                            <div
+                                class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
+                                <img src="/images/guarantee.png" alt=""
+                                    class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
+                                <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
+                                    Your order today is protected by our ridiculously iron-clad Picky Momz 90-day
+                                    <span class="font-bold">200% Happiness Guarantee.</span>
+                                    If you’re not happy with how
+                                    <span class="font-bold">great</span>
+                                    you and your family feel, or how improved your energy, focus, and gut issues are,
+                                    then
+                                    let us know anytime in the next
+                                    <span class="font-bold">90 days.</span> We’ll refund <span
+                                        class="font-bold">DOUBLE</span>
+                                    what you paid.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </section>
 
         </div>
