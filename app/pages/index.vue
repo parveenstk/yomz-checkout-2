@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
-import { useFormStore } from '../../stores/formStore';
 import Reviews from '~/components/Reviews.vue';
+import { useFormStore } from '../../stores/formStore';
+
+// form store data 
+const formStore = useFormStore();
+const { formFields, formSubmit, errors, validateField, handleBillSame } = formStore;
 
 // Gummy type
 const gummyType = ref('ogGummies');
@@ -14,20 +18,10 @@ if (Array.isArray(productData) && productData[0]) {
 const selectedBag = ref(1);
 
 // Payment method
-const paymentMethod = ref('creditCard');
-
-// same billing
-const sameBilling = ref(true);
-// const sameBilling = ref(false);
+const paymentMethod = ref('');
 
 // add extra product
 const extraProduct = ref(false);
-
-// form store data 
-const { formFields, formSubmit, errors, validateField, billSame } = useFormStore()
-if (sameBilling.value) {
-    billSame()
-};
 
 // track screen size
 const isMobile = ref(false)
@@ -91,6 +85,17 @@ onMounted(() => {
 watch(paymentMethod, (newValue) => {
     console.log('newValue:', newValue);
 });
+
+// watch formFields deeply
+// watch(formFields, (newVal, oldVal) => {
+//     for (const key in newVal) {
+//         // key is string by default, so cast it:
+//         const typedKey = key as keyof FormFields
+//         if (newVal[typedKey] !== oldVal[typedKey]) {
+//             errors[typedKey] = ''  // Clear error for the changed field
+//         }
+//     }
+// }, { deep: true })
 
 </script>
 <template>
@@ -530,9 +535,10 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Shipping - Country -->
                             <select v-model="formFields.shipCounty" name="shipCounty"
-                                @input="validateField('shipCounty', ($event.target as HTMLInputElement).value)" :class="[
+                                @input="validateField('shipCounty', ($event.target as HTMLInputElement).value)"
+                                :class="[
                                     'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                    errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                    errors.shipCounty ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                 <option value="">-- Choose Country --</option>
                                 <option value="us">United States</option>
                                 <option value="ca">Canada</option>
@@ -548,7 +554,7 @@ watch(paymentMethod, (newValue) => {
                                         @input="validateField('shipState', ($event.target as HTMLInputElement).value)"
                                         :class="[
                                             'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                            errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                                            errors.shipState ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                         <option value="">-- Choose State --</option>
                                         <option v-for="state in usStates" :key="state.code" :value="state.code">
                                             {{ state.name }}
@@ -645,16 +651,16 @@ watch(paymentMethod, (newValue) => {
                         <!-- Option: Same as shipping address -->
                         <div class="flex items-center justify-between pb-4 ">
                             <div class="flex items-center space-x-3">
-                                <div @click="sameBilling = true"
+                                <div @click="() => handleBillSame(true)"
                                     class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
-                                    :class="{ 'bg-[#172969]': sameBilling }">
-                                    <svg v-if="sameBilling" viewBox="0 0 24 24" fill="none"
+                                    :class="{ 'bg-[#172969]': formStore.sameBilling }">
+                                    <svg v-if="formStore.sameBilling" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                         <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
                                             stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
-                                <span class="cursor-pointer select-none" @click="sameBilling = true">
+                                <span class="cursor-pointer select-none" @click="() => handleBillSame(true)">
                                     Same as shipping address</span>
                             </div>
                         </div>
@@ -662,22 +668,22 @@ watch(paymentMethod, (newValue) => {
                         <!-- Option: Use a different billing address -->
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
-                                <div @click="sameBilling = false"
+                                <div @click="() => handleBillSame(false)"
                                     class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] cursor-pointer"
-                                    :class="{ 'bg-[#172969]': !sameBilling }">
-                                    <svg v-if="!sameBilling" viewBox="0 0 24 24" fill="none"
+                                    :class="{ 'bg-[#172969]': !formStore.sameBilling }">
+                                    <svg v-if="!formStore.sameBilling" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                         <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff"
                                             stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
-                                <span @click="sameBilling = false" class="cursor-pointer select-none">
+                                <span @click="() => handleBillSame(false)" class="cursor-pointer select-none">
                                     Use a different billing address</span>
                             </div>
                         </div>
 
                         <Transition name="sameName">
-                            <div v-if="!sameBilling" class="space-y-4 mt-5">
+                            <div v-if="!formStore.sameBilling" class="space-y-4 mt-5">
                                 <!-- Billing - First Name -->
                                 <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>

@@ -1,9 +1,11 @@
-import { defineStore } from 'pinia'
-import { ref, reactive, type Reactive } from 'vue'
-import { z, ZodError } from 'zod'
+import { defineStore } from 'pinia';
+import { reactive, ref, type Reactive } from 'vue';
+import { z, ZodError } from 'zod';
 
 export const useFormStore = defineStore('formStore', () => {
-    const form = ref(0)
+    // same billing
+    const sameBilling = ref(true);
+
     const formFields: Reactive<FormFields> = reactive({
 
         // Basic fields
@@ -111,8 +113,10 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Submit method
     const formSubmit = () => {
-        const result = schema.safeParse(formFields)
 
+        billSame()
+
+        const result = schema.safeParse(formFields)
         console.log('formFields', JSON.stringify(formFields, null, 2))
 
         // Clear previous errors
@@ -147,7 +151,7 @@ export const useFormStore = defineStore('formStore', () => {
     };
 
     // check validation on input
-    const validateField = <K extends keyof typeof schema.shape>(key: K, value: string | number) => {
+    const validateField = <K extends keyof typeof schema.shape>(key: K, value: string) => {
         const fieldSchema = schema.shape[key]
 
         try {
@@ -157,27 +161,57 @@ export const useFormStore = defineStore('formStore', () => {
             if (err instanceof z.ZodError) {
                 errors[key] = err.issues[0]?.message || 'Invalid input'
             }
+        } finally {
+            formFields[key] = value; // update form values again to make sure it doen't left behind in some cases
         }
     };
 
     // bill details same
     const billSame = () => {
-        formFields.shipFirstName = formFields.billingFirstName
-        formFields.shipLastName = formFields.billingLastName
-        formFields.shipStreetAddress = formFields.billingStreetAddress
-        formFields.shipApptsAddress = formFields.billingApptsAddress
-        formFields.shipCity = formFields.billingCity
-        formFields.shipCounty = formFields.billingCounty
-        formFields.shipState = formFields.billingState
-        formFields.shipPostalCode = formFields.billingPostalCode
+        // console.log("chala")
+        formFields.billingFirstName = formFields.shipFirstName
+        formFields.billingLastName = formFields.shipLastName
+        formFields.billingStreetAddress = formFields.shipStreetAddress
+        formFields.billingApptsAddress = formFields.shipApptsAddress
+        formFields.billingCity = formFields.shipCity
+        formFields.billingCounty = formFields.shipCounty
+        formFields.billingState = formFields.shipState
+        formFields.billingPostalCode = formFields.shipPostalCode
+
+        // Clear billing errors
+        const billingKeys: (keyof FormFields)[] = [
+            'billingFirstName',
+            'billingLastName',
+            'billingStreetAddress',
+            'billingApptsAddress',
+            'billingCity',
+            'billingCounty',
+            'billingState',
+            'billingPostalCode'
+        ]
+
+        billingKeys.forEach(key => {
+            if (formFields[key] !== "") errors[key] = ''
+        })
     };
 
+    // Handle bill same status
+    const handleBillSame = (status: boolean) => {
+        console.log("haa bilsame");
+        
+        sameBilling.value = status;
+        console.log('sameBilling:', sameBilling.value);
+        
+        if (status) billSame();
+    }
+
     return {
-        form,
+        sameBilling,
         formFields,
         errors,
         formSubmit,
         validateField,
-        billSame
+        billSame,
+        handleBillSame
     }
 });
