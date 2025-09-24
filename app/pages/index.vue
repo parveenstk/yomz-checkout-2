@@ -69,12 +69,78 @@ function startCountdown() {
     }, 1000)
 }
 
+// // Add data in Cart
+// const addProductData = (id: number) => {
+//     selectedBag.value = id;
+//     const selectedProduct: ProductData = productData.find(product => product.id === id)!;
+//     console.log("selectedProduct", selectedProduct)
+//     cartData.value[0] = selectedProduct
+// };
+
 // Add data in Cart
 const addProductData = (id: number) => {
     selectedBag.value = id;
-    const selectedProduct: ProductData = productData.find(product => product.id === id)!;
-    console.log("selectedProduct", selectedProduct)
-    cartData.value[0] = selectedProduct
+    const selectedProduct = productData.find(product => product.id === id);
+    if (selectedProduct) {
+        // Replace the first item (main product)
+        cartData.value[0] = selectedProduct;
+
+        // If extra product was already added, keep it
+        if (extraProduct.value && cartData.value.length === 1) {
+            const extraProd = productData.find(p => p.id === 4);
+            if (extraProd) {
+                cartData.value.push(extraProd);
+            }
+        }
+    }
+};
+
+// Add extra product
+// const addExtraProduct = () => {
+//     console.log("addExtraProduct chala.")
+//     extraProduct.value = !extraProduct.value
+// };
+
+// Add/Remove extra product
+const addExtraProduct = () => {
+    console.log("addExtraProduct chala.");
+    extraProduct.value = !extraProduct.value;
+
+    if (extraProduct.value) {
+        // Add extra product
+        const extraProd = productData.find(p => p.id === 4);
+        if (extraProd && !cartData.value.find(item => item.id === 4)) {
+            // Using push to trigger reactivity
+            cartData.value.push(extraProd);
+        }
+    } else {
+        // Remove extra product
+        cartData.value = cartData.value.filter(item => item.id !== 4);
+    }
+};
+
+// Calculate total price for all products in cart
+const calculateTotalPrice = () => {
+    const subtotal = cartData.value.reduce((sum, item) => sum + item.price, 0);
+    const shipping = cartData.value[0]?.id === 3 ? 7.99 : 0;
+    return (subtotal + shipping).toFixed(2);
+};
+
+// Calculate total compare price
+const calculateComparePrice = () => {
+    const total = cartData.value.reduce((sum, item) => sum + item.compareAtPrice, 0);
+    return (total + 7.99).toFixed(2);
+};
+
+// Calculate average discount percentage
+const calculateTotalDiscount = () => {
+    if (cartData.value.length === 0) return 0;
+
+    const totalOriginal = cartData.value.reduce((sum, item) => sum + item.compareAtPrice, 0) + 7.99;
+    const totalDiscounted = parseFloat(calculateTotalPrice());
+    const discount = ((totalOriginal - totalDiscounted) / totalOriginal) * 100;
+
+    return Math.round(discount);
 };
 
 onMounted(() => {
@@ -91,17 +157,6 @@ onMounted(() => {
 watch(paymentMethod, (newValue) => {
     console.log('newValue:', newValue);
 });
-
-// watch formFields deeply
-// watch(formFields, (newVal, oldVal) => {
-//     for (const key in newVal) {
-//         // key is string by default, so cast it:
-//         const typedKey = key as keyof FormFields
-//         if (newVal[typedKey] !== oldVal[typedKey]) {
-//             errors[typedKey] = ''  // Clear error for the changed field
-//         }
-//     }
-// }, { deep: true })
 
 </script>
 <template>
@@ -806,7 +861,8 @@ watch(paymentMethod, (newValue) => {
                             {{ paymentMethod === 'payPal' ? 'STEP 5' : 'STEP 7' }}: ORDER SUMMARY
                         </h2>
 
-                        <div @click="extraProduct = !extraProduct"
+                        <!-- <div @click="extraProduct = !extraProduct" -->
+                        <div @click=addExtraProduct
                             class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
 
                             <!-- Icon at top -->
@@ -817,32 +873,36 @@ watch(paymentMethod, (newValue) => {
                             </div>
 
                             <!-- Yes, I want 2 Years of Protection. -->
-                            <div class="flex justify-center items-center">
-                                <div class="flex items-center cursor-pointer justify-center w-fit">
+                            <div class="flex justify-center items-center relative">
+                                <div class="flex items-center cursor-pointer justify-center w-fit absolute">
                                     <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
-                                    <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center ml-3',
+                                    <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center',
                                         extraProduct ? 'bg-[#172969]' : 'bg-transparent']">
                                         <NuxtImg v-if="extraProduct" src="/images/whiteTick.svg" alt="white-tick" />
                                     </div>
                                     <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
-                                        Yes, I want 2 Years of Protection.
+                                        <!-- Yes, I want 2 Years of Protection. -->
+                                        Yes, I want another style of Gummies
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Description -->
                             <p class="text-gray-700 text-sm">
-                                <span class="font-semibold">One Time Offer:</span> By placing your order today you can
+                                <!-- <span class="font-semibold">One Time Offer:</span> By placing your order today you can
                                 have
                                 2 years of protection and replacement warranty for only an additional
                                 <span class="font-semibold">$19.97</span>. This extended warranty means your product is
-                                covered for 2 years.
+                                covered for 2 years. -->
+
+                                <span class="font-semibold">One Time Offer:</span> By placing your order today, you will
+                                receive another style of gummy with <b>free shipping</b>, worth $79.99, for just $48.00.
                             </p>
                         </div>
 
                         <!-- Product Section -->
-                        <div v-for="product in cartData" :key="product.id" class=" w-full pt-6 space-y-6">
-
+                        <div class="w-full pt-6 space-y-6">
+                            <!-- Main Product Section -->
                             <div name="product-details">
                                 <div class="flex justify-between items-center mb-2">
                                     <div class="flex items-center space-x-2">
@@ -851,45 +911,67 @@ watch(paymentMethod, (newValue) => {
                                     <p class="text-gray-800 text-lg font-bold">Price</p>
                                 </div>
 
-                                <div class="flex justify-between items-start mb-2">
+                                <!-- Main Product (First item in cart) -->
+                                <div v-if="cartData[0]" class="flex justify-between items-start mb-2">
                                     <div class="flex items-start space-x-4">
-                                        <img :src="product.img[gummyType]" alt="Product"
+                                        <img :src="cartData[0].img[gummyType]" alt="Product"
                                             class="w-20 h-20 object-contain border rounded">
                                         <div>
-                                            <h3 class="font-semibold text-gray-900">{{ product.title[gummyType] }}</h3>
+                                            <h3 class="font-semibold text-gray-900">{{ cartData[0].title[gummyType] }}
+                                            </h3>
                                             <span
                                                 class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full font-semibold">
-                                                {{ product.bagQty }} Bags
+                                                {{ cartData[0].bagQty }} Bags
                                             </span>
                                         </div>
                                     </div>
                                     <div class="text-right">
                                         <p class="text-sm text-red-500 line-through font-semibold">
-                                            Regular ${{ product.compareAtPrice }}</p>
-                                        <p class="text-gray-900 font-semibold">${{ product.price.toFixed(2) }}</p>
+                                            Regular ${{ cartData[0].compareAtPrice }}</p>
+                                        <p class="text-gray-900 font-semibold">${{ cartData[0].price.toFixed(2) }}</p>
                                     </div>
                                 </div>
 
-                                <!-- Free Shipping -->
+                                <!-- Extra Product (Second item in cart if exists) -->
+                                <div v-if="cartData[1]" class="flex justify-between items-start mb-2 pt-2">
+                                    <div class="flex items-start space-x-4">
+                                        <img :src="cartData[1].img[gummyType]" alt="Extra Product"
+                                            class="w-20 h-20 object-contain border rounded">
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900">{{ cartData[1].title[gummyType] }}
+                                            </h3>
+                                            <span
+                                                class="inline-block mt-1 text-sm bg-green-600 text-white px-2 py-0.5 rounded-full font-semibold">
+                                                Extra: {{ cartData[1].bagQty }} Bag
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-red-500 line-through font-semibold">
+                                            Regular ${{ cartData[1].compareAtPrice }}</p>
+                                        <p class="text-gray-900 font-semibold">${{ cartData[1].price.toFixed(2) }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Free Shipping Section -->
                                 <div class="flex justify-between items-center mb-2">
-                                    <div v-if="product.id === 3" class="flex items-center space-x-2">
+                                    <div v-if="cartData[0]?.id === 3" class="flex items-center space-x-2">
                                         <p class="text-lg font-semibold text-gray-800">Shipping Price</p>
                                     </div>
                                     <div v-else class="flex items-center space-x-2">
                                         <img class="w-5" src="/images/check-icons.png">
                                         <p class="text-lg font-semibold text-gray-800">Free Shipping</p>
                                     </div>
-                                    <div v-if="product.id === 3">
+                                    <div v-if="cartData[0]?.id === 3">
                                         <span class="text-md font-bold">$7.99</span>
                                     </div>
                                     <div v-else class="flex gap-1">
                                         <span class="text-md font-semibold line-through text-red-500">$7.99</span>
-                                        <span class="text-md font-semibold text-green-600 ">Free</span>
+                                        <span class="text-md font-semibold text-green-600">Free</span>
                                     </div>
-
                                 </div>
 
-                                <!-- Total -->
+                                <!-- Total Section -->
                                 <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
                                     <div>
                                         <p class="text-gray font-bold">Total:
@@ -900,20 +982,19 @@ watch(paymentMethod, (newValue) => {
                                     <div class="flex gap-3 items-baseline font-bold">
                                         <!-- discount % -->
                                         <span class="font-bold text-sm text-red">
-                                            -{{ product.percentageOff }}%</span>
+                                            -{{ calculateTotalDiscount() }}%
+                                        </span>
 
                                         <!-- final price -->
                                         <span class="font-bold text-gray-900 text-lg">
-                                            ${{ product.id === 3
-                                                ? (product.price + 7.99).toFixed(2) : product.price.toFixed(2) }}
+                                            ${{ calculateTotalPrice() }}
                                         </span>
 
                                         <!-- total price -->
                                         <span
                                             class="text-md font-bold text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
-                                            ${{ (Number(product.compareAtPrice) + 7.99).toFixed(2) }}
+                                            ${{ calculateComparePrice() }}
                                         </span>
-
                                     </div>
                                 </div>
 
@@ -924,13 +1005,14 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Checkout Button -->
                             <button type="submit"
-                                :class="['w-full flex justify-center items-center  font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
+                                :class="['w-full flex justify-center items-center font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
                                 {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
                                 <img v-if="paymentMethod === 'payPal'"
                                     src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png"
                                     alt="PayPal" class="h-6 ml-2">
                             </button>
 
+                            <!-- Guarantee Section -->
                             <div
                                 class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
                                 <img src="/images/guarantee.png" alt=""
@@ -938,12 +1020,11 @@ watch(paymentMethod, (newValue) => {
                                 <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
                                     Your order today is protected by our ridiculously iron-clad Picky Momz 90-day
                                     <span class="font-bold">200% Happiness Guarantee.</span>
-                                    If you’re not happy with how
+                                    If you're not happy with how
                                     <span class="font-bold">great</span>
                                     you and your family feel, or how improved your energy, focus, and gut issues are,
-                                    then
-                                    let us know anytime in the next
-                                    <span class="font-bold">90 days.</span> We’ll refund <span
+                                    then let us know anytime in the next
+                                    <span class="font-bold">90 days.</span> We'll refund <span
                                         class="font-bold">DOUBLE</span>
                                     what you paid.
                                 </p>
@@ -1134,39 +1215,38 @@ watch(paymentMethod, (newValue) => {
     animation: rotateclc 12s linear infinite;
 }
 
-.arrowimg {
-    -webkit-animation: leftdemote 3s infinite;
-    animation: leftdemote 3s infinite;
-}
-
 @keyframes rotateclc {
-    100% {
+    10% {
         transform: rotate(-360deg);
     }
 }
 
 .arrowimg {
-    -webkit-animation: leftdemote 3s infinite;
-    animation: leftdemote 3s infinite;
+    /* -webkit-animation: leftdemote 0s infinite; */
+    animation: leftdemote 3.5s infinite;
     top: 0px;
-    left: -30px;
+    left: -10px;
 }
 
 @keyframes leftdemote {
     0% {
-        left: -30px;
-    }
-
-    10% {
-        left: -40px;
-    }
-
-    18% {
-        left: -24px;
+        left: -35px;
     }
 
     25% {
-        left: -30px;
+        left: -8px;
+    }
+
+    50% {
+        left: -35px;
+    }
+
+    75% {
+        left: -8px;
+    }
+
+    100% {
+        left: -35px;
     }
 }
 </style>

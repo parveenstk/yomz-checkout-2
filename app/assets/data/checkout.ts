@@ -85,6 +85,22 @@ export const productData: ProductData[] = [
         compareAtPrice: 79.99,
         price: 48,
         percentageOff: 40
+    },
+
+    {
+        id: 4, // Extra product
+        img: {
+            soursGummies: '/images/og-bag.png',
+            ogGummies: '/images/sour-bag.png'
+        },
+        title: {
+            soursGummies: 'OG Gummies - Extra',
+            ogGummies: 'Sours Gummies - Extra'
+        },
+        bagQty: 1,
+        compareAtPrice: 79.99,
+        price: 48,
+        percentageOff: 40
     }
 ];
 

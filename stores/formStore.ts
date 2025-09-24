@@ -4,7 +4,7 @@ import { z, ZodError } from 'zod';
 
 export const useFormStore = defineStore('formStore', () => {
     // Payment method state
-    const paymentMethod = ref<'creditCard' | 'payPal' | null>(null);
+    const paymentMethod = ref<'creditCard' | 'payPal' | null>('creditCard');
 
     // same billing
     const sameBilling = ref(true);
@@ -94,34 +94,9 @@ export const useFormStore = defineStore('formStore', () => {
         billingPostalCode: z.string().regex(postalCodeRegex, 'Invalid postal code')
     });
 
-    // PayPal schema (only basic fields required, others optional)
-    const payPalSchema = basicSchema.extend({
-        // Make all other fields optional for PayPal
-        shipFirstName: z.string().optional(),
-        shipLastName: z.string().optional(),
-        shipStreetAddress: z.string().optional(),
-        shipApptsAddress: z.string().optional(),
-        shipCity: z.string().optional(),
-        shipCounty: z.string().optional(),
-        shipState: z.string().optional(),
-        shipPostalCode: z.string().optional(),
-        creditCardNumber: z.string().optional(),
-        cardCVV: z.string().optional(),
-        expiryMonth: z.string().optional(),
-        expiryYear: z.string().optional(),
-        billingFirstName: z.string().optional(),
-        billingLastName: z.string().optional(),
-        billingStreetAddress: z.string().optional(),
-        billingApptsAddress: z.string().optional(),
-        billingCity: z.string().optional(),
-        billingCounty: z.string().optional(),
-        billingState: z.string().optional(),
-        billingPostalCode: z.string().optional(),
-    });
-
     // Computed schema based on payment method
     const activeSchema = computed(() => {
-        if (paymentMethod.value === 'payPal') return payPalSchema;
+        if (paymentMethod.value === 'payPal') return basicSchema;
         if (paymentMethod.value === 'creditCard') return schema;
         return null; // No schema if no payment method selected
     });
