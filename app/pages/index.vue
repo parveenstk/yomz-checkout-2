@@ -867,9 +867,11 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Icon at top -->
                             <div class="flex justify-center">
-                                <span class="text-4xl">
-                                    <img src="/images/funds.png" class="h-16">
-                                </span>
+                                <!-- <NuxtImg v-if="gummyType === 'soursGummies'" src="/images/og-bag.png" alt="og-gummies"
+                                    class="h-16" />
+                                <NuxtImg v-else-if="gummyType === 'ogGummies'" src="/images/sour-bag.png"
+                                    alt="sour-gummies" class="h-16" /> -->
+                                <NuxtImg src="/images/funds.png" class="h-16" />
                             </div>
 
                             <!-- Yes, I want 2 Years of Protection. -->
