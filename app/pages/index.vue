@@ -1,11 +1,20 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
-import Reviews from '~/components/Reviews.vue';
 import { useFormStore } from '../../stores/formStore';
+import Reviews from '~/components/Reviews.vue';
 
 // form store data 
 const formStore = useFormStore();
 const { formFields, formSubmit, errors, validateField, handleBillSame } = formStore;
+
+// Use computed to sync with store's paymentMethod
+const paymentMethod = computed({
+    get: () => formStore.paymentMethod,
+    set: (value: 'creditCard' | 'payPal') => {
+        formStore.paymentMethod = value
+    }
+})
 
 // Gummy type
 const gummyType = ref('ogGummies');
@@ -16,9 +25,6 @@ if (Array.isArray(productData) && productData[0]) {
 
 // Gummy bags
 const selectedBag = ref(1);
-
-// Payment method
-const paymentMethod = ref('');
 
 // add extra product
 const extraProduct = ref(false);
@@ -274,8 +280,8 @@ watch(paymentMethod, (newValue) => {
                     <div v-for="value in gymmyTypeData" :key="value.id"
                         class="flex items-center space-x-1 cursor-pointer relative select-none"
                         @click="gummyType = value.id">
-                        <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3"
-                            :class="{ 'bg-[#172969] ': gummyType === value.id }">
+                        <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3 border-[#172969]"
+                            :class="{ 'bg-[#172969]': gummyType === value.id }">
                             <NuxtImg v-if="gummyType === value.id" src="/images/whiteTick.svg" alt="white-tick" />
                         </div>
 
@@ -295,7 +301,7 @@ watch(paymentMethod, (newValue) => {
                     'flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer transition relative select-none',
                     value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
                     <div class="flex items-center space-x-3">
-                        <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2"
+                        <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2 border-[#172969]"
                             :class="{ 'bg-[#172969]': selectedBag === value.id, 'border-[#172969]': selectedBag !== value.id }">
                             <NuxtImg v-if="selectedBag === value.id" src="/images/whiteTick.svg" />
                         </div>
@@ -333,11 +339,11 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- PayPal Method -->
                 <label @click="paymentMethod = 'payPal'"
-                    class="flex items-center justify-between  pl-0 pt-4 pr-4 pb-4  lg:pt-6 lg:pr-6 lg:pb-6 border-b border-[#e7e7e7] cursor-pointer">
+                    class="flex items-center justify-between pl-0 pt-4 pr-4 pb-4  lg:pt-6 lg:pr-6 lg:pb-6 border-b border-[#e7e7e7] cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
-                            class="w-6 h-6 border-2  rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            :class="['w-6 h-6 border-2  rounded-full flex items-center justify-center border-[#172969] ml-3', paymentMethod === null ? 'bg-white' : 'peer-checked:bg-[#172969]']">
                             <svg v-if="paymentMethod === 'payPal'" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -360,7 +366,7 @@ watch(paymentMethod, (newValue) => {
                     <div class="flex items-center space-x-3">
                         <input type="radio" name="YOMZ" class="peer hidden">
                         <div
-                            class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] peer-checked:bg-[#172969] ml-3">
+                            :class="['w-6 h-6 border-2  rounded-full flex items-center justify-center border-[#172969] ml-3', paymentMethod === null ? 'bg-white' : 'peer-checked:bg-[#172969]']">
                             <svg v-if="paymentMethod === 'creditCard'" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

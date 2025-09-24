@@ -3,6 +3,9 @@ import { reactive, ref, type Reactive } from 'vue';
 import { z, ZodError } from 'zod';
 
 export const useFormStore = defineStore('formStore', () => {
+    // Payment method state
+    const paymentMethod = ref<'creditCard' | 'payPal' | null>(null);
+
     // same billing
     const sameBilling = ref(true);
 
@@ -49,6 +52,14 @@ export const useFormStore = defineStore('formStore', () => {
     const phoneRegex = /^\+?[0-9\s\-]{10,15}$/
     const streetRegex = /^[A-Za-z0-9À-ÿ\s,'\-\.]{5,100}$/
 
+    // Basic schema (always required for both payment methods)
+    const basicSchema = z.object({
+        firstName: z.string().regex(nameRegex, 'Invalid first name'),
+        lastName: z.string().optional(),
+        email: z.email('Invalid email address'),
+        phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number'),
+    });
+
     const schema = z.object({
         // Basic
         firstName: z.string().regex(nameRegex, 'Invalid first name'),
@@ -67,7 +78,7 @@ export const useFormStore = defineStore('formStore', () => {
         shipPostalCode: z.string().regex(postalCodeRegex, 'Invalid postal code'),
 
         // Credit card
-        creditCardNumber: z.string().regex(/^\d{13,19}$/, 'Invalid credit card number'),
+        creditCardNumber: z.string().regex(/^\d{15,16}$/, 'Invalid credit card number'),
         cardCVV: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
         expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Invalid month'),
         expiryYear: z.string().regex(/^\d{4}$/, 'Invalid year'),
@@ -81,7 +92,39 @@ export const useFormStore = defineStore('formStore', () => {
         billingCounty: z.string().regex(cityRegex, 'Invalid county'),
         billingState: z.string().regex(stateRegex, 'Invalid state (use 2-letter code)'),
         billingPostalCode: z.string().regex(postalCodeRegex, 'Invalid postal code')
-    })
+    });
+
+    // PayPal schema (only basic fields required, others optional)
+    const payPalSchema = basicSchema.extend({
+        // Make all other fields optional for PayPal
+        shipFirstName: z.string().optional(),
+        shipLastName: z.string().optional(),
+        shipStreetAddress: z.string().optional(),
+        shipApptsAddress: z.string().optional(),
+        shipCity: z.string().optional(),
+        shipCounty: z.string().optional(),
+        shipState: z.string().optional(),
+        shipPostalCode: z.string().optional(),
+        creditCardNumber: z.string().optional(),
+        cardCVV: z.string().optional(),
+        expiryMonth: z.string().optional(),
+        expiryYear: z.string().optional(),
+        billingFirstName: z.string().optional(),
+        billingLastName: z.string().optional(),
+        billingStreetAddress: z.string().optional(),
+        billingApptsAddress: z.string().optional(),
+        billingCity: z.string().optional(),
+        billingCounty: z.string().optional(),
+        billingState: z.string().optional(),
+        billingPostalCode: z.string().optional(),
+    });
+
+    // Computed schema based on payment method
+    const activeSchema = computed(() => {
+        if (paymentMethod.value === 'payPal') return payPalSchema;
+        if (paymentMethod.value === 'creditCard') return schema;
+        return null; // No schema if no payment method selected
+    });
 
     // error Define
     const errors = reactive<Record<string, string>>({
@@ -113,16 +156,31 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Submit method
     const formSubmit = () => {
-
-        billSame()
-
-        const result = schema.safeParse(formFields)
-        console.log('formFields', JSON.stringify(formFields, null, 2))
-
         // Clear previous errors
         Object.keys(errors).forEach((key) => {
             errors[key] = ''
         })
+
+        // Check if payment method is selected
+        if (!paymentMethod.value) {
+            errors.paymentMethod = 'Please select a payment method';
+            console.log('No payment method selected');
+            return false;
+        }
+
+        billSame()
+
+        // Use the active schema based on payment method
+        const schema = activeSchema.value;
+        if (!schema) {
+            console.log('No schema available');
+            return false;
+        }
+
+        // Use the active schema based on payment method
+        const result = schema.safeParse(formFields)
+        console.log('formFields', JSON.stringify(formFields, null, 2))
+        console.log('Using schema for:', paymentMethod.value)
 
         if (!result.success) {
             const zodError = result.error as ZodError
@@ -147,22 +205,34 @@ export const useFormStore = defineStore('formStore', () => {
         Object.keys(formFields).forEach((key) => {
             formFields[key as keyof FormFields] = ''
         });
+        paymentMethod.value = null; // Reset payment method too
         console.log("🗑️ : All fields are clean now.");
     };
 
     // check validation on input
-    const validateField = <K extends keyof typeof schema.shape>(key: K, value: string) => {
-        const fieldSchema = schema.shape[key]
+    const validateField = <K extends keyof typeof formFields>(key: K, value: string) => {
+        if (!activeSchema.value) {
+            formFields[key] = value;
+            return;
+        }
+
+        const currentSchema = activeSchema.value.shape as any;
+        const fieldSchema = currentSchema[key];
+
+        if (!fieldSchema) {
+            formFields[key] = value;
+            return;
+        }
 
         try {
             fieldSchema.parse(value)
-            errors[key] = '' // Clear previous error
+            errors[key as string] = '' // Clear previous error
         } catch (err: any) {
             if (err instanceof z.ZodError) {
-                errors[key] = err.issues[0]?.message || 'Invalid input'
+                errors[key as string] = err.issues[0]?.message || 'Invalid input'
             }
         } finally {
-            formFields[key] = value; // update form values again to make sure it doen't left behind in some cases
+            formFields[key] = value; // update form values
         }
     };
 
@@ -197,15 +267,14 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Handle bill same status
     const handleBillSame = (status: boolean) => {
-        console.log("haa bilsame");
-        
+        // console.log("haa bilsame");
         sameBilling.value = status;
         console.log('sameBilling:', sameBilling.value);
-        
         if (status) billSame();
     }
 
     return {
+        paymentMethod,  // Export payment method
         sameBilling,
         formFields,
         errors,
