@@ -62,8 +62,6 @@
         <div class="flex justify-center items-center w-full max-w-5xl mx-auto p-4 ">
             <!-- <img src="/images/upsell.jpg" class="w-full border-1 border-[#ccc] rounded-xl" alt="Upsell Image"> -->
 
-
-
             <div ref="wrapper" id="videoWrapper" class="w-full relative cursor-pointer" tabindex="0" @click="togglePlay"
                 @keydown.space.prevent="togglePlay" @mousemove="onMouseMove">
                 <video ref="video" id="myVideo" class="w-full rounded-lg shadow-lg block" playsinline :poster="poster"
@@ -78,16 +76,13 @@
                     :class="{ 'opacity-0': hideOverlay }" alt="Play / Pause" />
             </div>
 
-
         </div>
         <h3 class="lg:text-4xl text-2xl extrablod mx-auto w-full max-w-5xl mt-4 text-center">
             <span class="inline lg:block text-center"> to decrease our prices</span>
             <span class="inline lg:block text-center"> and to make</span>
         </h3>
 
-
     </div>
-
 
     <section class="lg:py-10 py-4 bg-white">
 
@@ -104,7 +99,6 @@
                         <p class="text-5xl extrablod text-[#65a2b7]">1 PERSON</p>
                         <p class="text-2xl font-black mb-2">28 Day Supply</p>
                         <img src="/images/desktop-bag-1.png" class="mb-3">
-
 
                         <del class="block text-3xl  text-gray-500">$79.99</del>
                         <p class="flex gap-3 items-center justify-center">
@@ -124,7 +118,6 @@
 
                         <!-- <p class="text-center font-sm mt-1">* Plus applicable sales tax</p> -->
                     </div>
-
 
                 </div>
 
@@ -204,7 +197,6 @@
         </p>
     </section>
 
-
     <footer class="bg-[#1EB9F0] lg:py-7 py-3">
         <div class="mx-auto max-w-5xl text-center">
             <img src="/images/logo.png" class="max-w-30 mx-auto mb-4">
@@ -216,7 +208,6 @@
         </div>
     </footer>
 </template>
-
 
 <script>
 export default {

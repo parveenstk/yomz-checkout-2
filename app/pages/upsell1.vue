@@ -62,8 +62,6 @@
       <div class="flex justify-center items-center w-full max-w-5xl mx-auto p-4 ">
          <!-- <img src="/images/upsell.jpg" class="w-full border-1 border-[#ccc] rounded-xl" alt="Upsell Image"> -->
 
-
-
          <div ref="wrapper" id="videoWrapper" class="w-full relative cursor-pointer" tabindex="0" @click="togglePlay"
             @keydown.space.prevent="togglePlay" @mousemove="onMouseMove">
             <video ref="video" id="myVideo" class="w-full rounded-lg shadow-lg block" playsinline :poster="poster"
@@ -77,14 +75,6 @@
                class="absolute inset-0 m-auto w-16 h-16 select-none pointer-events-none z-10 transition-opacity duration-300"
                :class="{ 'opacity-0': hideOverlay }" alt="Play / Pause" />
          </div>
-
-
-
-
-
-
-
-
 
       </div>
       <h3 class="lg:text-4xl text-2xl extrablod mx-auto w-full max-w-5xl mt-4 text-center">
@@ -107,7 +97,6 @@
       </div>
    </footer>
 </template>
-
 
 <script>
 export default {

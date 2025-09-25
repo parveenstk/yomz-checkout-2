@@ -65,11 +65,8 @@
             </h3>
         </div>
 
-
         <div class="flex justify-center items-center w-full max-w-5xl mx-auto p-4 ">
             <!-- <img src="/images/upsell.jpg" class="w-full border-1 border-[#ccc] rounded-xl" alt="Upsell Image"> -->
-
-
 
             <div ref="wrapper" id="videoWrapper" class="w-full relative cursor-pointer" tabindex="0" @click="togglePlay"
                 @keydown.space.prevent="togglePlay" @mousemove="onMouseMove">
@@ -85,16 +82,13 @@
                     :class="{ 'opacity-0': hideOverlay }" alt="Play / Pause" />
             </div>
 
-
         </div>
         <h3 class="lg:text-4xl text-2xl extrablod mx-auto w-full max-w-5xl mt-4 text-center">
             <span class="inline lg:block text-center"> to decrease our prices</span>
             <span class="inline lg:block text-center"> and to make</span>
         </h3>
 
-
     </div>
-
 
     <section class="lg:py-10 py-4 bg-white">
 
@@ -146,14 +140,11 @@
         </p>
     </section>
 
-
-
     <section class="lg:py-20 py-4 bg-[#fff9b8]">
         <div class="max-w-5xl mx-auto">
             <h2 class="lg:text-5xl text-4xl extrablod lg:mb-16 lg:mt-0 mb-4 mt-3 text-center">FAQS</h2>
 
             <div class="space-y-3">
-
 
                 <div class="space-y-4">
                     <!-- FAQ 1 -->
@@ -360,7 +351,6 @@
                             guilt, no risk. All we ask is that you share any uneaten YOMZ Gummies with someone who might
                             enjoy a tasty, good-for-you snack.
 
-
                         </p>
                     </details>
 
@@ -391,24 +381,9 @@
                     </details>
                 </div>
 
-
-
             </div>
         </div>
     </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <footer class="bg-[#1EB9F0] lg:py-7 py-3">
         <div class="mx-auto max-w-5xl text-center">
@@ -421,7 +396,6 @@
         </div>
     </footer>
 </template>
-
 
 <script>
 export default {
