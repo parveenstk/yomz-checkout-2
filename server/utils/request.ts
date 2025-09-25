@@ -33,7 +33,7 @@ export default async function request(
     const data = { ...authParams, ...payload };
 
     const finalUrl =
-        ['get', 'delete'].includes(method) && Object.keys(data).length
+        ['get', 'post', 'delete'].includes(method) && Object.keys(data).length
             ? `${url}?${objectToQueryParams(data)}`
             : url;
 

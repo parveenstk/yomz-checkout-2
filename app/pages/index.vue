@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
 import { useFormStore } from '../../stores/formStore';
 import Reviews from '~/components/Reviews.vue';
+import Faq from '~/components/Faq.vue';
 
 // form store data 
 const formStore = useFormStore();
@@ -69,14 +70,6 @@ function startCountdown() {
     }, 1000)
 }
 
-// // Add data in Cart
-// const addProductData = (id: number) => {
-//     selectedBag.value = id;
-//     const selectedProduct: ProductData = productData.find(product => product.id === id)!;
-//     console.log("selectedProduct", selectedProduct)
-//     cartData.value[0] = selectedProduct
-// };
-
 // Add data in Cart
 const addProductData = (id: number) => {
     selectedBag.value = id;
@@ -94,12 +87,6 @@ const addProductData = (id: number) => {
         }
     }
 };
-
-// Add extra product
-// const addExtraProduct = () => {
-//     console.log("addExtraProduct chala.")
-//     extraProduct.value = !extraProduct.value
-// };
 
 // Add/Remove extra product
 const addExtraProduct = () => {
@@ -235,44 +222,11 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- Points -->
                 <div class="space-y-4 text-left">
-                    <!-- Point 1 -->
-                    <div class="flex items-start">
+                    <div v-for="point in keyPoints" class="flex items-start">
                         <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">Fill in Your Family’s Nutrition Gaps and Help Transform Their
-                            Lives!
-                        </p>
-                    </div>
-
-                    <!-- Point 2 -->
-                    <div class="flex items-start">
-                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">Packed with Vitamins, Antioxidants, and Nutrients from 18
-                            Superfoods
-                        </p>
-                    </div>
-
-                    <!-- Point 3 -->
-                    <div class="flex items-start">
-                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">One Serving Is the Phytonutrient Equal of 2 Servings of Fruits &
-                            Vegetables</p>
-                    </div>
-
-                    <!-- Point 4 -->
-                    <div class="flex items-start">
-                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">Crafted to Support: Gut Health, Energy, Focus, Mood, Brain
-                            Activity,
-                            Immunity, Heart Function, Vision, Family Nutrition</p>
-                    </div>
-
-                    <!-- Point 5 -->
-                    <div class="flex items-start">
-                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">Join 6,312 American families Boosting Their Nutrition.</p>
+                        <p class="text-gray-700">{{ point }}</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -1039,156 +993,12 @@ watch(paymentMethod, (newValue) => {
         </div>
     </div>
 
+    <!-- FAQ Section -->
     <div class="max-w-[1200px] mx-auto py-5">
-        <div class="w-full bg-white shadow rounded-lg lg:p-6 p-3 lg:pt-6 pt-6">
-
-            <!-- Section Title -->
-            <h2 class="text-center text-2xl extrablod text-gray-800 mb-6">
-                FREQUENTLY ASKED QUESTIONS
-            </h2>
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    Do I really need to continue taking YOMZ after a couple of months or so?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    No, you don’t. Our mission is to end Hidden Hunger for 100 million people by 2030. If it happens
-                    because families take their YOMZ daily for the next 3 years, then great. But if it happens
-                    because
-                    by taking YOMZ, you and your family were inspired to transform your lives by overhauling your
-                    diet,
-                    exercise routine, nutritional awareness, etc., then that’s great, too. We just want to help you
-                    however we can. 
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    Will it target gut health, low energy, and decreased focus?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    Absolutely. We carefully curated the ingredients in YOMZ with an eye toward gut health. We knew,
-                    and
-                    research backs this up, that if we help improve the gut health of your family, it would directly
-                    lead to better energy and focus.
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    How about helping with brain function, immunity, even heart health?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    Yes. Again, everything starts with improved gut health. In fact, there’s a direct link between
-                    gut
-                    health and brain function. Similarly, better gut health is critical for a more robust immune
-                    system
-                    and a stronger heart.
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    Is it safe for kids?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    Yes. Family is one of our 3 core values, so it has to be safe for ages 2 to 102. That’s why YOMZ
-                    has
-                    only 1g of added sugar and no artificial dyes. It’s free of GMOs, gluten, and dairy plus
-                    keto-friendly and vegan.
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    Will YOMZ help me lose weight?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    Let’s be clear, YOMZ is not a weight loss gummy. Even if you take 2-3 servings per day. However,
-                    if
-                    YOMZ helps you and your family be more active… If it causes you to reduce how much processed
-                    foods
-                    you eat… Or if by helping improve your immune system or kids’ growth and development, YOMZ helps
-                    you
-                    become stronger… then who knows what other results are possible? 😉
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    What if I don’t notice a difference — is there a guarantee?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    It would be a shame. That’s why we have the most ridiculously iron-clad guarantee you’ll find
-                    anywhere. If you don’t absolutely love YOMZ, simply reach out to us within 90 days and we’ll
-                    cheerfully refund double what you paid. It’s the YOMZ 90-Day Picky Momz 200% Happiness
-                    Guarantee. We
-                    take on all the risk so you can try it with total peace of mind. The worst that’ll happen is you
-                    double your investment in 90 days. Not even Wall St. can guarantee that.
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    Will I have to change my family’s diet or meals or snack routine?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    Not at all. It’s really up to you and your family. If you don’t change anything, you can still
-                    rest
-                    easier knowing you’re leveling up your nutrition. That’s a win right there. But there’s a very
-                    good
-                    chance that the mere daily routine of filling those nutrition gaps with YOMZ will lead to eating
-                    better. Once you start filling your nutrition needs, cravings for junk vanish. So play it by ear
-                    and
-                    your heart will know if change is good.
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    How many bags do I need for my family?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    One bag of YOMZ is filled with 28 packs. Each pack equals a daily serving for 1 person. So 1
-                    family
-                    member = 1 bag of nutrition for 28 days. So how bags you need depends on how many family members
-                    you
-                    want to help.
-                </p>
-            </div>
-
-            <!-- FAQ Item 1 -->
-            <div class="mb-4">
-                <button class="w-full text-left bg-gray-900 text-white px-4 py-3 font-semibold">
-                    Why is it priced lower than your competitors?
-                </button>
-                <p class="px-4 py-4 text-gray-700 text-sm">
-                    YOMZ has no competition, first and foremost. It’s a unicorn. No other gummy delivers amazing
-                    taste
-                    that’s also packed with antioxidants, vitamins, micronutrients, and 9g of fiber. As for price,
-                    there
-                    is no middleman. We’re making this offer directly to you. Because we don’t have to pay a
-                    middleman
-                    to offer it or sell it to you, we’re passing the savings on to you. On top of that, our mission
-                    is
-                    to end Hidden Hunger for 100 million people by 2030. There’s no way we could do that if we
-                    jacked up
-                    the price. This philosophy will never change. It’s the foundation of YOMZ.
-                </p>
-            </div>
-
-        </div>
+        <Faq />
     </div>
 
     <footer class="w-full text-gray-500 text-center text-sm py-6 px-4">
-
         <!-- Links -->
         <div class="space-x-2 mb-2">
             <a href="#" class="hover:text-gray-700">Terms & Conditions</a> |
