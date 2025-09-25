@@ -4,6 +4,8 @@ import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, pr
 import { useFormStore } from '../../stores/formStore';
 import Reviews from '~/components/Reviews.vue';
 import Faq from '~/components/Faq.vue';
+import Header from '~/components/Header.vue';
+import Footer from '~/components/Footer.vue';
 
 // form store data 
 const formStore = useFormStore();
@@ -147,33 +149,9 @@ watch(paymentMethod, (newValue) => {
 
 </script>
 <template>
-    <!-- Header -->
-    <header class="w-full border-b border-gray-200 bg-white">
-        <div class="max-w-[1200px] mx-auto flex items-center justify-between px-2 py-2 md:py-2">
 
-            <!-- Left: Logo -->
-            <div class="flex-shrink-0">
-                <img src="/images/logo.png" alt="YOMZ" class="h-10 lg:h-14">
-            </div>
-
-            <!-- Center: SSL Secure -->
-            <div class="hidden lg:flex items-center gap-2">
-                <img src="/images/ssl.png" alt="SSL" class="w-26">
-            </div>
-
-            <!-- Right: Flag + Contact -->
-            <div class="flex items-center gap-2">
-                <img src="/images/flag.png" alt="US Flag" class="w-16">
-                <div class="text-sm lg:text-sm text-gray-800 text-center">
-                    <div class="hidden sm:block">
-                        <span class="font-bold block text-lg">Contact Us:</span>
-                        <a href="mailto:support@yomz.co" class="text-black-600 hover:underline">support@yomz.co</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </header>
+    <!-- Header Section -->
+    <Header />
 
     <section class="w-full pt-3 p-2">
         <div class="max-w-[1200px] bg-white mx-auto grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 items-center 
@@ -993,32 +971,11 @@ watch(paymentMethod, (newValue) => {
         </div>
     </div>
 
-    <!-- FAQ Section -->
-    <div class="max-w-[1200px] mx-auto py-5">
-        <Faq />
-    </div>
+    <!-- FAQs section -->
+    <Faq />
 
-    <footer class="w-full text-gray-500 text-center text-sm py-6 px-4">
-        <!-- Links -->
-        <div class="space-x-2 mb-2">
-            <a href="#" class="hover:text-gray-700">Terms & Conditions</a> |
-            <a href="#" class="hover:text-gray-700">Privacy Policy / CCPA</a> |
-            <a href="#" class="hover:text-gray-700">Returns</a> |
-        </div>
-
-        <!-- Disclaimer -->
-        <p class="max-w-2xl mx-auto text-xs leading-relaxed">
-            By filling out the field, you consent for YOMZ™ to use automated technology,
-            including texts and prerecorded messages, to contact you at the number and email provided about YOMZ™
-            offers.
-        </p>
-
-        <!-- DMCA Badge -->
-        <div class="flex justify-center mt-3">
-            <img src="/images/dmca.png" alt="DMCA Protection" class="h-6">
-        </div>
-
-    </footer>
+    <!-- Footer section -->
+    <Footer />
 </template>
 
 <style scoped>
