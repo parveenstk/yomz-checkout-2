@@ -148,10 +148,10 @@ onMounted(async () => {
     // Query Campaign
     await queryCampaign()
     // console.log('checkoutStore:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
-})
 
-const campaignProductId = checkoutStore.allProducts[0]!.campaignProductId;
-console.log('campaignProductId:', campaignProductId);
+    const campaignProductId = checkoutStore.allProducts[0]!.campaignProductId;
+    console.log('campaignProductId:', campaignProductId);
+})
 
 watch(paymentMethod, (newValue) => {
     console.log('newValue:', newValue);
