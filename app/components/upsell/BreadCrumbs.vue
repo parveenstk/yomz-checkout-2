@@ -51,4 +51,15 @@
             </div>
         </div>
     </div>
+
+    <p class="text-center lg:text-lg text-sm">
+        **Please do <span class="underline extrablod">not</span>
+        hit your back button. You might accidentally place a double order.**
+    </p>
+    <div class="flex items-center justify-center m-3">
+        <h3
+            class="bg-[#F1F1F1] lg:w-160 w-full text-center lg:text-2xl text-sm py-2 font-semibold border-2 border-[#DFDFDF] rounded-xl">
+            Option 1 of 3 to Customize Your Order
+        </h3>
+    </div>
 </template>

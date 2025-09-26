@@ -2,17 +2,6 @@
    <div class="w-full border-b border-gray-200 bg-white py-4 lg:px-4 px-1">
       <UpsellBreadCrumbs />
 
-      <p class="text-center lg:text-lg text-sm">
-         **Please do <span class="underline extrablod">not</span>
-         hit your back button. You might accidentally place a double order.**
-      </p>
-      <div class="flex items-center justify-center m-3">
-         <h3
-            class="bg-[#F1F1F1] lg:w-160 w-full text-center lg:text-2xl text-sm py-2 font-semibold border-2 border-[#DFDFDF] rounded-xl">
-            Option 1 of 3 to Customize Your Order
-         </h3>
-      </div>
-
       <h2 class="text-center lg:text-5xl text-3xl extrablod lg:mt-10 mt-3">WAIT! Your Order Is Not Complete Yet</h2>
       <p class="text-center lg:my-3 my-1  lg:mb-8 mb-3">Please Watch This Quick Video…</p>
       <div class="flex justify-center items-center w-full max-w-5xl mx-auto p-4 ">
