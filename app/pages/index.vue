@@ -5,11 +5,14 @@ import Faq from '~/components/Faq.vue';
 import Footer from '~/components/Footer.vue';
 import Header from '~/components/Header.vue';
 import Reviews from '~/components/Reviews.vue';
-import { useFormStore } from '../../stores/formStore';
+import { useFormStore, useCheckoutStore } from '../../stores/index';
 
 // form store data 
 const formStore = useFormStore();
 const { formFields, formSubmit, errors, validateField, handleBillSame } = formStore;
+
+// checkout Store
+const checkoutStore = useCheckoutStore();
 
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
@@ -132,7 +135,7 @@ const calculateTotalDiscount = () => {
     return Math.round(discount);
 };
 
-onMounted(() => {
+onMounted(async () => {
     const update = () => {
         isMobile.value = window.innerWidth < 768
     }
@@ -143,8 +146,12 @@ onMounted(() => {
     startCountdown() // timer runs
 
     // Query Campaign
-    queryCampaign()
+    await queryCampaign()
+    // console.log('checkoutStore:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
 })
+
+const campaignProductId = checkoutStore.allProducts[0]!.campaignProductId;
+console.log('campaignProductId:', campaignProductId);
 
 watch(paymentMethod, (newValue) => {
     console.log('newValue:', newValue);

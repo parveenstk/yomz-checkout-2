@@ -1,4 +1,5 @@
-import axios, { type AxiosRequestConfig, type Method } from "axios"
+import axios, { type AxiosRequestConfig, type Method } from "axios";
+import { useCheckoutStore } from "../../stores/index";
 
 const api = axios.create({
     baseURL: 'api/konnective', // ✅ change this to your API base URL
@@ -45,9 +46,13 @@ export const request = async <T = any>(
 
 // Fetch Query Campaing
 export const queryCampaign = async () => {
+    const checkoutStore = useCheckoutStore()
     const config = useRuntimeConfig();
     const response = await request('/queryCampaign', {});
     const data = response.message.data[config.public.campaignId];
     const products = data.products;
+
+    checkoutStore.saveProducts(products)
     console.log("response", products);
-}
+
+};
