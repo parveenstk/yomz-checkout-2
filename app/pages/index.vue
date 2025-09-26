@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from 'vue';
 import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
-import { useFormStore } from '../../stores/formStore';
-import Reviews from '~/components/Reviews.vue';
 import Faq from '~/components/Faq.vue';
-import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
+import Header from '~/components/Header.vue';
+import Reviews from '~/components/Reviews.vue';
+import { useFormStore } from '../../stores/formStore';
 
 // form store data 
 const formStore = useFormStore();
@@ -141,6 +141,9 @@ onMounted(() => {
     window.addEventListener('resize', update)
 
     startCountdown() // timer runs
+
+    // Query Campaign
+    queryCampaign()
 })
 
 watch(paymentMethod, (newValue) => {

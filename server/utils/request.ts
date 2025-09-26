@@ -17,7 +17,7 @@ function getKonnectiveAuth() {
     return {
         loginId: config.konnective.loginId,
         password: config.konnective.password,
-        campaignId: config.konnective.campaignId,
+        campaignId: config.public.campaignId,
     };
 }
 

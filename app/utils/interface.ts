@@ -42,3 +42,12 @@ export interface FormFields {
     billingState: string;
     billingPostalCode: string;
 };
+
+export interface CampaignProducts {
+    campaignProductId: number;
+    productName: string;
+    price: string;
+    productQty: number;
+    imageUrl: string;
+    hasVariants: boolean;
+}

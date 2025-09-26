@@ -1,7 +1,9 @@
 <script setup>
-const response = await request('/importClick', { pageType: 'leadPage', requestUri: 'http://localhost:3000' })
-console.log('response:', response);
-
+// API calling on dynamic pages
+onMounted(() => {
+    const response = request('/importClick', { pageType: 'leadPage', requestUri: 'http://localhost:3000' })
+    console.log('response:', response);
+})
 </script>
 
 <template>

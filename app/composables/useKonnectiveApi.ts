@@ -2,6 +2,7 @@ import axios, { type AxiosRequestConfig, type Method } from "axios"
 
 const api = axios.create({
     baseURL: 'api/konnective', // ✅ change this to your API base URL
+    // baseURL: 'http://localhost:3000/api/konnective', // ✅ Absolute URL required in Node.js
     headers: {
         'Content-Type': 'application/json',
     },
@@ -21,7 +22,7 @@ export const request = async <T = any>(
         const config: AxiosRequestConfig = {
             url: route,
             method,
-            ...(method === 'GET' ? { params: payload } : { data: payload }),
+            ...(method === 'GET' ? { params: payload } : { data: { payload } }),
             headers: {
                 ...(encrypt ? { 'X-Encrypt': '1' } : {}),
             },
@@ -40,4 +41,13 @@ export const request = async <T = any>(
         console.error('API Error:', error)
         throw new Error(error?.response?.data?.error || 'API request failed')
     }
+}
+
+// Fetch Query Campaing
+export const queryCampaign = async () => {
+    const config = useRuntimeConfig();
+    const response = await request('/queryCampaign', {});
+    const data = response.message.data[config.public.campaignId];
+    const products = data.products;
+    console.log("response", products);
 }

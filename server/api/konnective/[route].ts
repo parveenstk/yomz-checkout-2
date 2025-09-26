@@ -5,8 +5,9 @@ import request from '~~/server/utils/request';
 export default defineEventHandler(async (event) => {
     const { method = 'POST' }: { [key: string]: string } = getQuery(event);
     const routeName = event.context.params?.route; // dynamic [route].ts
+    const headers = event.headers;
     const body = await readBody(event);
-    const encrypt = body.encrypt === true;
+    const encrypt = headers.has('x-encrypt');
 
     try {
         const data = await request(method.toLowerCase() as any, routeName!, body.payload || {});

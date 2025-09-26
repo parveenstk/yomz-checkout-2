@@ -22,10 +22,10 @@ export default defineNuxtConfig({
     konnective: {
       loginId: "gsteamapiu",
       password: "nZtvxxULEvJiqKiNpDF4",
-      campaignId: 386,
     },
     public: {
       encryptResponses: true, // Optional public flag
+      campaignId: 386,
     }
   }
 })
