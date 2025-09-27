@@ -1,3 +1,9 @@
+<script setup>
+defineProps({
+    optNumbar: String
+})
+
+</script>
 <template>
     <div class="mx-auto flex items-center justify-center lg:px-2 px-0 py-2 lg:py-2">
         <div class="flex items-center justify-center bg-[#F1F1F1] border-2 border-[#DFDFDF] rounded-xl w-fit">
@@ -59,7 +65,7 @@
     <div class="flex items-center justify-center m-3">
         <h3
             class="bg-[#F1F1F1] lg:w-160 w-full text-center lg:text-2xl text-sm py-2 font-semibold border-2 border-[#DFDFDF] rounded-xl">
-            Option 1 of 3 to Customize Your Order
+            Option {{ optNumbar }} of 3 to Customize Your Order
         </h3>
     </div>
 </template>
