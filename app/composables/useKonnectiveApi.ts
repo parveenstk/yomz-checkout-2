@@ -45,6 +45,19 @@ export const request = async <T = any>(
 }
 
 // Fetch Query Campaing
+export const importClick = async () => {
+    const response = await request('/importClick', {
+        pageType: 'checkoutPage',
+        requestUri: 'http://localhost:3000/',
+        sessionId: getFromStorage('sessionId', 'session') || ''
+    });
+
+    // console.log("response:", response.message.sessionId);
+    saveToStorage('sessionId', response.message.sessionId, 'session');
+    console.log("response:", getFromStorage('sessionId', 'session'));
+};
+
+// Fetch Query Campaing
 export const queryCampaign = async () => {
     const checkoutStore = useCheckoutStore()
     const config = useRuntimeConfig();

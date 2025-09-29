@@ -146,16 +146,19 @@ onMounted(async () => {
 
     startCountdown() // timer runs
 
+    // Import Click
+    await importClick();
+
     // Query Campaign
     await queryCampaign()
     // console.log('checkoutStore:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
 
     const campaignProductId = checkoutStore.allProducts[0]?.campaignProductId;
-    console.log('campaignProductId:', campaignProductId);
+    // console.log('campaignProductId:', campaignProductId);
 
     // const variants = checkoutStore.allProducts
     const variants = checkoutStore.allProducts[0]!.variants[0]
-    console.log('variants:', variants);
+    // console.log('variants:', variants);
 
     const keysToExtract: (keyof CampaignVariant)[] = [
         "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock"
@@ -166,7 +169,7 @@ onMounted(async () => {
         return obj;
     }, {} as Partial<Record<keyof CampaignVariant, any>>);
 
-    console.log('extractedValues', extractedValues);
+    // console.log('extractedValues', extractedValues);
 
 })
 
