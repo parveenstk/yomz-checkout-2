@@ -1,3 +1,7 @@
+import { defineStore } from "pinia";
+import { ref, type Ref } from "vue";
+import type { CampaignProducts } from "~/utils/interface";
+
 export const useCheckoutStore = defineStore('checkoutStore', () => {
     const allProducts: Ref<CampaignProducts[]> = ref([]);
 

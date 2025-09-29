@@ -6,6 +6,7 @@ import Footer from '~/components/Footer.vue';
 import Header from '~/components/Header.vue';
 import Reviews from '~/components/Reviews.vue';
 import { useFormStore, useCheckoutStore } from '../../stores/index';
+import { queryCampaign } from '~/composables/useKonnectiveApi';
 
 // form store data 
 const formStore = useFormStore();
@@ -149,8 +150,28 @@ onMounted(async () => {
     await queryCampaign()
     // console.log('checkoutStore:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
 
-    const campaignProductId = checkoutStore.allProducts[0]!.campaignProductId;
+    const campaignProductId = checkoutStore.allProducts[0]?.campaignProductId;
     console.log('campaignProductId:', campaignProductId);
+
+    const variants = checkoutStore.allProducts[0]
+    console.log('variants:', variants);
+
+    const keysToExtract = ["price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock"];
+    // const extractedValues = keysToExtract.reduce((obj, key) => {
+    //     obj[key] = variants?.[key] ?? null;
+    //     return obj;
+    // }, {});
+    // console.log('extractedValues:', extractedValues);
+
+    // variants.array.forEach(element => {
+    //     console.log(element);
+
+    // });
+
+    // const productOg = checkoutStore.allProducts[0]?.variants[0].variantName1
+    // console.log('productOg:', productOg);
+
+    // console.log('campaignProductId:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
 })
 
 watch(paymentMethod, (newValue) => {

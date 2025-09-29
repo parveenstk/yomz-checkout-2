@@ -53,6 +53,6 @@ export const queryCampaign = async () => {
     const products = data.products;
 
     checkoutStore.saveProducts(products)
-    console.log("response", products);
+    // console.log("response", products);
 
 };
