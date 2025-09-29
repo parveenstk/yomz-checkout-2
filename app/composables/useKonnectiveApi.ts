@@ -2,8 +2,8 @@ import axios, { type AxiosRequestConfig, type Method } from "axios";
 import { useCheckoutStore } from "../../stores/index";
 
 const api = axios.create({
-    baseURL: 'api/konnective', // ✅ change this to your API base URL
-    // baseURL: 'http://localhost:3000/api/konnective', // ✅ Absolute URL required in Node.js
+    baseURL: 'api/konnective', // change this to your API base URL
+    // baseURL: 'http://localhost:3000/api/konnective', // Absolute URL required in Node.js
     headers: {
         'Content-Type': 'application/json',
     },
@@ -12,7 +12,8 @@ const api = axios.create({
 type ApiResponse<T = any> = {
     encrypted?: boolean
     data: T | string
-}
+};
+
 export const request = async <T = any>(
     route: string,
     payload: Record<string, any> = {},
@@ -42,19 +43,24 @@ export const request = async <T = any>(
         console.error('API Error:', error)
         throw new Error(error?.response?.data?.error || 'API request failed')
     }
-}
+};
 
-// Fetch Query Campaing
+// Fetch Import Click 
 export const importClick = async () => {
     const response = await request('/importClick', {
         pageType: 'checkoutPage',
-        requestUri: 'http://localhost:3000/',
+        requestUri: window.location.href,
         sessionId: getFromStorage('sessionId', 'session') || ''
     });
 
     // console.log("response:", response.message.sessionId);
     saveToStorage('sessionId', response.message.sessionId, 'session');
     console.log("response:", getFromStorage('sessionId', 'session'));
+};
+
+// Fetch Import Lead
+export const importLead = async () => {
+    const response = await request('/importLead', params)
 };
 
 // Fetch Query Campaing

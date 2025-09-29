@@ -15,6 +15,11 @@ const { formFields, formSubmit, errors, validateField, handleBillSame } = formSt
 // checkout Store
 const checkoutStore = useCheckoutStore();
 
+// Set default if undefined
+if (!formStore.paymentMethod) {
+    formStore.paymentMethod = 'creditCard'
+}
+
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
     get: () => formStore.paymentMethod,
@@ -148,6 +153,9 @@ onMounted(async () => {
 
     // Import Click
     await importClick();
+
+    // Import Lead
+    // await importLead()
 
     // Query Campaign
     await queryCampaign()
