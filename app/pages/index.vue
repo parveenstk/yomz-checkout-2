@@ -153,25 +153,21 @@ onMounted(async () => {
     const campaignProductId = checkoutStore.allProducts[0]?.campaignProductId;
     console.log('campaignProductId:', campaignProductId);
 
-    const variants = checkoutStore.allProducts[0]
+    // const variants = checkoutStore.allProducts
+    const variants = checkoutStore.allProducts[0]!.variants[0]
     console.log('variants:', variants);
 
-    const keysToExtract = ["price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock"];
-    // const extractedValues = keysToExtract.reduce((obj, key) => {
-    //     obj[key] = variants?.[key] ?? null;
-    //     return obj;
-    // }, {});
-    // console.log('extractedValues:', extractedValues);
+    const keysToExtract: (keyof CampaignVariant)[] = [
+        "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock"
+    ];
 
-    // variants.array.forEach(element => {
-    //     console.log(element);
+    const extractedValues = keysToExtract.reduce((obj, key) => {
+        obj[key] = variants?.[key] ?? null;
+        return obj;
+    }, {} as Partial<Record<keyof CampaignVariant, any>>);
 
-    // });
+    console.log('extractedValues', extractedValues);
 
-    // const productOg = checkoutStore.allProducts[0]?.variants[0].variantName1
-    // console.log('productOg:', productOg);
-
-    // console.log('campaignProductId:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
 })
 
 watch(paymentMethod, (newValue) => {

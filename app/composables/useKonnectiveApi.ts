@@ -28,7 +28,7 @@ export const request = async <T = any>(
                 ...(encrypt ? { 'X-Encrypt': '1' } : {}),
             },
         }
-        console.log("config:", config)
+        // console.log("config:", config)
 
         const response = await api.request<ApiResponse<T>>(config)
 

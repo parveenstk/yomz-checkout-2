@@ -50,4 +50,15 @@ export interface CampaignProducts {
     productQty: number;
     imageUrl: string;
     hasVariants: boolean;
+    variants: CampaignVariant[];
+}
+
+export interface CampaignVariant {
+    imageUrl: string;
+    isOutOfStock: number; // or `boolean` if converted
+    price: string;
+    productSku: string;
+    title: string;
+    variantDetailId: number;
+    variantName1: string;
 }

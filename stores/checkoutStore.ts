@@ -7,7 +7,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
 
     // to add save products in 'allProducts'
     const saveProducts = (products: CampaignProducts[]) => {
-        console.log('products:', products);
+        // console.log('products:', products);
         allProducts.value = [...products]
     };
 
