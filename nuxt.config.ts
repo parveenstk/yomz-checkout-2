@@ -26,6 +26,9 @@ export default defineNuxtConfig({
     public: {
       encryptResponses: true, // Optional public flag
       campaignId: 386,
+      gummyId: 9198,
+      variantIds: [6702, 6704],
+      WarrantyId: 9196,
     }
   }
 })

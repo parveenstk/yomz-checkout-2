@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         const data = await request(method.toLowerCase() as any, routeName!, body.payload || {});
+        // console.log("data from server", data) // for debugging
 
         return encrypt ? { encrypted: true, data: encryptData(data) } : { encrypted: false, data };
     } catch (error: any) {

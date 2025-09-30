@@ -1,5 +1,7 @@
 import axios, { type AxiosRequestConfig, type Method } from "axios";
 import { useCheckoutStore } from "../../stores/index";
+import { getFromStorage, saveToStorage } from "~/utils/storage";
+import { params } from "./common";
 
 const api = axios.create({
     baseURL: 'api/konnective', // change this to your API base URL
@@ -60,18 +62,50 @@ export const importClick = async () => {
 
 // Fetch Import Lead
 export const importLead = async () => {
-    const response = await request('/importLead', params)
+    const payload = params()
+    const response = await request('/importLead', payload)
 };
 
-// Fetch Query Campaing
+// Fetch Query Campaign
 export const queryCampaign = async () => {
-    const checkoutStore = useCheckoutStore()
+    const checkoutStore = useCheckoutStore();
     const config = useRuntimeConfig();
     const response = await request('/queryCampaign', {});
     const data = response.message.data[config.public.campaignId];
-    const products = data.products;
+    const products: CampaignProducts[] = data.products;
 
-    checkoutStore.saveProducts(products)
-    // console.log("response", products);
+    const structuredProducts: StructuredProducts[] = [];
 
+    products.forEach((product: CampaignProducts) => {
+        if (product.hasVariants) {
+            const variants = product.variants;
+            variants.forEach((variant) => {
+                structuredProducts.push({
+                    productId: variant.variantDetailId,
+                    productName: variant.title,
+                    productImage: variant.imageUrl,
+                    productPrice: variant.price
+                });
+            });
+        } else {
+            structuredProducts.push({
+                productId: product.campaignProductId,
+                productName: product.productName,
+                productImage: product.imageUrl,
+                productPrice: product.price
+            });
+        }
+    });
+
+    // ✅ Filter gummy products directly here
+    let gummyProducts = structuredProducts.filter(product =>
+        config.public.variantIds.includes(product.productId)
+    );
+
+    gummyProducts.forEach(pr => {
+        pr.productName = pr.productName + " Gummies";
+    })
+
+    // ✅ Save both to the store (you'll need to update the store method)
+    checkoutStore.saveProducts(structuredProducts, gummyProducts);
 };

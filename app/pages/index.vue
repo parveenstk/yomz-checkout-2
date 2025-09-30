@@ -6,7 +6,7 @@ import Footer from '~/components/Footer.vue';
 import Header from '~/components/Header.vue';
 import Reviews from '~/components/Reviews.vue';
 import { useFormStore, useCheckoutStore } from '../../stores/index';
-import { queryCampaign } from '~/composables/useKonnectiveApi';
+import { importClick, importLead, queryCampaign } from '~/composables/useKonnectiveApi';
 
 // form store data 
 const formStore = useFormStore();
@@ -15,10 +15,13 @@ const { formFields, formSubmit, errors, validateField, handleBillSame } = formSt
 // checkout Store
 const checkoutStore = useCheckoutStore();
 
+// Config
+const config = useRuntimeConfig().public;
+
 // Set default if undefined
-if (!formStore.paymentMethod) {
-    formStore.paymentMethod = 'creditCard'
-}
+// if (!formStore.paymentMethod) {
+//     formStore.paymentMethod = 'payPal'
+// }
 
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
@@ -28,15 +31,13 @@ const paymentMethod = computed({
     }
 })
 
-// Gummy type
-const gummyType = ref('ogGummies');
-let cartData: Ref<ProductData[]> = ref([]);
-if (Array.isArray(productData) && productData[0]) {
-    cartData.value[0] = productData[0];
-};
+// let cartData: Ref<StructuredProducts[]> = ref([]);
+// if (Array.isArray(checkoutStore.allProducts) && checkoutStore.allProducts[0]) {
+//     cartData.value[0] = checkoutStore.allProducts[0];
+// };
 
 // Gummy bags
-const selectedBag = ref(1);
+const selectedBag = ref(2);
 
 // add extra product
 const extraProduct = ref(false);
@@ -84,57 +85,46 @@ function startCountdown() {
 // Add data in Cart
 const addProductData = (id: number) => {
     selectedBag.value = id;
-    const selectedProduct = productData.find(product => product.id === id);
-    if (selectedProduct) {
-        // Replace the first item (main product)
-        cartData.value[0] = selectedProduct;
-
-        // If extra product was already added, keep it
-        if (extraProduct.value && cartData.value.length === 1) {
-            const extraProd = productData.find(p => p.id === 4);
-            if (extraProd) {
-                cartData.value.push(extraProd);
-            }
-        }
-    }
+    checkoutStore.selectedQuantity = id;
+    checkoutStore.addGummyProduct();
 };
 
 // Add/Remove extra product
-const addExtraProduct = () => {
-    console.log("addExtraProduct chala.");
-    extraProduct.value = !extraProduct.value;
+// const addExtraProduct = () => {
+//     console.log("addExtraProduct chala.");
+//     extraProduct.value = !extraProduct.value;
 
-    if (extraProduct.value) {
-        // Add extra product
-        const extraProd = productData.find(p => p.id === 4);
-        if (extraProd && !cartData.value.find(item => item.id === 4)) {
-            // Using push to trigger reactivity
-            cartData.value.push(extraProd);
-        }
-    } else {
-        // Remove extra product
-        cartData.value = cartData.value.filter(item => item.id !== 4);
-    }
-};
+//     if (extraProduct.value) {
+//         // Add extra product
+//         const extraProd = checkoutStore.allProducts.find(p => p.productId === config.WarrantyId);
+//         if (extraProd && !checkoutStore.cartData.find(item => item.productId === config.WarrantyId)) {
+//             // Using push to trigger reactivity
+//             checkoutStore.cartData.push(extraProd);
+//         }
+//     } else {
+//         // Remove extra product
+//         checkoutStore.cartData = checkoutStore.cartData.filter(item => item.productId !== config.WarrantyId);
+//     }
+// };
 
 // Calculate total price for all products in cart
 const calculateTotalPrice = () => {
-    const subtotal = cartData.value.reduce((sum, item) => sum + item.price, 0);
-    const shipping = cartData.value[0]?.id === 3 ? 7.99 : 0;
+    const subtotal = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
+    const shipping = checkoutStore.cartData[0]?.productId === 3 ? 7.99 : 0;
     return (subtotal + shipping).toFixed(2);
 };
 
 // Calculate total compare price
 const calculateComparePrice = () => {
-    const total = cartData.value.reduce((sum, item) => sum + item.compareAtPrice, 0);
+    const total = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
     return (total + 7.99).toFixed(2);
 };
 
 // Calculate average discount percentage
 const calculateTotalDiscount = () => {
-    if (cartData.value.length === 0) return 0;
+    if (checkoutStore.cartData.length === 0) return 0;
 
-    const totalOriginal = cartData.value.reduce((sum, item) => sum + item.compareAtPrice, 0) + 7.99;
+    const totalOriginal = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0) + 7.99;
     const totalDiscounted = parseFloat(calculateTotalPrice());
     const discount = ((totalOriginal - totalDiscounted) / totalOriginal) * 100;
 
@@ -142,6 +132,15 @@ const calculateTotalDiscount = () => {
 };
 
 onMounted(async () => {
+
+    // Query Campaign
+    await queryCampaign()
+
+    // Initialize selected gummy and quanity on load
+    checkoutStore.selectedGummyType = config.variantIds[0]!;
+    checkoutStore.selectedQuantity = 2;
+    checkoutStore.addGummyProduct(); // add product in cart afterwards
+
     const update = () => {
         isMobile.value = window.innerWidth < 768
     }
@@ -156,26 +155,26 @@ onMounted(async () => {
 
     // Import Lead
     // await importLead()
-
-    // Query Campaign
-    await queryCampaign()
     // console.log('checkoutStore:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
 
-    const campaignProductId = checkoutStore.allProducts[0]?.campaignProductId;
-    // console.log('campaignProductId:', campaignProductId);
+    // const campaignProductId = checkoutStore.allProducts[0]?.campaignProductId;
+    // const allProducts = checkoutStore.allProducts
+    // console.log('allProducts:', allProducts);
+
+    // console.log("gummyProductss:", gummyProductss)
 
     // const variants = checkoutStore.allProducts
-    const variants = checkoutStore.allProducts[0]!.variants[0]
+    // const variants = checkoutStore.allProducts[0]!.variants[0]
     // console.log('variants:', variants);
 
     const keysToExtract: (keyof CampaignVariant)[] = [
         "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock"
     ];
 
-    const extractedValues = keysToExtract.reduce((obj, key) => {
-        obj[key] = variants?.[key] ?? null;
-        return obj;
-    }, {} as Partial<Record<keyof CampaignVariant, any>>);
+    // const extractedValues = keysToExtract.reduce((obj, key) => {
+    //     obj[key] = variants?.[key] ?? null;
+    //     return obj;
+    // }, {} as Partial<Record<keyof CampaignVariant, any>>);
 
     // console.log('extractedValues', extractedValues);
 
@@ -247,6 +246,7 @@ watch(paymentMethod, (newValue) => {
         </div>
     </section>
 
+    <!-- Timer -->
     <section class="w-full lg:py-5 lg:p-2 py-2 p-0">
         <div
             class="max-w-[1200px] mx-auto flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium ">
@@ -300,19 +300,23 @@ watch(paymentMethod, (newValue) => {
                     STEP 1: Select Gummy Style
                 </h2>
 
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
+                <div v-if="checkoutStore.gummyProducts.length < 1">
+                    <SkeletonProductSelector />
+                </div>
+                <div v-else class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
                     <!-- Gummy Selectors -->
-                    <div v-for="value in gymmyTypeData" :key="value.id"
+                    <div v-for="value in checkoutStore.gummyProducts" :key="value.productId"
                         class="flex items-center space-x-1 cursor-pointer relative select-none"
-                        @click="gummyType = value.id">
+                        @click="checkoutStore.selectedGummyType = value.productId">
                         <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3 border-[#172969]"
-                            :class="{ 'bg-[#172969]': gummyType === value.id }">
-                            <NuxtImg v-if="gummyType === value.id" src="/images/whiteTick.svg" alt="white-tick" />
+                            :class="{ 'bg-[#172969]': checkoutStore.selectedGummyType === value.productId }">
+                            <NuxtImg v-if="checkoutStore.selectedGummyType === value.productId"
+                                src="/images/whiteTick.svg" alt="white-tick" />
                         </div>
 
-                        <NuxtImg :src="value.img" width="64" height="64" :alt="value.alt" />
+                        <NuxtImg :src="value.productImage" width="64" height="64" alt="Product Image" />
                         <span class="text-gray text-lg leading-5 font-extrabold">
-                            {{ value.name }}
+                            {{ value.productName }}
                         </span>
                     </div>
                 </div>
@@ -322,30 +326,33 @@ watch(paymentMethod, (newValue) => {
                     STEP 2: Select Order Quantity
                 </h2>
 
+                <!-- <div v-for="value in gummyBagsSelector" :key="value.id" :class="[ -->
                 <div v-for="value in gummyBagsSelector" :key="value.id" @click="addProductData(value.id)" :class="[
                     'flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer transition relative select-none',
-                    value.id === 1 ? 'bg-yellow-400/90' : 'bg-white']">
+                    value.id === 2 ? 'bg-yellow-400/90' : 'bg-white']">
+
                     <div class="flex items-center space-x-3">
                         <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2 border-[#172969]"
                             :class="{ 'bg-[#172969]': selectedBag === value.id, 'border-[#172969]': selectedBag !== value.id }">
                             <NuxtImg v-if="selectedBag === value.id" src="/images/whiteTick.svg" />
                         </div>
 
-                        <p :class="{ 'w-2/3': value.id === 1 }">
-                            <span v-if="value.id === 1" class="font-bold">BEST SELLER </span>
+                        <p :class="{ 'w-2/3': value.id === 2 }">
+                            <span v-if="value.id === 2" class="font-bold">BEST SELLER </span>
                             <span class="text-gray-800 w-[10%]">{{ value.title }}</span>
                         </p>
                     </div>
 
                     <div :class="[
                         'text-right text-sm text-gray-900',
-                        value.id === 1 ? 'font-bold' : ''
+                        value.id === 2 ? 'font-bold' : ''
                     ]">
                         <p>${{ value.price.toFixed(2) }} each</p>
                         <p class="uppercase">{{ value.shipping }}</p>
                     </div>
 
-                    <img v-if="value.id === 1" src="/images/redarrow.svg"
+                    <!-- Red Arrow -->
+                    <img v-if="value.id === 2" src="/images/redarrow.svg"
                         class="w-8 lg:w-12 absolute lg:-left-10 -left-5" alt="Best Seller Arrow" />
                 </div>
             </div>
@@ -832,7 +839,7 @@ watch(paymentMethod, (newValue) => {
                         </h2>
 
                         <!-- <div @click="extraProduct = !extraProduct" -->
-                        <div @click=addExtraProduct
+                        <div @click="checkoutStore.addExtraProduct"
                             class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
 
                             <!-- Icon at top -->
@@ -849,8 +856,9 @@ watch(paymentMethod, (newValue) => {
                                 <div class="flex items-center cursor-pointer justify-center w-fit absolute">
                                     <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
                                     <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center',
-                                        extraProduct ? 'bg-[#172969]' : 'bg-transparent']">
-                                        <NuxtImg v-if="extraProduct" src="/images/whiteTick.svg" alt="white-tick" />
+                                        checkoutStore.cartData.length > 1 ? 'bg-[#172969]' : 'bg-transparent']">
+                                        <NuxtImg v-if="checkoutStore.cartData.length > 1" src="/images/whiteTick.svg"
+                                            alt="white-tick" />
                                     </div>
                                     <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
                                         <!-- Yes, I want 2 Years of Protection. -->
@@ -884,57 +892,90 @@ watch(paymentMethod, (newValue) => {
                                 </div>
 
                                 <!-- Main Product (First item in cart) -->
-                                <div v-if="cartData[0]" class="flex justify-between items-start mb-2">
+                                <!-- <div v-if="checkoutStore.cartData.length > 1"
+                                    class="flex justify-between items-start mb-2">
                                     <div class="flex items-start space-x-4">
-                                        <img :src="cartData[0].img[gummyType]" alt="Product"
+                                        <img :src="checkoutStore.cartData[0]!.productImage" alt="Product"
                                             class="w-20 h-20 object-contain border rounded">
                                         <div>
-                                            <h3 class="font-semibold text-gray-900">{{ cartData[0].title[gummyType] }}
+                                            <h3 class="font-semibold text-gray-900">{{
+                                                checkoutStore.cartData[0]!.productName }}
                                             </h3>
                                             <span
                                                 class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full font-semibold">
-                                                {{ cartData[0].bagQty }} Bags
+                                                {{ 2 }} Bags
                                             </span>
                                         </div>
                                     </div>
                                     <div class="text-right">
                                         <p class="text-sm text-red-500 line-through font-semibold">
-                                            Regular ${{ cartData[0].compareAtPrice }}</p>
-                                        <p class="text-gray-900 font-semibold">${{ cartData[0].price.toFixed(2) }}</p>
+                                            Regular ${{ 77 }}</p>
+                                        <p class="text-gray-900 font-semibold">${{
+                                            checkoutStore.cartData[0]!.productPrice
+                                            }}</p>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Extra Product (Second item in cart if exists) -->
-                                <div v-if="cartData[1]" class="flex justify-between items-start mb-2 pt-2">
+                                <!-- <div v-if="checkoutStore.cartData[1]"
+                                    class="flex justify-between items-start mb-2 pt-2">
                                     <div class="flex items-start space-x-4">
-                                        <img :src="cartData[1].img[gummyType]" alt="Extra Product"
+                                        <img :src="checkoutStore.cartData[1].productImage" alt="Extra Product"
                                             class="w-20 h-20 object-contain border rounded">
                                         <div>
-                                            <h3 class="font-semibold text-gray-900">{{ cartData[1].title[gummyType] }}
+                                            <h3 class="font-semibold text-gray-900">{{
+                                                checkoutStore.cartData[1].productName
+                                                }}
                                             </h3>
                                             <span
                                                 class="inline-block mt-1 text-sm bg-green-600 text-white px-2 py-0.5 rounded-full font-semibold">
-                                                Extra: {{ cartData[1].bagQty }} Bag
+                                                Extra: {{ 1 }} Bag
                                             </span>
                                         </div>
                                     </div>
                                     <div class="text-right">
                                         <p class="text-sm text-red-500 line-through font-semibold">
-                                            Regular ${{ cartData[1].compareAtPrice }}</p>
-                                        <p class="text-gray-900 font-semibold">${{ cartData[1].price.toFixed(2) }}</p>
+                                            Regular ${{ 77 }}</p>
+                                        <p class="text-gray-900 font-semibold">${{
+                                            checkoutStore.cartData[1].productPrice }}
+                                        </p>
+                                    </div>
+                                </div> -->
+
+                                <!-- Display up to 2 cart items -->
+                                <div v-for="(item, index) in checkoutStore.cartData.slice(0, 2)" :key="item.productId"
+                                    class="flex justify-between items-start mb-2 pt-2 first:pt-0">
+                                    <div class="flex items-start space-x-4">
+                                        <img :src="item.productImage" alt="Product Image"
+                                            class="w-20 h-20 object-contain border rounded" />
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900">{{ item.productName }}</h3>
+                                            <span
+                                                class="inline-block mt-1 text-sm px-2 py-0.5 rounded-full font-semibold"
+                                                :class="index === 0 ? 'bg-gray-700 text-white' : 'bg-green-600 text-white'">
+                                                {{ index === 0 ? `${checkoutStore.selectedQuantity} Bags` : `Extra: 1
+                                                Bag`
+                                                }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-red-500 line-through font-semibold">Regular $77</p>
+                                        <p class="text-gray-900 font-semibold">${{ item.productPrice }}</p>
                                     </div>
                                 </div>
 
                                 <!-- Free Shipping Section -->
                                 <div class="flex justify-between items-center mb-2">
-                                    <div v-if="cartData[0]?.id === 3" class="flex items-center space-x-2">
+                                    <div v-if="checkoutStore.cartData[0]?.productId === 3"
+                                        class="flex items-center space-x-2">
                                         <p class="text-lg font-semibold text-gray-800">Shipping Price</p>
                                     </div>
                                     <div v-else class="flex items-center space-x-2">
                                         <img class="w-5" src="/images/check-icons.png">
                                         <p class="text-lg font-semibold text-gray-800">Free Shipping</p>
                                     </div>
-                                    <div v-if="cartData[0]?.id === 3">
+                                    <div v-if="checkoutStore.cartData[0]?.productId === 3">
                                         <span class="text-md font-bold">$7.99</span>
                                     </div>
                                     <div v-else class="flex gap-1">
@@ -976,7 +1017,7 @@ watch(paymentMethod, (newValue) => {
                             </div>
 
                             <!-- Checkout Button -->
-                            <button type="submit"
+                            <button type="submit" @click="importLead"
                                 :class="['w-full flex justify-center items-center font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
                                 {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
                                 <img v-if="paymentMethod === 'payPal'"
