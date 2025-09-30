@@ -1,7 +1,8 @@
 const routes: Record<string, string> = {
-    getOrders: '/v1/orders',
-    createCustomer: '/v1/customers',
-    // Add more here
+    // add more here
+    importClick: 'https://api.konnektive.com/landers/clicks/import/',
+    importLead: 'https://api.konnektive.com/leads/import/',
+    queryCampaign: 'https://api.konnektive.com/campaign/query/',
 };
 
 export default routes;

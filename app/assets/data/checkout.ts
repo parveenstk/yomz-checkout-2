@@ -1,20 +1,20 @@
 export const gummyBagsSelector = [
     {
-        id: 1,
+        id: 2,
         title: "51% OFF: 2 Bags",
         price: 39,
         shipping: "Incl. FREE Shipping"
     },
 
     {
-        id: 2,
+        id: 3,
         title: "60% OFF: 3 Bags",
         price: 32,
         shipping: "Incl. FREE Shipping"
     },
 
     {
-        id: 3,
+        id: 1,
         title: "40% OFF: 1 Bag",
         price: 48,
         shipping: "$7.99 Shipping"
@@ -80,6 +80,22 @@ export const productData: ProductData[] = [
         title: {
             ogGummies: 'OG Gummies',
             soursGummies: 'Sours Gummies'
+        },
+        bagQty: 1,
+        compareAtPrice: 79.99,
+        price: 48,
+        percentageOff: 40
+    },
+
+    {
+        id: 4, // Extra product
+        img: {
+            soursGummies: '/images/og-bag.png',
+            ogGummies: '/images/sour-bag.png'
+        },
+        title: {
+            soursGummies: 'OG Gummies - Extra',
+            ogGummies: 'Sours Gummies - Extra'
         },
         bagQty: 1,
         compareAtPrice: 79.99,

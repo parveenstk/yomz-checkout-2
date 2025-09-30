@@ -20,12 +20,15 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     konnective: {
-      loginId: "abc",
-      password: "abc123",
-      campaignId: 24,
+      loginId: "gsteamapiu",
+      password: "nZtvxxULEvJiqKiNpDF4",
     },
     public: {
       encryptResponses: true, // Optional public flag
+      campaignId: 386,
+      gummyId: 9198,
+      variantIds: [6702, 6704],
+      WarrantyId: 9196,
     }
   }
 })

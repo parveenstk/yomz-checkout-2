@@ -42,3 +42,31 @@ export interface FormFields {
     billingState: string;
     billingPostalCode: string;
 };
+
+export interface CampaignProducts {
+    campaignProductId: number;
+    productName: string;
+    price: string;
+    productQty: number;
+    imageUrl: string;
+    hasVariants: boolean;
+    variants: CampaignVariant[];
+}
+
+export interface CampaignVariant {
+    imageUrl: string;
+    isOutOfStock: number; // or `boolean` if converted
+    price: string;
+    productSku: string;
+    title: string;
+    variantDetailId: number;
+    variantName1: string;
+    productQty: number;
+}
+
+export interface StructuredProducts {
+    productId: number,
+    productName: string,
+    productImage: string,
+    productPrice: string
+}

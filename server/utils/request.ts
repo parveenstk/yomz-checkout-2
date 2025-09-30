@@ -17,7 +17,7 @@ function getKonnectiveAuth() {
     return {
         loginId: config.konnective.loginId,
         password: config.konnective.password,
-        campaignId: config.konnective.campaignId,
+        campaignId: config.public.campaignId,
     };
 }
 
@@ -33,7 +33,7 @@ export default async function request(
     const data = { ...authParams, ...payload };
 
     const finalUrl =
-        ['get', 'delete'].includes(method) && Object.keys(data).length
+        ['get', 'post', 'delete'].includes(method) && Object.keys(data).length
             ? `${url}?${objectToQueryParams(data)}`
             : url;
 
