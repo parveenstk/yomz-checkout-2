@@ -26,3 +26,29 @@ export const params = () => {
 
     return param
 };
+
+export const giftItemsData = [
+    {
+        img: "/images/git-logo.png",
+        name: "YOMZ Collectible Sticker",
+        oldPrice: "$4.99",
+    },
+
+    {
+        img: "/images/feature-book2.jpg",
+        name: "YOMZ Interactive E-book",
+        oldPrice: "$9.99",
+    },
+
+    {
+        img: "/images/feature-refund2.jpg",
+        name: "Chance for Order Refund",
+        oldPrice: "$239.97",
+    },
+
+    {
+        img: "/images/feature-giftcard.jpg",
+        name: "YOMZ $20 Gift Card",
+        oldPrice: "$20.00",
+    }
+];
