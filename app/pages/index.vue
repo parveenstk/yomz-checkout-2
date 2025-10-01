@@ -250,7 +250,7 @@ watch(paymentMethod, (newValue) => {
     <!-- Timer -->
     <section class="w-full lg:py-5 lg:p-2 py-2 p-0">
         <div
-            class="max-w-[1200px] flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium mx-2">
+            class="max-w-[1200px] flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium mx-2 lg:mx-auto">
 
             <!-- Fire Icon -->
             <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
