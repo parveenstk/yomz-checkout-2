@@ -250,7 +250,7 @@ watch(paymentMethod, (newValue) => {
     <!-- Timer -->
     <section class="w-full lg:py-5 lg:p-2 py-2 p-0">
         <div
-            class="max-w-[1200px] mx-auto flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium ">
+            class="max-w-[1200px] flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium mx-2">
 
             <!-- Fire Icon -->
             <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
@@ -329,7 +329,7 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- <div v-for="value in gummyBagsSelector" :key="value.id" :class="[ -->
                 <div v-for="value in gummyBagsSelector" :key="value.id" @click="addProductData(value.id)" :class="[
-                    'flex items-center justify-between pl-0 pt-4 pb-0 pr-4 cursor-pointer transition relative select-none',
+                    'flex items-center justify-between cursor-pointer transition relative select-none py-2.5 pr-2.5',
                     value.id === 2 ? 'bg-yellow-400/90' : 'bg-white']">
 
                     <div class="flex items-center space-x-3">
@@ -358,7 +358,7 @@ watch(paymentMethod, (newValue) => {
                 </div>
 
                 <!-- GiftItems Ist -->
-                <GiftItems customClass="mx-3"/>
+                <GiftItems customClass="mx-3" />
             </div>
 
             <!-- Mobile Screen -->
