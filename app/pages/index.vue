@@ -250,7 +250,7 @@ watch(paymentMethod, (newValue) => {
     <!-- Timer -->
     <section class="w-full lg:py-5 lg:p-2 py-2 p-0">
         <div
-            class="max-w-[1200px] flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium mx-2 lg:mx-auto">
+            class="max-w-[1200px] flex bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium mx-2 lg:mx-auto">
 
             <!-- Fire Icon -->
             <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
@@ -895,63 +895,12 @@ watch(paymentMethod, (newValue) => {
                                     <p class="text-gray-800 text-lg font-bold">Price</p>
                                 </div>
 
-                                <!-- Main Product (First item in cart) -->
-                                <!-- <div v-if="checkoutStore.cartData.length > 1"
-                                    class="flex justify-between items-start mb-2">
-                                    <div class="flex items-start space-x-4">
-                                        <img :src="checkoutStore.cartData[0]!.productImage" alt="Product"
-                                            class="w-20 h-20 object-contain border rounded">
-                                        <div>
-                                            <h3 class="font-semibold text-gray-900">{{
-                                                checkoutStore.cartData[0]!.productName }}
-                                            </h3>
-                                            <span
-                                                class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full font-semibold">
-                                                {{ 2 }} Bags
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-sm text-red-500 line-through font-semibold">
-                                            Regular ${{ 77 }}</p>
-                                        <p class="text-gray-900 font-semibold">${{
-                                            checkoutStore.cartData[0]!.productPrice
-                                            }}</p>
-                                    </div>
-                                </div> -->
-
-                                <!-- Extra Product (Second item in cart if exists) -->
-                                <!-- <div v-if="checkoutStore.cartData[1]"
-                                    class="flex justify-between items-start mb-2 pt-2">
-                                    <div class="flex items-start space-x-4">
-                                        <img :src="checkoutStore.cartData[1].productImage" alt="Extra Product"
-                                            class="w-20 h-20 object-contain border rounded">
-                                        <div>
-                                            <h3 class="font-semibold text-gray-900">{{
-                                                checkoutStore.cartData[1].productName
-                                                }}
-                                            </h3>
-                                            <span
-                                                class="inline-block mt-1 text-sm bg-green-600 text-white px-2 py-0.5 rounded-full font-semibold">
-                                                Extra: {{ 1 }} Bag
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-sm text-red-500 line-through font-semibold">
-                                            Regular ${{ 77 }}</p>
-                                        <p class="text-gray-900 font-semibold">${{
-                                            checkoutStore.cartData[1].productPrice }}
-                                        </p>
-                                    </div>
-                                </div> -->
-
                                 <!-- Display up to 2 cart items -->
                                 <div v-for="(item, index) in checkoutStore.cartData.slice(0, 2)" :key="item.productId"
                                     class="flex justify-between items-start mb-2 pt-2 first:pt-0">
                                     <div class="flex items-start space-x-4">
                                         <img :src="item.productImage" alt="Product Image"
-                                            class="w-20 h-20 object-contain border rounded" />
+                                            class="lg:w-18 lg:h-18 w-15 h-15 object-contain border rounded" />
                                         <div>
                                             <h3 class="font-semibold text-gray-900">{{ item.productName }}</h3>
                                             <span
