@@ -328,7 +328,7 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- <div v-for="value in gummyBagsSelector" :key="value.id" :class="[ -->
                 <div v-for="value in gummyBagsSelector" :key="value.id" @click="addProductData(value.id)" :class="[
-                    'flex items-center justify-between pl-0 pt-4 pb-4 pr-4 cursor-pointer transition relative select-none',
+                    'flex items-center justify-between pl-0 pt-4 pb-0 pr-4 cursor-pointer transition relative select-none',
                     value.id === 2 ? 'bg-yellow-400/90' : 'bg-white']">
 
                     <div class="flex items-center space-x-3">
@@ -355,7 +355,11 @@ watch(paymentMethod, (newValue) => {
                     <img v-if="value.id === 2" src="/images/redarrow.svg"
                         class="w-8 lg:w-12 absolute lg:-left-10 -left-5" alt="Best Seller Arrow" />
                 </div>
+
+                <!-- GiftItems -->
+                <GiftItems />
             </div>
+
 
             <!-- Mobile Screen -->
             <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
@@ -984,6 +988,9 @@ watch(paymentMethod, (newValue) => {
                                     </div>
                                 </div>
 
+                                <!-- GiftItems II -->
+                                <GiftItems />
+                                
                                 <!-- Total Section -->
                                 <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
                                     <div>
