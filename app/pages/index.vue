@@ -357,10 +357,9 @@ watch(paymentMethod, (newValue) => {
                         class="w-8 lg:w-12 absolute lg:-left-10 -left-5" alt="Best Seller Arrow" />
                 </div>
 
-                <!-- GiftItems -->
-                <GiftItems />
+                <!-- GiftItems Ist -->
+                <GiftItems customClass="mx-3"/>
             </div>
-
 
             <!-- Mobile Screen -->
             <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
@@ -991,7 +990,7 @@ watch(paymentMethod, (newValue) => {
 
                                 <!-- GiftItems II -->
                                 <GiftItems />
-                                
+
                                 <!-- Total Section -->
                                 <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
                                     <div>

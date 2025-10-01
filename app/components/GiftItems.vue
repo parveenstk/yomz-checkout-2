@@ -1,5 +1,16 @@
+<script setup>
+defineProps({
+    customClass: {
+        type: String,
+        required: true,
+        default: '',
+    },
+});
+</script>
+
 <template>
-    <div class="mt-2 mb-2 mx-3">
+    <!-- <div class="mt-2 mb-2 mx-3"> -->
+    <div :class="['mt-2 mb-2', customClass]">
         <p v-for="(item, index) in giftItemsData" :key="index"
             class="flex items-center justify-between py-2 px-0 lg:text-lg text-sm">
             <span class="flex items-center lg:gap-3 gap-2">
