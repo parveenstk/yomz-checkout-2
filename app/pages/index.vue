@@ -1,3 +1,4 @@
+`
 <script setup lang="ts">
 import { computed } from 'vue';
 import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
@@ -21,7 +22,7 @@ const config = useRuntimeConfig().public;
 // Set default if undefined
 // if (!formStore.paymentMethod) {
 //     formStore.paymentMethod = 'payPal'
-// }
+// };
 
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
@@ -960,7 +961,7 @@ watch(paymentMethod, (newValue) => {
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-sm text-red-500 line-through font-semibold">Regular $77</p>
+                                        <p class="text-sm text-red-500 line-through font-semibold">Regular $79.99</p>
                                         <p class="text-gray-900 font-semibold">${{ item.productPrice }}</p>
                                     </div>
                                 </div>

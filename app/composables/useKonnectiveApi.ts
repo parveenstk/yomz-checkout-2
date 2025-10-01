@@ -57,7 +57,7 @@ export const importClick = async () => {
 
     // console.log("response:", response.message.sessionId);
     saveToStorage('sessionId', response.message.sessionId, 'session');
-    console.log("response:", getFromStorage('sessionId', 'session'));
+    console.log("sessionId:", getFromStorage('sessionId', 'session'));
 };
 
 // Fetch Import Lead
@@ -97,7 +97,7 @@ export const queryCampaign = async () => {
         }
     });
 
-    // ✅ Filter gummy products directly here
+    // Filter gummy products directly here
     let gummyProducts = structuredProducts.filter(product =>
         config.public.variantIds.includes(product.productId)
     );
@@ -106,6 +106,6 @@ export const queryCampaign = async () => {
         pr.productName = pr.productName + " Gummies";
     })
 
-    // ✅ Save both to the store (you'll need to update the store method)
+    // Save both to the store (you'll need to update the store method)
     checkoutStore.saveProducts(structuredProducts, gummyProducts);
 };
