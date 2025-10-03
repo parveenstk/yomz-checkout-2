@@ -358,7 +358,9 @@ watch(paymentMethod, (newValue) => {
                 </div>
 
                 <!-- GiftItems Ist -->
-                <GiftItems customClass="mx-3" />
+                <GiftItems customClass="" />
+
+                
             </div>
 
             <!-- Mobile Screen -->
@@ -968,7 +970,7 @@ watch(paymentMethod, (newValue) => {
                                 </div>
 
                                 <p class="text-center text-[0.9rem] font-medium">
-                                    🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.
+                                    🔒 By placing this order, you accept the YOMZ Privacy Policy and Terms of Use.
                                 </p>
                             </div>
 

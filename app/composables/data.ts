@@ -21,7 +21,7 @@ export const faqs = [
     },
     {
         "question": "Is it safe for kids?",
-        "answer": "Yes. Family is one of our 3 core values, so it has to be safe for ages 2 to 102. That’s why YOMZ has only 1g of added sugar and no artificial dyes. It’s free of GMOs, gluten, and dairy plus keto-friendly and vegan."
+        "answer": "Yes. Family is one of our 3 core values, so it has to be safe for ages 2 to 102. That’s why YOMZ has no artificial dyes, flavors, or other junk. It’s free of GMOs, gluten, and dairy plus vegan-friendly."
     },
     {
         "question": "Will YOMZ help me lose weight?",
@@ -41,7 +41,7 @@ export const faqs = [
     },
     {
         "question": "Why is it priced lower than your competitors?",
-        "answer": "YOMZ has no competition, first and foremost. It’s a unicorn. No other gummy delivers amazing taste that’s also packed with antioxidants, vitamins, micronutrients, and 9g of fiber. As for price, there is no middleman. We’re making this offer directly to you. Because we don’t have to pay a middleman to offer it or sell it to you, we’re passing the savings on to you. On top of that, our mission is to end Hidden Hunger for 100 million people by 2030. There’s no way we could do that if we jacked up the price. This philosophy will never change. It’s the foundation of YOMZ."
+        "answer": "YOMZ has no competition, first and foremost. It’s a unicorn. No other gummy delivers amazing taste that’s also packed with antioxidants, vitamins, micronutrients, and 5g of fiber. As for price, there is no middleman. We’re making this offer directly to you. Because we don’t have to pay a middleman to offer it or sell it to you, we’re passing the savings on to you. On top of that, our mission is to end Hidden Hunger for 100 million people by 2030. There’s no way we could do that if we jacked up the price. This philosophy will never change. It’s the foundation of YOMZ."
     }
 ];
 
