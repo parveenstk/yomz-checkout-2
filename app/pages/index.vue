@@ -20,9 +20,9 @@ const checkoutStore = useCheckoutStore();
 const config = useRuntimeConfig().public;
 
 // Set default if undefined
-// if (!formStore.paymentMethod) {
-//     formStore.paymentMethod = 'payPal'
-// };
+if (!formStore.paymentMethod) {
+    formStore.paymentMethod = 'payPal'
+};
 
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
@@ -169,7 +169,7 @@ onMounted(async () => {
     // console.log('variants:', variants);
 
     const keysToExtract: (keyof CampaignVariant)[] = [
-        "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock"
+        "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock",
     ];
 
     // const extractedValues = keysToExtract.reduce((obj, key) => {
@@ -250,7 +250,7 @@ watch(paymentMethod, (newValue) => {
     <!-- Timer -->
     <section class="w-full lg:py-5 lg:p-2 py-2 p-0">
         <div
-            class="max-w-[1200px] mx-auto flex  bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium ">
+            class="max-w-[1200px] flex bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium mx-2 lg:mx-auto">
 
             <!-- Fire Icon -->
             <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
@@ -329,7 +329,7 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- <div v-for="value in gummyBagsSelector" :key="value.id" :class="[ -->
                 <div v-for="value in gummyBagsSelector" :key="value.id" @click="addProductData(value.id)" :class="[
-                    'flex items-center justify-between pl-0 pt-4 pb-0 pr-4 cursor-pointer transition relative select-none',
+                    'flex items-center justify-between cursor-pointer transition relative select-none py-2.5 pr-2.5',
                     value.id === 2 ? 'bg-yellow-400/90' : 'bg-white']">
 
                     <div class="flex items-center space-x-3">
@@ -357,10 +357,9 @@ watch(paymentMethod, (newValue) => {
                         class="w-8 lg:w-12 absolute lg:-left-10 -left-5" alt="Best Seller Arrow" />
                 </div>
 
-                <!-- GiftItems -->
-                <GiftItems />
+                <!-- GiftItems Ist -->
+                <GiftItems customClass="mx-3" />
             </div>
-
 
             <!-- Mobile Screen -->
             <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
@@ -368,8 +367,10 @@ watch(paymentMethod, (newValue) => {
         </div>
 
         <!-- Right Column -->
-        <div class="">
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
+        <div>
+
+            <!-- STEP 3: PAYMENT METHOD -->
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -424,7 +425,6 @@ watch(paymentMethod, (newValue) => {
 
                     </div>
                 </label>
-
             </div>
 
             <section v-if="paymentMethod === 'creditCard' || paymentMethod === 'payPal'" class="lg:m-0 m-2">
@@ -432,7 +432,7 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
@@ -866,7 +866,6 @@ watch(paymentMethod, (newValue) => {
                                             alt="white-tick" />
                                     </div>
                                     <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
-                                        <!-- Yes, I want 2 Years of Protection. -->
                                         Yes, I want another style of Gummies
                                     </span>
                                 </div>
@@ -874,12 +873,6 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Description -->
                             <p class="text-gray-700 text-sm">
-                                <!-- <span class="font-semibold">One Time Offer:</span> By placing your order today you can
-                                have
-                                2 years of protection and replacement warranty for only an additional
-                                <span class="font-semibold">$19.97</span>. This extended warranty means your product is
-                                covered for 2 years. -->
-
                                 <span class="font-semibold">One Time Offer:</span> By placing your order today, you will
                                 receive another style of gummy with <b>free shipping</b>, worth $79.99, for just $48.00.
                             </p>
@@ -896,63 +889,12 @@ watch(paymentMethod, (newValue) => {
                                     <p class="text-gray-800 text-lg font-bold">Price</p>
                                 </div>
 
-                                <!-- Main Product (First item in cart) -->
-                                <!-- <div v-if="checkoutStore.cartData.length > 1"
-                                    class="flex justify-between items-start mb-2">
-                                    <div class="flex items-start space-x-4">
-                                        <img :src="checkoutStore.cartData[0]!.productImage" alt="Product"
-                                            class="w-20 h-20 object-contain border rounded">
-                                        <div>
-                                            <h3 class="font-semibold text-gray-900">{{
-                                                checkoutStore.cartData[0]!.productName }}
-                                            </h3>
-                                            <span
-                                                class="inline-block mt-1 text-sm bg-gray-700 text-white px-2 py-0.5 rounded-full font-semibold">
-                                                {{ 2 }} Bags
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-sm text-red-500 line-through font-semibold">
-                                            Regular ${{ 77 }}</p>
-                                        <p class="text-gray-900 font-semibold">${{
-                                            checkoutStore.cartData[0]!.productPrice
-                                            }}</p>
-                                    </div>
-                                </div> -->
-
-                                <!-- Extra Product (Second item in cart if exists) -->
-                                <!-- <div v-if="checkoutStore.cartData[1]"
-                                    class="flex justify-between items-start mb-2 pt-2">
-                                    <div class="flex items-start space-x-4">
-                                        <img :src="checkoutStore.cartData[1].productImage" alt="Extra Product"
-                                            class="w-20 h-20 object-contain border rounded">
-                                        <div>
-                                            <h3 class="font-semibold text-gray-900">{{
-                                                checkoutStore.cartData[1].productName
-                                                }}
-                                            </h3>
-                                            <span
-                                                class="inline-block mt-1 text-sm bg-green-600 text-white px-2 py-0.5 rounded-full font-semibold">
-                                                Extra: {{ 1 }} Bag
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-sm text-red-500 line-through font-semibold">
-                                            Regular ${{ 77 }}</p>
-                                        <p class="text-gray-900 font-semibold">${{
-                                            checkoutStore.cartData[1].productPrice }}
-                                        </p>
-                                    </div>
-                                </div> -->
-
                                 <!-- Display up to 2 cart items -->
                                 <div v-for="(item, index) in checkoutStore.cartData.slice(0, 2)" :key="item.productId"
                                     class="flex justify-between items-start mb-2 pt-2 first:pt-0">
                                     <div class="flex items-start space-x-4">
                                         <img :src="item.productImage" alt="Product Image"
-                                            class="w-20 h-20 object-contain border rounded" />
+                                            class="lg:w-18 lg:h-18 w-15 h-15 object-contain border rounded" />
                                         <div>
                                             <h3 class="font-semibold text-gray-900">{{ item.productName }}</h3>
                                             <span
@@ -991,7 +933,7 @@ watch(paymentMethod, (newValue) => {
 
                                 <!-- GiftItems II -->
                                 <GiftItems />
-                                
+
                                 <!-- Total Section -->
                                 <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
                                     <div>
@@ -1002,9 +944,9 @@ watch(paymentMethod, (newValue) => {
 
                                     <div class="flex gap-3 items-baseline font-bold">
                                         <!-- discount % -->
-                                        <span class="font-bold text-sm text-red">
+                                        <!-- <span class="font-bold text-sm text-red">
                                             -{{ calculateTotalDiscount() }}%
-                                        </span>
+                                        </span> -->
 
                                         <!-- final price -->
                                         <span class="font-bold text-gray-900 text-lg">

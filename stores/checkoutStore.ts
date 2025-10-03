@@ -6,6 +6,8 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     const config = useRuntimeConfig().public;
     const allProducts: Ref<StructuredProducts[]> = ref([]);
     const gummyProducts: Ref<StructuredProducts[]> = ref([]);
+    const ogBags: Ref<StructuredProducts[]> = ref([]);
+    const sourBags: Ref<StructuredProducts[]> = ref([]);
     let cartData: Ref<StructuredProducts[]> = ref([]);
     const selectedGummyType: Ref<number> = ref(config.variantIds[0]!);
     const selectedQuantity: Ref<number> = ref(2);
@@ -13,10 +15,14 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     // to add save products in 'allProducts'
     const saveProducts = (
         products: StructuredProducts[],
-        filteredGummyProducts: StructuredProducts[]
+        filteredGummyProducts: StructuredProducts[],
+        bags: StructuredProducts[]
     ) => {
         allProducts.value = [...products];
+        console.log("allProducts.value:", allProducts.value);
+
         gummyProducts.value = [...filteredGummyProducts];
+        // console.log('gummyProducts.value:', gummyProducts.value);
     };
 
     // Add Product in Cart
@@ -24,6 +30,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         const selectedProduct = allProducts.value.find(
             (product) => product.productId === selectedGummyType.value
         );
+        // console.log('selectedGummyType.value:', selectedGummyType.value)
 
         if (!selectedProduct) {
             console.warn('Product not found');

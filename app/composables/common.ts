@@ -41,14 +41,14 @@ export const giftItemsData = [
     },
 
     {
+        img: "/images/feature-giftcard.jpg",
+        name: "YOMZ $20 Gift Card",
+        oldPrice: "$20.00",
+    },
+
+    {
         img: "/images/feature-refund2.jpg",
         name: "Chance for Order Refund",
         oldPrice: "$239.97",
     },
-
-    {
-        img: "/images/feature-giftcard.jpg",
-        name: "YOMZ $20 Gift Card",
-        oldPrice: "$20.00",
-    }
 ];

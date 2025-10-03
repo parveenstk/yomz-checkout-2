@@ -3,7 +3,7 @@ export const gummyBagsSelector = [
         id: 2,
         title: "51% OFF: 2 Bags",
         price: 39,
-        shipping: "Incl. FREE Shipping"
+        shipping: "Incl. FREE Shipping",
     },
 
     {
