@@ -84,9 +84,9 @@ function startCountdown() {
 }
 
 // Add data in Cart
-const addProductData = (id: number) => {
+const addProductData = (id: number, variantId: number) => {
     selectedBag.value = id;
-    checkoutStore.selectedQuantity = id;
+    checkoutStore.selectedQuantity = variantId;
     checkoutStore.addGummyProduct();
 };
 
@@ -138,8 +138,8 @@ onMounted(async () => {
     await queryCampaign()
 
     // Initialize selected gummy and quanity on load
-    checkoutStore.selectedGummyType = config.variantIds[0]!;
-    checkoutStore.selectedQuantity = 2;
+    checkoutStore.selectedGummyType = "ogGummies";
+    checkoutStore.selectedQuantity = 6752;
     checkoutStore.addGummyProduct(); // add product in cart afterwards
 
     const update = () => {
@@ -306,18 +306,18 @@ watch(paymentMethod, (newValue) => {
                 </div>
                 <div v-else class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
                     <!-- Gummy Selectors -->
-                    <div v-for="value in checkoutStore.gummyProducts" :key="value.productId"
+                    <div v-for="value in gymmyTypeData" :key="value.id"
                         class="flex items-center space-x-1 cursor-pointer relative select-none"
-                        @click="checkoutStore.selectedGummyType = value.productId">
+                        @click="checkoutStore.selectedGummyType = value.id">
                         <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3 border-[#172969]"
-                            :class="{ 'bg-[#172969]': checkoutStore.selectedGummyType === value.productId }">
-                            <NuxtImg v-if="checkoutStore.selectedGummyType === value.productId"
-                                src="/images/whiteTick.svg" alt="white-tick" />
+                            :class="{ 'bg-[#172969]': checkoutStore.selectedGummyType === value.id }">
+                            <NuxtImg v-if="checkoutStore.selectedGummyType === value.id" src="/images/whiteTick.svg"
+                                alt="white-tick" />
                         </div>
 
-                        <NuxtImg :src="value.productImage" width="64" height="64" alt="Product Image" />
+                        <NuxtImg :src="value.img" width="64" height="64" :alt="value.alt" />
                         <span class="text-gray text-lg leading-5 font-extrabold">
-                            {{ value.productName }}
+                            {{ value.name }}
                         </span>
                     </div>
                 </div>
@@ -328,9 +328,10 @@ watch(paymentMethod, (newValue) => {
                 </h2>
 
                 <!-- <div v-for="value in gummyBagsSelector" :key="value.id" :class="[ -->
-                <div v-for="value in gummyBagsSelector" :key="value.id" @click="addProductData(value.id)" :class="[
-                    'flex items-center justify-between cursor-pointer transition relative select-none py-2.5 pr-2.5',
-                    value.id === 2 ? 'bg-yellow-400/90' : 'bg-white']">
+                <div v-for="value in gummyBagsSelector" :key="value.id"
+                    @click="addProductData(value.id, value.variant[checkoutStore.selectedGummyType].id)" :class="[
+                        'flex items-center justify-between cursor-pointer transition relative select-none py-2.5 pr-2.5',
+                        value.id === 2 ? 'bg-yellow-400/90' : 'bg-white']">
 
                     <div class="flex items-center space-x-3">
                         <div class="w-6 h-6 rounded-full flex items-center justify-center ml-3 border-2 border-[#172969]"
@@ -358,9 +359,7 @@ watch(paymentMethod, (newValue) => {
                 </div>
 
                 <!-- GiftItems Ist -->
-                <GiftItems customClass="" />
-
-                
+                <GiftItems />
             </div>
 
             <!-- Mobile Screen -->
@@ -851,10 +850,6 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Icon at top -->
                             <div class="flex justify-center">
-                                <!-- <NuxtImg v-if="gummyType === 'soursGummies'" src="/images/og-bag.png" alt="og-gummies"
-                                    class="h-16" />
-                                <NuxtImg v-else-if="gummyType === 'ogGummies'" src="/images/sour-bag.png"
-                                    alt="sour-gummies" class="h-16" /> -->
                                 <NuxtImg src="/images/funds.png" class="h-16" />
                             </div>
 
@@ -898,19 +893,22 @@ watch(paymentMethod, (newValue) => {
                                         <img :src="item.productImage" alt="Product Image"
                                             class="lg:w-18 lg:h-18 w-15 h-15 object-contain border rounded" />
                                         <div>
-                                            <h3 class="font-semibold text-gray-900">{{ item.productName }}</h3>
+                                            <h3 class="font-semibold text-gray-900">{{ item.ProductVariantName }}</h3>
                                             <span
                                                 class="inline-block mt-1 text-sm px-2 py-0.5 rounded-full font-semibold"
                                                 :class="index === 0 ? 'bg-gray-700 text-white' : 'bg-green-600 text-white'">
-                                                {{ index === 0 ? `${checkoutStore.selectedQuantity} Bags` : `Extra: 1
-                                                Bag`
-                                                }}
+                                                <!-- {{ index === 0 ? `${checkoutStore.selectedQuantity} Bags` : `Extra: 1 -->
+                                                {{ index === 0 ? `${item.BagsQty}` : `Extra: 1 Bag` }}
                                             </span>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-sm text-red-500 line-through font-semibold">Regular $79.99</p>
-                                        <p class="text-gray-900 font-semibold">${{ item.productPrice }}</p>
+                                        <p class="text-sm text-red-500 line-through font-bold">Regular $159.98</p>
+
+                                        <div class="flex gap-4 items-baseline">
+                                            <p class="text-sm text-green-600 font-bold">51% off</p>
+                                            <p class="text-gray-900 font-bold">${{ item.productPrice }}</p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -964,7 +962,7 @@ watch(paymentMethod, (newValue) => {
                                 </div>
 
                                 <p class="text-center text-[0.9rem] font-medium">
-                                    🔒 By placing this order, you accept the YOMZ Privacy Policy and Terms of Use.
+                                    🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.
                                 </p>
                             </div>
 

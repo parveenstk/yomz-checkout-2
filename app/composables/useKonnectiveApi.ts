@@ -115,8 +115,8 @@ export const queryCampaign = async () => {
         config.public.sourBags.includes(product.productId)
     );
 
-    console.log('ogBags:', ogBags)
-    console.log('sourBags:', sourBags)
+    // console.log('ogBags:', ogBags)
+    // console.log('sourBags:', sourBags)
 
     gummyProducts.forEach(pr => {
         pr.productName = pr.productName + " Gummies";

@@ -4,20 +4,32 @@ export const gummyBagsSelector = [
         title: "51% OFF: 2 Bags",
         price: 39,
         shipping: "Incl. FREE Shipping",
+        variant: {
+            "ogGummies": { id: 6752 },
+            "soursGummies": { id: 6764 }
+        }
     },
 
     {
         id: 3,
         title: "60% OFF: 3 Bags",
         price: 32,
-        shipping: "Incl. FREE Shipping"
+        shipping: "Incl. FREE Shipping",
+        variant: {
+            "ogGummies": { id: 6754 },
+            "soursGummies": { id: 6766 }
+        }
     },
 
     {
         id: 1,
         title: "40% OFF: 1 Bag",
         price: 48,
-        shipping: "$7.99 Shipping"
+        shipping: "$7.99 Shipping",
+        variant: {
+            "ogGummies": { id: 6750 },
+            "soursGummies": { id: 6762 }
+        }
     }
 ];
 

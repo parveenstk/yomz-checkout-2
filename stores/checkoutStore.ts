@@ -9,7 +9,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     const ogBags: Ref<StructuredProducts[]> = ref([]);
     const sourBags: Ref<StructuredProducts[]> = ref([]);
     let cartData: Ref<StructuredProducts[]> = ref([]);
-    const selectedGummyType: Ref<number> = ref(config.variantIds[0]!);
+    const selectedGummyType: Ref<string> = ref("ogGummies");
     const selectedQuantity: Ref<number> = ref(2);
 
     // to add save products in 'allProducts'
@@ -19,7 +19,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         bags: StructuredProducts[]
     ) => {
         allProducts.value = [...products];
-        console.log("allProducts.value:", allProducts.value);
+        // console.log("allProducts.value:", allProducts.value);
 
         gummyProducts.value = [...filteredGummyProducts];
         // console.log('gummyProducts.value:', gummyProducts.value);
@@ -28,7 +28,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     // Add Product in Cart
     const addGummyProduct = (): void => {
         const selectedProduct = allProducts.value.find(
-            (product) => product.productId === selectedGummyType.value
+            (product) => product.productId === selectedQuantity.value
         );
         // console.log('selectedGummyType.value:', selectedGummyType.value)
 
