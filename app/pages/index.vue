@@ -20,9 +20,9 @@ const checkoutStore = useCheckoutStore();
 const config = useRuntimeConfig().public;
 
 // Set default if undefined
-if (!formStore.paymentMethod) {
-    formStore.paymentMethod = 'payPal'
-};
+// if (!formStore.paymentMethod) {
+//     formStore.paymentMethod = 'payPal'
+// };
 
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
@@ -372,7 +372,7 @@ watch(paymentMethod, (newValue) => {
         <div>
 
             <!-- STEP 3: PAYMENT METHOD -->
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -434,7 +434,7 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
+                    <div class="bg-white p-4 rounded-lg shadow mt-3">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
