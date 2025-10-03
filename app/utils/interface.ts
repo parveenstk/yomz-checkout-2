@@ -62,11 +62,15 @@ export interface CampaignVariant {
     variantDetailId: number;
     variantName1: string;
     productQty: number;
+    variantOptionName1: string;
+    variantOptionName2: string;
 }
 
 export interface StructuredProducts {
     productId: number,
     productName: string,
     productImage: string,
-    productPrice: string
+    productPrice: string,
+    ProductVariantName?: string;
+    BagsQty?: string;
 }

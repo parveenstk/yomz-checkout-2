@@ -20,9 +20,9 @@ const checkoutStore = useCheckoutStore();
 const config = useRuntimeConfig().public;
 
 // Set default if undefined
-// if (!formStore.paymentMethod) {
-//     formStore.paymentMethod = 'payPal'
-// };
+if (!formStore.paymentMethod) {
+    formStore.paymentMethod = 'payPal'
+};
 
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
@@ -169,7 +169,7 @@ onMounted(async () => {
     // console.log('variants:', variants);
 
     const keysToExtract: (keyof CampaignVariant)[] = [
-        "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock"
+        "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock",
     ];
 
     // const extractedValues = keysToExtract.reduce((obj, key) => {
@@ -369,8 +369,10 @@ watch(paymentMethod, (newValue) => {
         </div>
 
         <!-- Right Column -->
-        <div class="">
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
+        <div>
+
+            <!-- STEP 3: PAYMENT METHOD -->
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -425,7 +427,6 @@ watch(paymentMethod, (newValue) => {
 
                     </div>
                 </label>
-
             </div>
 
             <section v-if="paymentMethod === 'creditCard' || paymentMethod === 'payPal'" class="lg:m-0 m-2">
@@ -433,7 +434,7 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
@@ -867,7 +868,6 @@ watch(paymentMethod, (newValue) => {
                                             alt="white-tick" />
                                     </div>
                                     <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
-                                        <!-- Yes, I want 2 Years of Protection. -->
                                         Yes, I want another style of Gummies
                                     </span>
                                 </div>
@@ -875,12 +875,6 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Description -->
                             <p class="text-gray-700 text-sm">
-                                <!-- <span class="font-semibold">One Time Offer:</span> By placing your order today you can
-                                have
-                                2 years of protection and replacement warranty for only an additional
-                                <span class="font-semibold">$19.97</span>. This extended warranty means your product is
-                                covered for 2 years. -->
-
                                 <span class="font-semibold">One Time Offer:</span> By placing your order today, you will
                                 receive another style of gummy with <b>free shipping</b>, worth $79.99, for just $48.00.
                             </p>
@@ -952,9 +946,9 @@ watch(paymentMethod, (newValue) => {
 
                                     <div class="flex gap-3 items-baseline font-bold">
                                         <!-- discount % -->
-                                        <span class="font-bold text-sm text-red">
+                                        <!-- <span class="font-bold text-sm text-red">
                                             -{{ calculateTotalDiscount() }}%
-                                        </span>
+                                        </span> -->
 
                                         <!-- final price -->
                                         <span class="font-bold text-gray-900 text-lg">

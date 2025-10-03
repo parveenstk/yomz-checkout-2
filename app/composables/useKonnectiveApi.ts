@@ -75,6 +75,7 @@ export const queryCampaign = async () => {
     const products: CampaignProducts[] = data.products;
 
     const structuredProducts: StructuredProducts[] = [];
+    // console.log('structuredProducts:', structuredProducts);
 
     products.forEach((product: CampaignProducts) => {
         if (product.hasVariants) {
@@ -84,7 +85,9 @@ export const queryCampaign = async () => {
                     productId: variant.variantDetailId,
                     productName: variant.title,
                     productImage: variant.imageUrl,
-                    productPrice: variant.price
+                    productPrice: variant.price,
+                    ProductVariantName: variant.variantOptionName1,
+                    BagsQty: variant.variantOptionName2
                 });
             });
         } else {
@@ -102,10 +105,23 @@ export const queryCampaign = async () => {
         config.public.variantIds.includes(product.productId)
     );
 
+    // Filter OG Gummies Bags
+    let ogBags = structuredProducts.filter(product =>
+        config.public.ogBags.includes(product.productId)
+    );
+
+    // Filter Sour Gummies Bags
+    let sourBags = structuredProducts.filter(product =>
+        config.public.sourBags.includes(product.productId)
+    );
+
+    console.log('ogBags:', ogBags)
+    console.log('sourBags:', sourBags)
+
     gummyProducts.forEach(pr => {
         pr.productName = pr.productName + " Gummies";
     })
 
     // Save both to the store (you'll need to update the store method)
-    checkoutStore.saveProducts(structuredProducts, gummyProducts);
+    checkoutStore.saveProducts(structuredProducts, gummyProducts, ogBags);
 };
