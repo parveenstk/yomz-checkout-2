@@ -1,18 +1,19 @@
 <script setup>
+
 defineProps({
     customClass: {
         type: String,
         required: true,
         default: '',
-    },
+    }
 });
 </script>
 
 <template>
-    <div
+    <!-- <div
         :class="['mt-2 mb-2 px-1 border border-dashed border-blue-500 rounded-lg overflow-hidden relative', customClass]">
 
-        <!-- Gradient overlay -->
+        Gradient overlay
         <div
             class="absolute inset-0 w-full h-full z-10 bg-[linear-gradient(144deg,rgba(255,235,0,0.27)_0%,rgba(30,185,240,0.2)_100%)]">
         </div>
@@ -32,7 +33,7 @@ defineProps({
     <div
         :class="['mt-2 mb-2 px-1 border border-dashed border-blue-500 rounded-lg overflow-hidden relative', customClass]">
 
-        <!-- Gradient overlay -->
+        Gradient overlay
         <div
             class="absolute inset-0 w-full h-full z-10 bg-[linear-gradient(144deg,rgba(255,235,0,0.27)_0%,rgba(30,185,240,0.2)_100%)]">
         </div>
@@ -53,7 +54,7 @@ defineProps({
         :class="['mt-2 mb-2 px-1 border border-dashed border-blue-500 rounded-lg overflow-hidden relative', customClass]">
 
         <div class="">
-            <!-- Gradient overlay -->
+            Gradient overlay
             <div
                 class="absolute inset-0 w-full h-full  z-10 bg-[linear-gradient(144deg,rgba(255,235,0,0.27)_0%,rgba(30,185,240,0.2)_100%)]">
             </div>
@@ -75,7 +76,7 @@ defineProps({
         :class="['mt-2 mb-2 px-1 border border-dashed border-blue-500 rounded-lg overflow-hidden relative', customClass]">
 
         <div class="opacity-10">
-            <!-- Gradient overlay -->
+            Gradient overlay
             <div
                 class="absolute inset-0 w-full h-full z-10 bg-[linear-gradient(144deg,rgba(255,235,0,0.27)_0%,rgba(30,185,240,0.2)_100%)]">
             </div>
@@ -91,67 +92,40 @@ defineProps({
                 </span>
             </p>
         </div>
+    </div> -->
+
+    <!-- <p class="lg:text-lg text-sm text-center">Order now... only <span
+            class="extrablod text-[#C91F3F] lg:text-xl text-lg mx-1">23</span> left in stock for this offer</p> -->
+
+    <div>
+        <div v-for="(item, index) in giftItemsData" :key="index" :class="[
+            'mt-2 mb-2 px-1 border border-dashed border-blue-500 rounded-lg overflow-hidden relative',
+            customClass]">
+
+            <!-- Gradient overlay -->
+            <div class="absolute inset-0 w-full h-full z-10 
+            bg-[linear-gradient(144deg,rgba(255,235,0,0.27)_0%,rgba(30,185,240,0.2)_100%)]"
+                :style="{ opacity: index === 3 ? '0.1' : '1' }">
+            </div>
+
+            <p :style="{ opacity: index === 3 ? '0.1' : '1' }"
+                class="flex items-center justify-between py-1 px-0 lg:text-lg text-sm relative z-20 font-bold">
+                <span class="flex items-center lg:gap-3 gap-2">
+                    <NuxtImg :src="item.img" class="lg:h-16 h-16 rounded-lg border border-dashed border-blue-500 p-1" />
+                    {{ item.name }}
+                </span>
+                <span class="flex items-center gap-1 font-bold">
+                    <del class="text-[#474747]">{{ item.oldPrice }}</del>
+                    <span>$0.00</span>
+                </span>
+            </p>
+        </div>
+
+        <p class="lg:text-lg text-sm text-center mb-2">
+            Order now... only
+            <span class="extrablod text-[#C91F3F] lg:text-xl text-lg mx-1">23</span>
+            left in stock for this offer
+        </p>
     </div>
 
-
-<p class="lg:text-lg text-sm text-center">Order now... only <span class="extrablod text-[#C91F3F] lg:text-xl text-lg mx-1">23</span> left in stock for this offer</p>
-
-
-
-    <!-- <div :class="['mt-2 mb-2', customClass]">
-        <p v-for="(item, index) in giftItemsData" :key="index"
-            class="flex items-center justify-between py-2 px-0 lg:text-lg text-sm">
-            <span class="flex items-center lg:gap-3 gap-2">
-                <NuxtImg :src="item.img" :class="[
-                    'lg:h-16 h-12 rounded-lg',
-                    (index === 0 || index === 3) ? 'border-1 p-1 border-[#e0e0e0]' : '']" />
-                {{ item.name }}
-            </span>
-            <span class="flex items-center gap-1">
-                <del class="text-[#9ca3af]">{{ item.oldPrice }}</del>
-                <span>$0.00</span>
-            </span>
-        </p>
-    </div> -->
-
-    <!-- <div :class="['mt-2 mb-2', customClass]">
-        <p class="flex items-center justify-between py-2 px-0 lg:text-lg text-sm">
-            <span class="flex items-center lg:gap-3 gap-2">
-                <NuxtImg src="/images/feature-book2.jpg" class="lg:h-16 h-12 rounded-lg" />
-                YOMZ Interactive E-book
-            </span>
-            <span class="flex items-center gap-1">
-                <del class="text-[#9ca3af]">$9.99</del>
-                <span>$0.00</span>
-            </span>
-        </p>
-    </div> -->
-
-    <!-- 3rd Gift -->
-    <!-- <div :class="['mt-2 mb-2', customClass]">
-        <p class="flex items-center justify-between py-2 px-0 lg:text-lg text-sm">
-            <span class="flex items-center lg:gap-3 gap-2">
-                <NuxtImg src="/images/feature-giftcard.jpg" class="lg:h-16 h-12 rounded-lg" />
-                YOMZ $20 Gift Card
-            </span>
-            <span class="flex items-center gap-1">
-                <del class="text-[#9ca3af]">$20.00</del>
-                <span>$0.00</span>
-            </span>
-        </p>
-    </div> -->
-
-    <!-- 4th Gift -->
-    <!-- <div :class="['mt-2 mb-2', customClass]">
-        <p class="flex items-center justify-between py-2 px-0 lg:text-lg text-sm">
-            <span class="flex items-center lg:gap-3 gap-2">
-                <NuxtImg src="/images/feature-refund2.jpg" class="lg:h-16 h-12 rounded-lg" />
-                Chance for Order Refund
-            </span>
-            <span class="flex items-center gap-1">
-                <del class="text-[#9ca3af]">$239.97</del>
-                <span>$0.00</span>
-            </span>
-        </p>
-    </div> -->
 </template>
