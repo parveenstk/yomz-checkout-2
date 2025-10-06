@@ -1,4 +1,3 @@
-`
 <script setup lang="ts">
 import { computed } from 'vue';
 import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
@@ -25,7 +24,7 @@ const paymentMethod = computed({
     set: (value: 'creditCard' | 'payPal') => {
         formStore.paymentMethod = value
     }
-})
+});
 
 // Gummy bags
 const selectedBag = ref(2);
@@ -76,7 +75,7 @@ function startCountdown() {
 // Add data in Cart
 const addProductData = (id: number, variantId: number) => {
     selectedBag.value = id;
-    console.log("selectedBag.value:", selectedBag.value);
+    // console.log("selectedBag.value:", selectedBag.value);
 
     checkoutStore.selectedQuantity = variantId;
     checkoutStore.addGummyProduct();
@@ -85,7 +84,9 @@ const addProductData = (id: number, variantId: number) => {
 // Calculate total price for all products in cart
 const calculateTotalPrice = () => {
     const subtotal = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
-    const shipping = checkoutStore.cartData[0]?.productId === 3 ? 7.99 : 0;
+    const shipping = checkoutStore.cartData[0]?.productId === 1 ? 7.99 : 0;
+    console.log('shipping:', shipping);
+
     return (subtotal + shipping).toFixed(2);
 };
 
@@ -93,17 +94,6 @@ const calculateTotalPrice = () => {
 const calculateComparePrice = () => {
     const total = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
     return (total + 7.99).toFixed(2);
-};
-
-// Calculate average discount percentage
-const calculateTotalDiscount = () => {
-    if (checkoutStore.cartData.length === 0) return 0;
-
-    const totalOriginal = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0) + 7.99;
-    const totalDiscounted = parseFloat(calculateTotalPrice());
-    const discount = ((totalOriginal - totalDiscounted) / totalOriginal) * 100;
-
-    return Math.round(discount);
 };
 
 // Switch Gummy Type
@@ -173,10 +163,6 @@ onMounted(async () => {
 watch(paymentMethod, (newValue) => {
     console.log('newValue:', newValue);
 });
-
-// watch(selectedBag, (newValue) => {
-//     console.log('selectedBag:', newValue);
-// });
 
 </script>
 <template>
@@ -343,9 +329,7 @@ watch(paymentMethod, (newValue) => {
                     </div>
 
                     <div :class="[
-                        'text-right text-sm text-gray-900',
-                        value.id === 2 ? 'font-bold' : ''
-                    ]">
+                        'text-right text-sm text-gray-900', value.id === 2 ? 'font-bold' : '']">
                         <p>${{ value.price.toFixed(2) }} each</p>
                         <p class="uppercase">{{ value.shipping }}</p>
                     </div>
@@ -356,7 +340,7 @@ watch(paymentMethod, (newValue) => {
                 </div>
 
                 <!-- GiftItems Ist -->
-                <GiftItems />
+                <GiftItems :selectedBag="selectedBag" version="first" />
             </div>
 
             <!-- Mobile Screen -->
@@ -368,8 +352,8 @@ watch(paymentMethod, (newValue) => {
         <div>
 
             <!-- STEP 3: PAYMENT METHOD -->
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
-                <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2"> -->
+            <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden"> -->
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -421,8 +405,8 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
+                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3 hidden"> -->
+                    <div class="bg-white p-4 rounded-lg shadow mt-3">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
@@ -857,7 +841,7 @@ watch(paymentMethod, (newValue) => {
                                         <NuxtImg v-if="checkoutStore.cartData.length > 1" src="/images/whiteTick.svg"
                                             alt="white-tick" />
                                     </div>
-                                    <span class="font-semibold px-1 py-1 rounded-lg lg:text-base text-sm lg:ms-2 ms-1">
+                                    <span class="font-semibold px-1 py-1 rounded-lg lg:text-base text-xs lg:ms-2 ms-1">
                                         Yes, rush my order + add insurance
                                     </span>
                                 </div>
@@ -913,15 +897,18 @@ watch(paymentMethod, (newValue) => {
 
                                 <!-- Free Shipping Section -->
                                 <div class="flex justify-between items-center mb-2">
-                                    <div v-if="checkoutStore.cartData[0]?.productId === 3"
-                                        class="flex items-center space-x-2">
+                                    <div v-if="selectedBag === 1" class="flex items-center space-x-2">
                                         <p class="text-lg font-semibold text-gray-800">Shipping Price</p>
                                     </div>
                                     <div v-else class="flex items-center space-x-2">
-                                        <img class="w-5" src="/images/check-icons.png">
+                                        <div class="w-5 h-5 rounded-full flex items-center justify-center border-2
+                                             border-[#172969] bg-[#172969]">
+                                            <NuxtImg src="/images/whiteTick.svg" />
+                                        </div>
                                         <p class="text-lg font-semibold text-gray-800">Free Shipping</p>
                                     </div>
-                                    <div v-if="checkoutStore.cartData[0]?.productId === 3">
+
+                                    <div v-if="selectedBag === 1">
                                         <span class="text-md font-bold">$7.99</span>
                                     </div>
                                     <div v-else class="flex gap-1">
@@ -931,11 +918,11 @@ watch(paymentMethod, (newValue) => {
                                 </div>
 
                                 <!-- GiftItems II -->
-                                <GiftItems />
+                                <GiftItems :selectedBag="selectedBag" version="second" />
 
                                 <!-- Total Section -->
                                 <div
-                                    class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2 mt-4">
+                                    class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2 mt-2">
                                     <div>
                                         <p class="text-gray font-bold">Total:
                                             <span class="text-sm">Before Taxes</span>
@@ -943,17 +930,12 @@ watch(paymentMethod, (newValue) => {
                                     </div>
 
                                     <div class="flex gap-3 items-baseline font-bold">
-                                        <!-- discount % -->
-                                        <!-- <span class="font-bold text-sm text-red">
-                                            -{{ calculateTotalDiscount() }}%
-                                        </span> -->
-
                                         <!-- final price -->
                                         <span class="font-bold text-gray-900 text-lg">
                                             ${{ calculateTotalPrice() }}
                                         </span>
 
-                                        <!-- total price -->
+                                        <!-- CompareAt price -->
                                         <span
                                             class="text-md font-bold text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
                                             ${{ calculateComparePrice() }}
