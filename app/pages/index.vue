@@ -225,8 +225,12 @@ watch(paymentMethod, (newValue) => {
 
             <!-- Right: Text Content -->
             <div class="space-y-4">
-                <h2 class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left">
-                    Families Like Yours Are Using YOMZ to Boost Their Nutrition and Supercharge Their Lives
+                <h2
+                    class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left hidden lg:block">
+                    The Power of 18 Superfoods to Supercharge Your Family
+                </h2>
+                <h2 class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
+                    The Power of 18 Superfoods <br>to Supercharge Your Family
                 </h2>
 
                 <!-- Points -->
@@ -831,29 +835,33 @@ watch(paymentMethod, (newValue) => {
 
                         <!-- <div @click="extraProduct = !extraProduct" -->
                         <div @click="checkoutStore.addExtraProduct"
-                            class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
+                            class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-2 lg:pb-2 pb-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
 
                             <!-- Icon at top -->
                             <div class="flex justify-center">
                                 <NuxtImg src="/images/funds.png" class="h-16" />
                             </div>
 
-                            <!-- Yes, I want 2 Years of Protection. -->
-                            <div class="flex justify-center items-center relative">
-                                <div class="flex items-center cursor-pointer justify-center w-fit absolute">
+                            <div class="flex flex-col items-center w-full">
+                                <!-- Upar ka text/copy -->
+                                <p class="font-bold text-gray-900 lg:text-lg text-base text-center">
+                                    Special 1-time Offer:
+                                </p>
+                                <div class="flex items-center cursor-pointer w-fit mt-1">
+                                    <!-- Arrow -->
                                     <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
+
+                                    <!-- Circle with tick -->
                                     <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center',
                                         checkoutStore.cartData.length > 1 ? 'bg-[#172969]' : 'bg-transparent']">
                                         <NuxtImg v-if="checkoutStore.cartData.length > 1" src="/images/whiteTick.svg"
                                             alt="white-tick" />
                                     </div>
-                                    <span class="font-bold text-gray-900 lg:text-lg text-sm lg:ms-2 ms-1">
-                                        <!-- Yes, I want another style of Gummies -->
-                                        Special 1-time Offer:
+                                    <span class="font-semibold px-1 py-1 rounded-lg lg:text-base text-sm lg:ms-2 ms-1">
+                                        Yes, rush my order + add insurance
                                     </span>
                                 </div>
                             </div>
-
                             <!-- Description -->
                             <p class="text-gray-700 text-sm">
                                 <!-- <span class="font-semibold">One Time Offer:</span> By placing your order today, you will
@@ -1006,8 +1014,13 @@ watch(paymentMethod, (newValue) => {
 }
 
 @keyframes rotateclc {
-    10% {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
         transform: rotate(-360deg);
+        /* anticlockwise */
     }
 }
 
