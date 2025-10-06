@@ -121,11 +121,11 @@ defineProps({
             </p>
         </div>
 
-        <p class="lg:text-lg text-sm text-center mb-2">
+        <!-- <p class="lg:text-lg text-sm text-center mb-2">
             Order now... only
             <span class="extrablod text-[#C91F3F] lg:text-xl text-lg mx-1">23</span>
             left in stock for this offer
-        </p>
+        </p> -->
     </div>
 
 </template>

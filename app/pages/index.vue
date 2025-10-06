@@ -21,7 +21,7 @@ const config = useRuntimeConfig().public;
 
 // Set default if undefined
 // if (!formStore.paymentMethod) {
-//     formStore.paymentMethod = 'payPal'
+//     formStore.paymentMethod = 'creditCard'
 // };
 
 // Use computed to sync with store's paymentMethod
@@ -36,6 +36,8 @@ const paymentMethod = computed({
 // if (Array.isArray(checkoutStore.allProducts) && checkoutStore.allProducts[0]) {
 //     cartData.value[0] = checkoutStore.allProducts[0];
 // };
+
+// const 
 
 // Gummy bags
 const selectedBag = ref(2);
@@ -90,24 +92,6 @@ const addProductData = (id: number, variantId: number) => {
     checkoutStore.addGummyProduct();
 };
 
-// Add/Remove extra product
-// const addExtraProduct = () => {
-//     console.log("addExtraProduct chala.");
-//     extraProduct.value = !extraProduct.value;
-
-//     if (extraProduct.value) {
-//         // Add extra product
-//         const extraProd = checkoutStore.allProducts.find(p => p.productId === config.WarrantyId);
-//         if (extraProd && !checkoutStore.cartData.find(item => item.productId === config.WarrantyId)) {
-//             // Using push to trigger reactivity
-//             checkoutStore.cartData.push(extraProd);
-//         }
-//     } else {
-//         // Remove extra product
-//         checkoutStore.cartData = checkoutStore.cartData.filter(item => item.productId !== config.WarrantyId);
-//     }
-// };
-
 // Calculate total price for all products in cart
 const calculateTotalPrice = () => {
     const subtotal = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
@@ -132,6 +116,21 @@ const calculateTotalDiscount = () => {
     return Math.round(discount);
 };
 
+// Switch Gummy Type
+const switchGummyType = (type: string) => {
+    checkoutStore.selectedGummyType = type;
+    const bagQty = selectedBag.value;
+    const activeBag = gummyBagsSelector.find(bag => bag.id === bagQty)!;
+    if (!activeBag) return;
+
+    const variantId = activeBag.variant[type]?.id;
+    if (!variantId) return;
+
+    checkoutStore.selectedQuantity = variantId;
+    checkoutStore.addGummyProduct();
+}
+
+// On Mount
 onMounted(async () => {
 
     // Query Campaign
@@ -304,11 +303,12 @@ watch(paymentMethod, (newValue) => {
                 <div v-if="checkoutStore.gummyProducts.length < 1">
                     <SkeletonProductSelector />
                 </div>
+
+                <!-- Gummies Selectors -->
                 <div v-else class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
-                    <!-- Gummy Selectors -->
                     <div v-for="value in gymmyTypeData" :key="value.id"
                         class="flex items-center space-x-1 cursor-pointer relative select-none"
-                        @click="checkoutStore.selectedGummyType = value.id">
+                        @click="() => switchGummyType(value.id)">
                         <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3 border-[#172969]"
                             :class="{ 'bg-[#172969]': checkoutStore.selectedGummyType === value.id }">
                             <NuxtImg v-if="checkoutStore.selectedGummyType === value.id" src="/images/whiteTick.svg"
@@ -329,7 +329,7 @@ watch(paymentMethod, (newValue) => {
 
                 <!-- <div v-for="value in gummyBagsSelector" :key="value.id" :class="[ -->
                 <div v-for="value in gummyBagsSelector" :key="value.id"
-                    @click="addProductData(value.id, value.variant[checkoutStore.selectedGummyType].id)" :class="[
+                    @click="addProductData(value.id, value.variant[checkoutStore.selectedGummyType]?.id!)" :class="[
                         'flex items-center justify-between cursor-pointer transition relative select-none py-2.5 pr-2.5',
                         value.id === 2 ? 'bg-yellow-400/90' : 'bg-white']">
 
@@ -371,50 +371,42 @@ watch(paymentMethod, (newValue) => {
         <div>
 
             <!-- STEP 3: PAYMENT METHOD -->
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
+            <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2"> -->
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
 
                 <!-- PayPal Method -->
-                <label @click="paymentMethod = 'payPal'"
-                    class="flex items-center justify-between pl-0 pt-4 pr-4 pb-4  lg:pt-6 lg:pr-6 lg:pb-6 border-b border-[#e7e7e7] cursor-pointer">
+                <label
+                    class="flex items-center justify-between pl-0 pt-4 pr-4 pb-4 lg:pt-6 lg:pr-6 lg:pb-6 border-b border-[#e7e7e7] cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <input type="radio" name="YOMZ" class="peer hidden">
-                        <div
-                            :class="['w-6 h-6 border-2  rounded-full flex items-center justify-center border-[#172969] ml-3', paymentMethod === null ? 'bg-white' : 'peer-checked:bg-[#172969]']">
+                        <input type="radio" name="paymentMethod" value="payPal" v-model="paymentMethod"
+                            class="hidden" />
+                        <div class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] ml-3"
+                            :class="{ 'bg-[#172969]': paymentMethod === 'payPal', 'bg-white': paymentMethod !== 'payPal' }">
                             <svg v-if="paymentMethod === 'payPal'" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </g>
+                                <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                    stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <img src="/images/paypal.png" alt="PayPal" class="lg:h-10 h-6">
-
+                        <img src="/images/paypal.png" alt="PayPal" class="lg:h-10 h-6" />
                     </div>
                 </label>
 
                 <!-- Credit Card Method -->
-                <label @click="paymentMethod = 'creditCard'"
-                    class="flex items-center justify-between pl-0 pt-4 pr-4 pb-4  lg:pt-6 lg:pr-6 lg:pb-6 cursor-pointer select-none">
+                <label
+                    class="flex items-center justify-between pl-0 pt-4 pr-4 pb-4 lg:pt-6 lg:pr-6 lg:pb-6 cursor-pointer select-none">
                     <div class="flex items-center space-x-3">
-                        <input type="radio" name="YOMZ" class="peer hidden">
-                        <div
-                            :class="['w-6 h-6 border-2  rounded-full flex items-center justify-center border-[#172969] ml-3', paymentMethod === null ? 'bg-white' : 'peer-checked:bg-[#172969]']">
+                        <input type="radio" name="paymentMethod" value="creditCard" v-model="paymentMethod"
+                            class="hidden" />
+                        <div class="w-6 h-6 border-2 rounded-full flex items-center justify-center border-[#172969] ml-3"
+                            :class="{ 'bg-[#172969]': paymentMethod === 'creditCard', 'bg-white': paymentMethod !== 'creditCard' }">
                             <svg v-if="paymentMethod === 'creditCard'" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </g>
+                                <path d="M4.89163 13.2687L9.16582 17.5427L18.7085 8" stroke="#fff" stroke-width="3"
+                                    stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
                         <span class="text-gray-800 text-lg font-semibold">Credit Card</span>
@@ -422,8 +414,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Card Logos -->
                     <div class="flex lg:space-x-2 space-x-0">
-                        <img src="/images/payicons.svg" alt="" class="lg:h-10 h-6">
-
+                        <img src="/images/payicons.svg" alt="cards-merchandise-icons" class="lg:h-10 h-6" />
                     </div>
                 </label>
             </div>
@@ -433,7 +424,8 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
+                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
@@ -862,16 +854,20 @@ watch(paymentMethod, (newValue) => {
                                         <NuxtImg v-if="checkoutStore.cartData.length > 1" src="/images/whiteTick.svg"
                                             alt="white-tick" />
                                     </div>
-                                    <span class="font-semibold text-gray-900 lg:text-lg text-sm lg:ms-5 ms-1">
-                                        Yes, I want another style of Gummies
+                                    <span class="font-bold text-gray-900 lg:text-lg text-sm lg:ms-2 ms-1">
+                                        <!-- Yes, I want another style of Gummies -->
+                                        Special 1-time Offer:
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Description -->
                             <p class="text-gray-700 text-sm">
-                                <span class="font-semibold">One Time Offer:</span> By placing your order today, you will
-                                receive another style of gummy with <b>free shipping</b>, worth $79.99, for just $48.00.
+                                <!-- <span class="font-semibold">One Time Offer:</span> By placing your order today, you will
+                                receive another style of gummy with <b>free shipping</b>, worth $79.99, for just $48.00. -->
+
+                                Get the jump on your family's better nutrition with expedited shipping & processing +
+                                shipping insurance. Today only for just <span class="font-bold">$9.99.</span>
                             </p>
                         </div>
 
@@ -903,10 +899,12 @@ watch(paymentMethod, (newValue) => {
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-sm text-red-500 line-through font-bold">Regular $159.98</p>
+                                        <p class="text-sm text-red-500 line-through font-bold">Regular ${{
+                                            item.compareAtPrice }}</p>
 
                                         <div class="flex gap-4 items-baseline">
-                                            <p class="text-sm text-green-600 font-bold">51% off</p>
+                                            <p class="text-sm text-green-600 font-bold">{{ item.percentageOff }}% off
+                                            </p>
                                             <p class="text-gray-900 font-bold">${{ item.productPrice }}</p>
                                         </div>
                                     </div>
@@ -935,7 +933,8 @@ watch(paymentMethod, (newValue) => {
                                 <GiftItems />
 
                                 <!-- Total Section -->
-                                <div class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2">
+                                <div
+                                    class="bg-gray-100 px-4 py-3 rounded-lg flex justify-between items-center mb-2 mt-4">
                                     <div>
                                         <p class="text-gray font-bold">Total:
                                             <span class="text-sm">Before Taxes</span>

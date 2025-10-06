@@ -73,4 +73,16 @@ export interface StructuredProducts {
     productPrice: string,
     ProductVariantName?: string;
     BagsQty?: string;
+    compareAtPrice?: number;
+    percentageOff?: number;
+}
+
+export interface GummyBagOption {
+    id: number;
+    title: string;
+    price: number;
+    shipping: string;
+    variant: {
+        [key: string]: { id: number }
+    };
 }

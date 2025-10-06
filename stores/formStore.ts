@@ -3,8 +3,9 @@ import { reactive, ref, type Reactive } from 'vue';
 import { z, ZodError } from 'zod';
 
 export const useFormStore = defineStore('formStore', () => {
-    // Payment method state
-    const paymentMethod = ref<'creditCard' | 'payPal' | null>(null);
+    // Payment method state ( 'creditCard' default selected )
+    // const paymentMethod = ref<'creditCard' | 'payPal' | null>('creditCard');
+    const paymentMethod = ref<'creditCard' | 'payPal' | null>('payPal');
 
     // same billing
     const sameBilling = ref(true);

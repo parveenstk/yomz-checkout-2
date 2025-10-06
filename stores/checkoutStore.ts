@@ -9,7 +9,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     const ogBags: Ref<StructuredProducts[]> = ref([]);
     const sourBags: Ref<StructuredProducts[]> = ref([]);
     let cartData: Ref<StructuredProducts[]> = ref([]);
-    const selectedGummyType: Ref<string> = ref("ogGummies");
+    const selectedGummyType: Ref<string> = ref("ogGummie");
     const selectedQuantity: Ref<number> = ref(2);
 
     // to add save products in 'allProducts'
@@ -40,7 +40,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         // Example logic: replace the first item in cartData with the selected product
         cartData.value[0] = { ...selectedProduct }; // You might want to clone it or customize it
 
-        // console.log("cartData!:", cartData.value);
+        console.log("cartData:", cartData.value);
         // console.log("Selected Product:", selectedGummyType.value, selectedQuantity.value);
     };
 
@@ -49,7 +49,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
             cartData.value.pop();
         } else {
             const selectedProduct = gummyProducts.value.find(
-                (product) => product.productId !== selectedGummyType.value
+                (product) => product.productId !== +selectedGummyType.value
             );
 
             if (!selectedProduct) {

@@ -1,4 +1,6 @@
-export const gummyBagsSelector = [
+import type { number } from "zod";
+
+export const gummyBagsSelector: GummyBagOption[] = [
     {
         id: 2,
         title: "51% OFF: 2 Bags",
@@ -205,3 +207,9 @@ export const cardExpiryYears = [
     { value: "2034", name: "2034" },
     { value: "2035", name: "2035" }
 ];
+
+export const compareAtPrice: { [key: string]: { price: number, discount: number } } = {
+    "1 Bag": { price: 79.99, discount: 40 },
+    "2 Bags": { price: 159.98, discount: 51 },
+    "3 Bags": { price: 239.97, discount: 60 }
+}

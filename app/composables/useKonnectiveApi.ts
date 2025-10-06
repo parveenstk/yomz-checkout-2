@@ -2,6 +2,7 @@ import axios, { type AxiosRequestConfig, type Method } from "axios";
 import { useCheckoutStore } from "../../stores/index";
 import { getFromStorage, saveToStorage } from "~/utils/storage";
 import { params } from "./common";
+import { compareAtPrice } from "~/assets/data/checkout";
 
 const api = axios.create({
     baseURL: 'api/konnective', // change this to your API base URL
@@ -87,7 +88,9 @@ export const queryCampaign = async () => {
                     productImage: variant.imageUrl,
                     productPrice: variant.price,
                     ProductVariantName: variant.variantOptionName1,
-                    BagsQty: variant.variantOptionName2
+                    BagsQty: variant.variantOptionName2,
+                    compareAtPrice: compareAtPrice[variant.variantOptionName2]?.price,
+                    percentageOff: compareAtPrice[variant.variantOptionName2]?.discount,
                 });
             });
         } else {
