@@ -371,8 +371,8 @@ watch(paymentMethod, (newValue) => {
         <div>
 
             <!-- STEP 3: PAYMENT METHOD -->
-            <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2"> -->
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
+                <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden"> -->
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -424,8 +424,8 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
+                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3 hidden"> -->
+                    <div class="bg-white p-4 rounded-lg shadow mt-3">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
