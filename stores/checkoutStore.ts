@@ -40,7 +40,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         // Example logic: replace the first item in cartData with the selected product
         cartData.value[0] = { ...selectedProduct }; // You might want to clone it or customize it
 
-        console.log("cartData:", cartData.value);
+        // console.log("cartData:", cartData.value);
         // console.log("Selected Product:", selectedGummyType.value, selectedQuantity.value);
     };
 

@@ -19,11 +19,6 @@ const checkoutStore = useCheckoutStore();
 // Config
 const config = useRuntimeConfig().public;
 
-// Set default if undefined
-// if (!formStore.paymentMethod) {
-//     formStore.paymentMethod = 'creditCard'
-// };
-
 // Use computed to sync with store's paymentMethod
 const paymentMethod = computed({
     get: () => formStore.paymentMethod,
@@ -32,18 +27,11 @@ const paymentMethod = computed({
     }
 })
 
-// let cartData: Ref<StructuredProducts[]> = ref([]);
-// if (Array.isArray(checkoutStore.allProducts) && checkoutStore.allProducts[0]) {
-//     cartData.value[0] = checkoutStore.allProducts[0];
-// };
-
-// const 
-
 // Gummy bags
 const selectedBag = ref(2);
 
 // add extra product
-const extraProduct = ref(false);
+// const extraProduct = ref(false);
 
 // track screen size
 const isMobile = ref(false)
@@ -88,6 +76,8 @@ function startCountdown() {
 // Add data in Cart
 const addProductData = (id: number, variantId: number) => {
     selectedBag.value = id;
+    console.log("selectedBag.value:", selectedBag.value);
+
     checkoutStore.selectedQuantity = variantId;
     checkoutStore.addGummyProduct();
 };
@@ -128,7 +118,7 @@ const switchGummyType = (type: string) => {
 
     checkoutStore.selectedQuantity = variantId;
     checkoutStore.addGummyProduct();
-}
+};
 
 // On Mount
 onMounted(async () => {
@@ -183,6 +173,10 @@ onMounted(async () => {
 watch(paymentMethod, (newValue) => {
     console.log('newValue:', newValue);
 });
+
+// watch(selectedBag, (newValue) => {
+//     console.log('selectedBag:', newValue);
+// });
 
 </script>
 <template>
@@ -327,7 +321,6 @@ watch(paymentMethod, (newValue) => {
                     STEP 2: Select Order Quantity
                 </h2>
 
-                <!-- <div v-for="value in gummyBagsSelector" :key="value.id" :class="[ -->
                 <div v-for="value in gummyBagsSelector" :key="value.id"
                     @click="addProductData(value.id, value.variant[checkoutStore.selectedGummyType]?.id!)" :class="[
                         'flex items-center justify-between cursor-pointer transition relative select-none py-2.5 pr-2.5',
@@ -371,8 +364,8 @@ watch(paymentMethod, (newValue) => {
         <div>
 
             <!-- STEP 3: PAYMENT METHOD -->
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
-                <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden"> -->
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
+                <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2"> -->
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -424,8 +417,8 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3 hidden"> -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
+                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
