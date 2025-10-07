@@ -345,7 +345,7 @@ watch(paymentMethod, (newValue) => {
                 <GiftItems :selectedBag="selectedBag" version="first" />
             </div>
 
-            <!-- Mobile Screen -->
+            <!-- Reviews - Mobile Screen -->
             <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
 
         </div>
@@ -354,8 +354,8 @@ watch(paymentMethod, (newValue) => {
         <div>
 
             <!-- STEP 3: PAYMENT METHOD -->
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
-                <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2"> -->
+            <!-- <div class="bg-white px-4 py-4 lg:py-0 lg:pt-4 rounded-lg shadow lg:m-0 m-2 hidden"> -->
+                <div class="bg-white px-4 py-4 lg:py-0 lg:pt-4 rounded-lg shadow lg:m-0 m-2">
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -407,8 +407,8 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
-                        <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
+                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3 hidden"> -->
+                        <div class="bg-white p-4 rounded-lg shadow mt-3">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
@@ -477,14 +477,14 @@ watch(paymentMethod, (newValue) => {
                             </div>
                         </div>
 
-                        <!-- Desktop Screen -->
+                        <!-- Reviews - Desktop Screen -->
                         <Reviews v-if="!isMobile" />
                     </div>
 
                     <!-- STEP 5: SHIPPING ADDRESS -->
                     <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
 
-                        <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
+                        <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
                             STEP 5: SHIPPING ADDRESS
                         </h2>
 
@@ -663,7 +663,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- STEP 6: BILLING ADDRESS -->
                     <div v-if="paymentMethod === 'creditCard'" class="bg-white p-4 rounded-lg shadow mt-3">
-                        <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 pt-2 mb-3 uppercase">
+                        <h2 class="d-block text-[18px] font-bold border-b border-[#e7e7e7] pb-4 mb-3 uppercase">
                             STEP 6: BILLING ADDRESS
                         </h2>
 
@@ -815,11 +815,10 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- ORDER SUMMARY -->
                     <div class="bg-white p-4 rounded-lg shadow mt-3">
-                        <h2 class="text-lg font-bold mt-3 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
+                        <h2 class="text-lg font-bold mt-0 border-b border-[#e7e7e7] pb-4 mb-4 uppercase">
                             {{ paymentMethod === 'payPal' ? 'STEP 5' : 'STEP 7' }}: ORDER SUMMARY
                         </h2>
 
-                        <!-- <div @click="extraProduct = !extraProduct" -->
                         <div @click="checkoutStore.addExtraProduct"
                             class="bg-[#f5f5f5] border border-[#e0e0e0] rounded-lg shadow-sm lg:p-6 p-2 space-y-2 lg:pb-2 pb-4  text-center hover:border-[#323232]  transition-all duration-[400ms] cursor-pointer select-none">
 
@@ -828,11 +827,12 @@ watch(paymentMethod, (newValue) => {
                                 <NuxtImg src="/images/funds.png" class="h-16" />
                             </div>
 
+                            <!-- Special 1-time Offer: -->
                             <div class="flex flex-col items-center w-full">
-                                <!-- Upar ka text/copy -->
                                 <p class="font-bold text-gray-900 lg:text-lg text-base text-center">
                                     Special 1-time Offer:
                                 </p>
+
                                 <div class="flex items-center cursor-pointer w-fit mt-1">
                                     <!-- Arrow -->
                                     <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
@@ -848,11 +848,9 @@ watch(paymentMethod, (newValue) => {
                                     </span>
                                 </div>
                             </div>
+
                             <!-- Description -->
                             <p class="text-gray-700 text-sm">
-                                <!-- <span class="font-semibold">One Time Offer:</span> By placing your order today, you will
-                                receive another style of gummy with <b>free shipping</b>, worth $79.99, for just $48.00. -->
-
                                 Get the jump on your family's better nutrition with expedited shipping & processing +
                                 shipping insurance. Today only for just <span class="font-bold">$9.99.</span>
                             </p>
@@ -880,7 +878,6 @@ watch(paymentMethod, (newValue) => {
                                             <span
                                                 class="inline-block mt-1 text-sm px-2 py-0.5 rounded-full font-semibold"
                                                 :class="index === 0 ? 'bg-gray-700 text-white' : 'bg-green-600 text-white'">
-                                                <!-- {{ index === 0 ? `${checkoutStore.selectedQuantity} Bags` : `Extra: 1 -->
                                                 {{ index === 0 ? `${item.BagsQty}` : `Extra: 1 Bag` }}
                                             </span>
                                         </div>

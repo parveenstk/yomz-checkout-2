@@ -51,6 +51,7 @@ export interface CampaignProducts {
     imageUrl: string;
     hasVariants: boolean;
     variants: CampaignVariant[];
+    productType: string
 }
 
 export interface CampaignVariant {
@@ -75,6 +76,7 @@ export interface StructuredProducts {
     BagsQty?: string;
     compareAtPrice?: number;
     percentageOff?: number;
+    productType?: string
 }
 
 export interface GummyBagOption {

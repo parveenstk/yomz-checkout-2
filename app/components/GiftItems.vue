@@ -3,7 +3,7 @@
 const props = defineProps({
     customClass: {
         type: String,
-        required: true,
+        required: false,
         default: '',
     },
     selectedBag: {

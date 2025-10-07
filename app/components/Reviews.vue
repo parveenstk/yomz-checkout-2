@@ -7,7 +7,7 @@
         </h2>
 
         <article v-for="(review, index) in reviewsData" :key="index"
-            class="pt-6 pr-3 pb-6 pl-3 border-b border-[#e7e7e7]">
+            :class="[`py-5 px-3 border-[#e7e7e7]`, index === 2 ? '' : 'border-b']">
             <div class="flex items-center gap-4">
                 <img :src="review.img" alt="" class="w-12 h-12 rounded-full object-cover" />
                 <div class="flex-1 min-w-0">

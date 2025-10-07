@@ -6,8 +6,6 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     const config = useRuntimeConfig().public;
     const allProducts: Ref<StructuredProducts[]> = ref([]);
     const gummyProducts: Ref<StructuredProducts[]> = ref([]);
-    const ogBags: Ref<StructuredProducts[]> = ref([]);
-    const sourBags: Ref<StructuredProducts[]> = ref([]);
     let cartData: Ref<StructuredProducts[]> = ref([]);
     const selectedGummyType: Ref<string> = ref("ogGummie");
     const selectedQuantity: Ref<number> = ref(2);
@@ -16,7 +14,6 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     const saveProducts = (
         products: StructuredProducts[],
         filteredGummyProducts: StructuredProducts[],
-        bags: StructuredProducts[]
     ) => {
         allProducts.value = [...products];
         // console.log("allProducts.value:", allProducts.value);
@@ -37,8 +34,8 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
             return;
         }
 
-        // Example logic: replace the first item in cartData with the selected product
-        cartData.value[0] = { ...selectedProduct }; // You might want to clone it or customize it
+        // logic: replace the first item in cartData with the selected product
+        cartData.value[0] = { ...selectedProduct };
 
         // console.log("cartData:", cartData.value);
         // console.log("Selected Product:", selectedGummyType.value, selectedQuantity.value);
