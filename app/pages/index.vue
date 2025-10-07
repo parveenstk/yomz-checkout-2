@@ -84,16 +84,18 @@ const addProductData = (id: number, variantId: number) => {
 // Calculate total price for all products in cart
 const calculateTotalPrice = () => {
     const subtotal = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
-    const shipping = checkoutStore.cartData[0]?.productId === 1 ? 7.99 : 0;
-    console.log('shipping:', shipping);
-
+    const shipping = checkoutStore.cartData[0]?.productId === 6750 && 6762 ? 7.99 : 0;
     return (subtotal + shipping).toFixed(2);
 };
 
-// Calculate total compare price
+// Calculate total compareAt price
 const calculateComparePrice = () => {
-    const total = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
-    return (total + 7.99).toFixed(2);
+    const firstItem = checkoutStore.cartData[0];
+    const compareAtPrice = firstItem?.compareAtPrice ?? 0; // Use 0 if undefined
+    const isSpecialProduct = firstItem?.productId === 6750 || firstItem?.productId === 6762;
+
+    const updatedTotal = isSpecialProduct ? 79.99 : (compareAtPrice + 7.99);
+    return updatedTotal.toFixed(2);
 };
 
 // Switch Gummy Type
@@ -352,8 +354,8 @@ watch(paymentMethod, (newValue) => {
         <div>
 
             <!-- STEP 3: PAYMENT METHOD -->
-            <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden"> -->
-            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2">
+            <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2 hidden">
+                <!-- <div class="bg-white p-4 rounded-lg shadow lg:m-0 m-2"> -->
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -405,8 +407,8 @@ watch(paymentMethod, (newValue) => {
                 <form @submit.prevent="() => formSubmit()">
 
                     <!-- STEP 4: CONTACT INFORMATION -->
-                    <!-- <div class="bg-white p-4 rounded-lg shadow mt-3 hidden"> -->
-                    <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <div class="bg-white p-4 rounded-lg shadow mt-3 hidden">
+                        <!-- <div class="bg-white p-4 rounded-lg shadow mt-3"> -->
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
@@ -936,7 +938,7 @@ watch(paymentMethod, (newValue) => {
                                         </span>
 
                                         <!-- CompareAt price -->
-                                        <span
+                                        <span v-if="selectedBag !== 1"
                                             class="text-md font-bold text-white line-through bg-[#c91f3f] px-2 py-1 rounded-2xl">
                                             ${{ calculateComparePrice() }}
                                         </span>
@@ -950,7 +952,7 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Checkout Button -->
                             <button type="submit" @click="importLead"
-                                :class="['w-full flex justify-center items-center font-semibold py-3 rounded-lg text-lg cursor-pointer', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
+                                :class="['w-full flex justify-center items-center py-3 rounded-lg text-lg cursor-pointer font-bold', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
                                 {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
                                 <img v-if="paymentMethod === 'payPal'"
                                     src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png"
