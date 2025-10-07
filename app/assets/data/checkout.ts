@@ -211,5 +211,9 @@ export const cardExpiryYears = [
 export const compareAtPrice: { [key: string]: { price: number, discount: number } } = {
     "1 Bag": { price: 79.99, discount: 40 },
     "2 Bags": { price: 159.98, discount: 51 },
-    "3 Bags": { price: 239.97, discount: 60 }
+    "3 Bags": { price: 239.97, discount: 60 },
+    "YOMZ Collectible Sticker": { price: 239.97, discount: 60 },
+    "YOMZ Interactive E-book": { price: 239.97, discount: 60 },
+    "YOMZ $20 Gift Card": { price: 239.97, discount: 60 },
+    "Chance for Order Refund": { price: 239.97, discount: 60 },
 }

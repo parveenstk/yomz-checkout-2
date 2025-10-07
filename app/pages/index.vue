@@ -7,6 +7,8 @@ import Header from '~/components/Header.vue';
 import Reviews from '~/components/Reviews.vue';
 import { useFormStore, useCheckoutStore } from '../../stores/index';
 import { importClick, importLead, queryCampaign } from '~/composables/useKonnectiveApi';
+import GiftItemsSkeleton from '~/components/skeleton/GiftItemsSkeleton.vue';
+import GiftItems from '~/components/GiftItems.vue';
 
 // form store data 
 const formStore = useFormStore();
@@ -342,7 +344,13 @@ watch(paymentMethod, (newValue) => {
                 </div>
 
                 <!-- GiftItems Ist -->
-                <GiftItems :selectedBag="selectedBag" version="first" />
+                <div v-if="checkoutStore.gummyProducts.length < 1">
+                    <GiftItemsSkeleton />
+                </div>
+                <div v-else>
+                    <GiftItems :selectedBag="selectedBag" version="first" />
+                </div>
+
             </div>
 
             <!-- Reviews - Mobile Screen -->
@@ -355,7 +363,7 @@ watch(paymentMethod, (newValue) => {
 
             <!-- STEP 3: PAYMENT METHOD -->
             <!-- <div class="bg-white px-4 py-4 lg:py-0 lg:pt-4 rounded-lg shadow lg:m-0 m-2 hidden"> -->
-                <div class="bg-white px-4 py-4 lg:py-0 lg:pt-4 rounded-lg shadow lg:m-0 m-2">
+            <div class="bg-white px-4 py-4 lg:py-0 lg:pt-4 rounded-lg shadow lg:m-0 m-2">
                 <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 uppercase">
                     STEP 3: PAYMENT METHOD
                 </h2>
@@ -408,7 +416,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- STEP 4: CONTACT INFORMATION -->
                     <!-- <div class="bg-white p-4 rounded-lg shadow mt-3 hidden"> -->
-                        <div class="bg-white p-4 rounded-lg shadow mt-3">
+                    <div class="bg-white p-4 rounded-lg shadow mt-3">
                         <h2 class="text-lg font-bold border-b border-[#e7e7e7] pb-4 mb-1 uppercase">
                             STEP 4: CONTACT INFORMATION
                         </h2>
@@ -917,7 +925,12 @@ watch(paymentMethod, (newValue) => {
                                 </div>
 
                                 <!-- GiftItems II -->
-                                <GiftItems :selectedBag="selectedBag" version="second" />
+                                <div v-if="checkoutStore.gummyProducts.length < 1">
+                                    <GiftItemsSkeleton />
+                                </div>
+                                <div v-else>
+                                    <GiftItems :selectedBag="selectedBag" version="second" />
+                                </div>
 
                                 <!-- Total Section -->
                                 <div

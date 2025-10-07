@@ -1,5 +1,12 @@
 <script setup>
+import { useCheckoutStore } from '~~/stores';
 
+
+// Checkout Store
+const chekoutStore = useCheckoutStore();
+
+// Config
+const config = useRuntimeConfig().public;
 const props = defineProps({
     customClass: {
         type: String,
@@ -26,9 +33,16 @@ const isDimmed = (index) => {
 // Now: filter based on version
 const visibleItems = computed(() => {
     if (props.version === 'second') {
-        return giftItemsData.filter((_, index) => !isDimmed(index));
+        const filteredGifts = chekoutStore.giftsProducts.filter((_, index) => !isDimmed(index));
+        const filteredGiftIds = filteredGifts.map(pr => {
+            if (config.giftItems.includes(pr.productId)) return pr.productId;
+            else return;
+        });
+        chekoutStore.addGiftProducts(filteredGiftIds)
+        console.log("filteredGiftIds", filteredGiftIds)
+        return filteredGifts;
     }
-    return giftItemsData;
+    return chekoutStore.giftsProducts;
 });
 
 // watch(visibleItems, (newValue) => {
@@ -51,12 +65,13 @@ const visibleItems = computed(() => {
         <p :style="{ opacity: props.version === 'first' && isDimmed(index) ? '0.1' : '1' }"
             class="flex items-center justify-between py-1 px-0 lg:text-lg text-sm relative z-20 font-bold">
             <span class="flex items-center lg:gap-3 gap-2">
-                <NuxtImg :src="item.img" class="lg:h-16 h-16 rounded-lg border border-dashed border-blue-500 p-1" />
-                {{ item.name }}
+                <NuxtImg :src="item.productImage"
+                    class="lg:h-16 h-16 rounded-lg border border-dashed border-blue-500 p-1" />
+                {{ item.productName }}
             </span>
             <span class="flex items-center gap-1 font-bold">
-                <del class="text-[#474747]">{{ item.oldPrice }}</del>
-                <span>$0.00</span>
+                <del class="text-[#474747]">{{ item.compareAtPrice }}</del>
+                <span>${{ item.productPrice }}</span>
             </span>
         </p>
     </div>

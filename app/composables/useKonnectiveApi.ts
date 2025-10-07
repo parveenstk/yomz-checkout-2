@@ -100,7 +100,8 @@ export const queryCampaign = async () => {
                 productName: product.productName,
                 productImage: product.imageUrl,
                 productPrice: product.price,
-                productType: product.productType
+                productType: product.productType,
+                compareAtPrice: compareAtPrice[product.productName]?.price,
             });
         }
     });
@@ -114,6 +115,9 @@ export const queryCampaign = async () => {
         pr.productName = pr.productName + " Gummies";
     })
 
+    // Gift Products
+    const giftProducts = structuredProducts.filter(product => config.public.giftItems.includes(product.productId));
+
     // Save both to the store (you'll need to update the store method)
-    checkoutStore.saveProducts(structuredProducts, gummyProducts);
+    checkoutStore.saveProducts(structuredProducts, gummyProducts, giftProducts);
 };
