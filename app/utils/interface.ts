@@ -41,6 +41,9 @@ export interface FormFields {
     billingCounty: string;
     billingState: string;
     billingPostalCode: string;
+
+    // Shipping Profile
+    shipProfile: string;
 };
 
 export interface CampaignProducts {
@@ -87,4 +90,17 @@ export interface GummyBagOption {
     variant: {
         [key: string]: { id: number }
     };
+};
+
+export interface ShipProfile {
+    profileName: string;
+    shipProfileId: number;
+    rules: SimplifiedRule[];
+}
+
+export interface SimplifiedRule {
+    profileName: string;
+    productTypeSelect: string;
+    shipPrice: number;
+    shipProfileId: number;
 }

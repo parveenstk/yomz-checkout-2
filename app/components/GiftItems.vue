@@ -39,7 +39,7 @@ const visibleItems = computed(() => {
             else return;
         });
         chekoutStore.addGiftProducts(filteredGiftIds)
-        console.log("filteredGiftIds", filteredGiftIds)
+        // console.log("filteredGiftIds", filteredGiftIds)
         return filteredGifts;
     }
     return chekoutStore.giftsProducts;

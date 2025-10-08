@@ -1,16 +1,23 @@
 import { defineStore } from "pinia";
 import { ref, type Reactive, type Ref } from "vue";
+import { useFormStore } from "./formStore";
 // import type { CampaignProducts } from "~/utils/interface";
 
 export const useCheckoutStore = defineStore('checkoutStore', () => {
     const config = useRuntimeConfig().public;
+    // FormStore
+    const formStore = useFormStore();
+
     const allProducts: Ref<StructuredProducts[]> = ref([]);
     const gummyProducts: Ref<StructuredProducts[]> = ref([]);
     const giftsProducts: Ref<StructuredProducts[]> = ref([]);
     let cartData: Ref<StructuredProducts[]> = ref([]);
     let giftCartData: Ref<StructuredProducts[]> = ref([]);
-    const selectedGummyType: Ref<string> = ref("ogGummie");
+    const selectedGummyType: Ref<string> = ref("ogGummies");
     const selectedQuantity: Ref<number> = ref(2);
+    const shipProfiles: Ref<SimplifiedRule[]> = ref([]);
+    // OderId
+    const orderId: Ref<string> = ref(getFromStorage('orderId', "session") || '');
 
     // to add save products in 'allProducts'
     const saveProducts = (
@@ -25,7 +32,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         // console.log('gummyProducts.value:', gummyProducts.value);
 
         giftsProducts.value = [...filteredGiftsProducts];
-        console.log('giftsProducts.value:', giftsProducts.value);
+        // console.log('giftsProducts.value:', giftsProducts.value);
     };
 
     // Add Product in Cart
@@ -33,7 +40,6 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         const selectedProduct = allProducts.value.find(
             (product) => product.productId === selectedQuantity.value
         );
-        // console.log('selectedGummyType.value:', selectedGummyType.value)
 
         if (!selectedProduct) {
             console.warn('Product not found');
@@ -42,6 +48,15 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
 
         // logic: replace the first item in cartData with the selected product
         cartData.value[0] = { ...selectedProduct };
+
+        // console.log('selectedQuantity.value:', selectedQuantity.value)
+        // console.log('config.ogBags:', config.ogBags)
+        // Set Shipping
+        if (selectedQuantity.value === config.ogBags[0]) {
+            formStore.formFields.shipProfile = config.shipProfiles[0]?.toString()!;
+        } else {
+            formStore.formFields.shipProfile = config.shipProfiles[1]?.toString()!;
+        }
     };
 
     // add extra product
@@ -49,8 +64,8 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         if (cartData.value && cartData.value.length > 1) {
             cartData.value.pop();
         } else {
-            const selectedProduct = gummyProducts.value.find(
-                (product) => product.productId !== +selectedGummyType.value
+            const selectedProduct = allProducts.value.find(
+                (product) => product.productId === config.WarrantyId
             );
 
             if (!selectedProduct) {
@@ -65,10 +80,10 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
 
     // Add GiftProducts in cart
     const addGiftProducts = (giftProducts: number[]) => {
-        giftCartData = allProducts.value.filter(
+        giftCartData.value = allProducts.value.filter(
             (product) => giftProducts.includes(product.productId)
         )
-        console.log("giftCartData", giftCartData);
+        // console.log("giftCartData", giftCartData);
     };
 
     return {
@@ -81,6 +96,8 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         addGummyProduct,
         cartData,
         addExtraProduct,
-        addGiftProducts
+        addGiftProducts,
+        shipProfiles,
+        orderId
     }
 });

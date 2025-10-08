@@ -27,7 +27,7 @@ export const gummyBagsSelector: GummyBagOption[] = [
         id: 1,
         title: "40% OFF: 1 Bag",
         price: 48,
-        shipping: "$7.99 Shipping",
+        shipping: "$4.99 Shipping",
         variant: {
             "ogGummies": { id: 6750 },
             "soursGummies": { id: 6762 }
@@ -195,7 +195,6 @@ export const cardExpiryMonths = [
 ];
 
 export const cardExpiryYears = [
-    { value: "2025", name: "2025" },
     { value: "2026", name: "2026" },
     { value: "2027", name: "2027" },
     { value: "2028", name: "2028" },

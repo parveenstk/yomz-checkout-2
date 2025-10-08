@@ -43,6 +43,9 @@ export const useFormStore = defineStore('formStore', () => {
         billingCounty: '',
         billingState: '',
         billingPostalCode: '',
+
+        // Shif Profile
+        shipProfile: '36'
     })
 
     // Zod schema
@@ -131,7 +134,7 @@ export const useFormStore = defineStore('formStore', () => {
     })
 
     // Submit method
-    const formSubmit = () => {
+    const formSubmit = async () => {
         // Clear previous errors
         Object.keys(errors).forEach((key) => {
             errors[key] = ''
@@ -171,6 +174,8 @@ export const useFormStore = defineStore('formStore', () => {
             return false
         }
 
+        await importLead();
+        await importOrder();
         resetForm();
         console.log('Form is valid!')
         return true
@@ -186,7 +191,7 @@ export const useFormStore = defineStore('formStore', () => {
     };
 
     // check validation on input
-    const validateField = <K extends keyof typeof formFields>(key: K, value: string) => {
+    const validateField = async <K extends keyof typeof formFields>(key: K, value: string) => {
         if (!activeSchema.value) {
             formFields[key] = value;
             return;
@@ -209,6 +214,8 @@ export const useFormStore = defineStore('formStore', () => {
             }
         } finally {
             formFields[key] = value; // update form values
+            // Call Import Lead
+            // await importLead();
         }
     };
 

@@ -48,25 +48,6 @@ export const request = async <T = any>(
     }
 };
 
-// Fetch Import Click 
-export const importClick = async () => {
-    const response = await request('/importClick', {
-        pageType: 'checkoutPage',
-        requestUri: window.location.href,
-        sessionId: getFromStorage('sessionId', 'session') || ''
-    });
-
-    // console.log("response:", response.message.sessionId);
-    saveToStorage('sessionId', response.message.sessionId, 'session');
-    console.log("sessionId:", getFromStorage('sessionId', 'session'));
-};
-
-// Fetch Import Lead
-export const importLead = async () => {
-    const payload = params()
-    const response = await request('/importLead', payload)
-};
-
 // Fetch Query Campaign
 export const queryCampaign = async () => {
     const checkoutStore = useCheckoutStore();
@@ -74,11 +55,28 @@ export const queryCampaign = async () => {
     const response = await request('/queryCampaign', {});
     const data = response.message.data[config.public.campaignId];
     const products: CampaignProducts[] = data.products;
-    // console.log("products:", products)
+    const shipProfiles: ShipProfile[] = data.shipProfiles;
 
-    const structuredProducts: StructuredProducts[] = [];
-    console.log('structuredProducts:', structuredProducts);
+    const structuredProducts: StructuredProducts[] = []; // For Products
+    const simplifiedRules: SimplifiedRule[] = []; // For ShipProfiles
 
+    // ship profiles
+    shipProfiles.forEach((profile) => {
+        if (profile.rules && profile.rules.length > 0) {
+            profile.rules.forEach((rule) => {
+                simplifiedRules.push({
+                    profileName: profile.profileName,
+                    productTypeSelect: rule.productTypeSelect,
+                    shipPrice: rule.shipPrice,
+                    shipProfileId: profile.shipProfileId
+                });
+            });
+        }
+    });
+    checkoutStore.shipProfiles = [...simplifiedRules]
+    // console.log("Simplified rules:", checkoutStore.shipProfiles);
+
+    // All products
     products.forEach((product: CampaignProducts) => {
         if (product.hasVariants) {
             const variants = product.variants;
@@ -119,5 +117,38 @@ export const queryCampaign = async () => {
     const giftProducts = structuredProducts.filter(product => config.public.giftItems.includes(product.productId));
 
     // Save both to the store (you'll need to update the store method)
-    checkoutStore.saveProducts(structuredProducts, gummyProducts, giftProducts);
+    checkoutStore.saveProducts(structuredProducts, gummyProducts, giftProducts,);
 };
+
+// Fetch Import Click 
+export const importClick = async () => {
+    const response = await request('/importClick', {
+        pageType: 'checkoutPage',
+        requestUri: window.location.href,
+        sessionId: getFromStorage('sessionId', 'session') || ''
+    });
+
+    // console.log("response:", response.message.sessionId);
+    saveToStorage('sessionId', response.message.sessionId, 'session');
+    console.log("sessionId:", getFromStorage('sessionId', 'session'));
+};
+
+// Fetch Import Lead
+export const importLead = async () => {
+    // checkoutStore
+    const checkoutStore = useCheckoutStore();
+    const payload = params();
+    if (!payload) return;
+    const response = await request('/importLead', payload);
+    if (response.result !== "SUCCESS") return;
+    saveToStorage("orderId", response.message.orderId, "session");
+    checkoutStore.orderId = response.message.orderId;
+};
+
+// Import Order
+export const importOrder = async () => {
+    const payload = params('order');
+    if (!payload) return;
+    const response = await request('/importOrder', payload);
+    console.log(response);
+}

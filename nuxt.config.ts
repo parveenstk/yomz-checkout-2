@@ -26,12 +26,13 @@ export default defineNuxtConfig({
     public: {
       encryptResponses: true, // Optional public flag
       campaignId: 386,
-      gummyId: 9198,
+      gummyId: 9200,
       variantIds: [6702, 6704],
       ogBags: [6750, 6752, 6754],
       sourBags: [6762, 6764, 6766],
       WarrantyId: 9196,
       giftItems: [9202, 9204, 9206, 9208],
+      shipProfiles: [36, 38]
     }
   }
 })

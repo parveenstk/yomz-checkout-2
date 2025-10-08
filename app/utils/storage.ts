@@ -7,7 +7,7 @@ const isClient = typeof window !== 'undefined';
 // setting storage type
 function getStorage(type: StorageType): Storage | null {
     if (!isClient) return null;
-
+    
     return type === 'local' ? window.localStorage : window.sessionStorage;
 }
 

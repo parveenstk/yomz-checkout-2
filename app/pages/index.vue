@@ -84,11 +84,15 @@ const addProductData = (id: number, variantId: number) => {
 };
 
 // Calculate total price for all products in cart
-const calculateTotalPrice = () => {
-    const subtotal = checkoutStore.cartData.reduce((sum, item) => sum + +item.productPrice, 0);
-    const shipping = checkoutStore.cartData[0]?.productId === 6750 && 6762 ? 7.99 : 0;
+const calculateTotalPrice = computed(() => {
+    const subtotal = checkoutStore.cartData.reduce((a, p, i) => {
+        return a += +p.productPrice
+    }, 0)
+
+    const shipping = +checkoutStore.shipProfiles.filter(shipping => shipping.shipProfileId === +formStore.formFields.shipProfile)[0]?.shipPrice!;
+
     return (subtotal + shipping).toFixed(2);
-};
+});
 
 // Calculate total compareAt price
 const calculateComparePrice = () => {
@@ -96,7 +100,7 @@ const calculateComparePrice = () => {
     const compareAtPrice = firstItem?.compareAtPrice ?? 0; // Use 0 if undefined
     const isSpecialProduct = firstItem?.productId === 6750 || firstItem?.productId === 6762;
 
-    const updatedTotal = isSpecialProduct ? 79.99 : (compareAtPrice + 7.99);
+    const updatedTotal = isSpecialProduct ? 79.99 : (compareAtPrice + 4.99);
     return updatedTotal.toFixed(2);
 };
 
@@ -882,45 +886,51 @@ watch(paymentMethod, (newValue) => {
                                         <img :src="item.productImage" alt="Product Image"
                                             class="lg:w-18 lg:h-18 w-15 h-15 object-contain border rounded" />
                                         <div>
-                                            <h3 class="font-semibold text-gray-900">{{ item.ProductVariantName }}</h3>
+                                            <h3 class="font-semibold text-gray-900">{{ index === 0 ?
+                                                item.ProductVariantName
+                                                : item.productName }}</h3>
                                             <span
                                                 class="inline-block mt-1 text-sm px-2 py-0.5 rounded-full font-semibold"
-                                                :class="index === 0 ? 'bg-gray-700 text-white' : 'bg-green-600 text-white'">
-                                                {{ index === 0 ? `${item.BagsQty}` : `Extra: 1 Bag` }}
+                                                :class="index === 0 ? 'bg-gray-700 text-white' : ''">
+                                                {{ index === 0 ? `${item.BagsQty}` : `` }}
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="text-right">
+
+                                    <div v-if="index === 0" class="text-right">
                                         <p class="text-sm text-red-500 line-through font-bold">Regular ${{
                                             item.compareAtPrice }}</p>
-
                                         <div class="flex gap-4 items-baseline">
-                                            <p class="text-sm text-green-600 font-bold">{{ item.percentageOff }}% off
+                                            <p class="text-sm text-green-600 font-bold">
+                                                {{ item.percentageOff }}% off
                                             </p>
                                             <p class="text-gray-900 font-bold">${{ item.productPrice }}</p>
                                         </div>
                                     </div>
+
+                                    <div v-else>
+                                        <p class="text-gray-900 font-bold">${{ item.productPrice }}</p>
+                                    </div>
                                 </div>
 
-                                <!-- Free Shipping Section -->
+                                <!-- Shipping Section -->
                                 <div class="flex justify-between items-center mb-2">
-                                    <div v-if="selectedBag === 1" class="flex items-center space-x-2">
+                                    <div class="flex items-center space-x-2">
                                         <p class="text-lg font-semibold text-gray-800">Shipping Price</p>
                                     </div>
-                                    <div v-else class="flex items-center space-x-2">
-                                        <div class="w-5 h-5 rounded-full flex items-center justify-center border-2
-                                             border-[#172969] bg-[#172969]">
-                                            <NuxtImg src="/images/whiteTick.svg" />
+                                    <div v-if="checkoutStore.gummyProducts.length > 1">
+                                        <div v-if="selectedBag === 1">
+                                            <span class="text-md font-bold">
+                                                ${{ checkoutStore.shipProfiles[0]?.shipPrice }}
+                                            </span>
                                         </div>
-                                        <p class="text-lg font-semibold text-gray-800">Free Shipping</p>
-                                    </div>
-
-                                    <div v-if="selectedBag === 1">
-                                        <span class="text-md font-bold">$7.99</span>
-                                    </div>
-                                    <div v-else class="flex gap-1">
-                                        <span class="text-md font-semibold line-through text-red-500">$7.99</span>
-                                        <span class="text-md font-semibold text-green-600">Free</span>
+                                        <div v-else class="flex gap-1">
+                                            <span class="text-md font-semibold line-through text-red-500">
+                                                ${{ checkoutStore.shipProfiles[0]?.shipPrice }}
+                                            </span>
+                                            <span class="text-md font-semibold text-green-600">{{
+                                                checkoutStore.shipProfiles[1]?.profileName.split(" ")[0] }}</span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -944,7 +954,7 @@ watch(paymentMethod, (newValue) => {
                                     <div class="flex gap-3 items-baseline font-bold">
                                         <!-- final price -->
                                         <span class="font-bold text-gray-900 text-lg">
-                                            ${{ calculateTotalPrice() }}
+                                            ${{ calculateTotalPrice }}
                                         </span>
 
                                         <!-- CompareAt price -->
@@ -962,7 +972,7 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Checkout Button -->
                             <button type="submit" @click="importLead"
-                                :class="['w-full flex justify-center items-center py-3 rounded-lg text-lg cursor-pointer font-bold', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white']">
+                                :class="['w-full flex justify-center items-center py-3 rounded-lg cursor-pointer text-pixel', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white text-2xl']">
                                 {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
                                 <img v-if="paymentMethod === 'payPal'"
                                     src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png"

@@ -49,6 +49,12 @@
     font-family: 'century_gothic_paneuropeanXBd'
 }
 
+.text-pixel {
+    -webkit-text-stroke: 1px #ffffff;
+    -webkit-text-fill-color: white;
+    letter-spacing: 1px;
+}
+
 @media screen and (max-width: 366px) {
     .odr-text {
         font-size: 10px;

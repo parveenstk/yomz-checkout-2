@@ -1,10 +1,21 @@
-import { useFormStore } from "~~/stores";
+import { useCheckoutStore, useFormStore } from "~~/stores";
 
-export const params = () => {
+export const params = (type: string = "lead") => {
+    // Config
+    const config = useRuntimeConfig().public;
+    // FormStore
     const formStore = useFormStore();
     const formFields = formStore.formFields
 
-    const param = {
+    // CheckoutStore
+    const checkoutStore = useCheckoutStore();
+
+    if (type === 'lead') {
+        if (!formFields.firstName || !formFields.lastName || !formFields.email) return;
+
+    }
+    const param: { [key: string]: string } = {
+        sessionId: getFromStorage('sessionId', "session")!,
         firstName: formFields.firstName,
         lastName: formFields.lastName,
         emailAddress: formFields.email,
@@ -22,6 +33,29 @@ export const params = () => {
         shipCity: formFields.shipCity,
         shipState: formFields.shipState,
         shipCountry: formFields.shipCounty,
+        emailOptIn: '1',
+    }
+
+    // Product details
+    const cart = checkoutStore.cartData;
+    cart.forEach((product, index) => {
+        if (product.ProductVariantName) {
+            param[`product${index + 1}_id`] = config.gummyId.toString();
+            param[`product${index + 1}_qty`] = '1';
+            param[`variant${index + 1}_id`] = product.productId.toString();
+        } else {
+            param[`product${index + 1}_id`] = product.productId.toString();
+            param[`product${index + 1}_qty`] = '1';
+        }
+    });
+    if (type === 'order') {
+        param.shipProfileId = formFields.shipProfile;
+        param.paySource = formStore.paymentMethod?.toUpperCase()!;
+        param.cardNumber = formFields.creditCardNumber;
+        param.cardMonth = formFields.expiryMonth;
+        param.cardSecurityCode = formFields.cardCVV;
+        param.cardYear = formFields.expiryYear;
+        param.orderId = checkoutStore.orderId;
     }
 
     return param
