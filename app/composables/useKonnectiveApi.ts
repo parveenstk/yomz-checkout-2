@@ -147,8 +147,11 @@ export const importLead = async () => {
 
 // Import Order
 export const importOrder = async () => {
+    const router = useRouter()
     const payload = params('order');
     if (!payload) return;
     const response = await request('/importOrder', payload);
     console.log(response);
-}
+    if (response.result !== "SUCCESS") return;
+    router.push('orderconfirmation')
+};
