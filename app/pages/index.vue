@@ -96,12 +96,12 @@ const calculateTotalPrice = computed(() => {
 
 // Calculate total compareAt price
 const calculateComparePrice = () => {
-    const firstItem = checkoutStore.cartData[0];
-    const compareAtPrice = firstItem?.compareAtPrice ?? 0; // Use 0 if undefined
-    const isSpecialProduct = firstItem?.productId === 6750 || firstItem?.productId === 6762;
+    const subtotal = checkoutStore.cartData.reduce((a, p, i) => {
+        return a += +p.compareAtPrice!
+    }, 0)
 
-    const updatedTotal = isSpecialProduct ? 79.99 : (compareAtPrice + 4.99);
-    return updatedTotal.toFixed(2);
+    const shipping = +checkoutStore.shipProfiles.filter(shipping => shipping.shipProfileId === +formStore.formFields.shipProfile)[0]?.shipPrice!;
+    return (subtotal + shipping).toFixed(2);
 };
 
 // Switch Gummy Type
@@ -339,7 +339,11 @@ watch(paymentMethod, (newValue) => {
                     <div :class="[
                         'text-right text-sm text-gray-900', value.id === 2 ? 'font-bold' : '']">
                         <p>${{ value.price.toFixed(2) }} each</p>
-                        <p class="uppercase">{{ value.shipping }}</p>
+                        <!-- <p class="uppercase">{{ value.shipping }}</p> -->
+                        <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
+                            value.shipping
+                        }} Shipping</p>
+
                     </div>
 
                     <!-- Red Arrow -->

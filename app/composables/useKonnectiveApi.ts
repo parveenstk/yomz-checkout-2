@@ -104,6 +104,8 @@ export const queryCampaign = async () => {
         }
     });
 
+    console.log("structuredProducts:", structuredProducts);
+
     // Filter gummy products directly here
     let gummyProducts = structuredProducts.filter(product =>
         config.public.variantIds.includes(product.productId)

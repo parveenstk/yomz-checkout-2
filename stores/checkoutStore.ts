@@ -32,7 +32,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         // console.log('gummyProducts.value:', gummyProducts.value);
 
         giftsProducts.value = [...filteredGiftsProducts];
-        // console.log('giftsProducts.value:', giftsProducts.value);
+        console.log('giftsProducts.value:', giftsProducts.value);
     };
 
     // Add Product in Cart

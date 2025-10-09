@@ -5,7 +5,7 @@ export const gummyBagsSelector: GummyBagOption[] = [
         id: 2,
         title: "51% OFF: 2 Bags",
         price: 39,
-        shipping: "Incl. FREE Shipping",
+        shipping: "Incl. FREE",
         variant: {
             "ogGummies": { id: 6752 },
             "soursGummies": { id: 6764 }
@@ -16,7 +16,7 @@ export const gummyBagsSelector: GummyBagOption[] = [
         id: 3,
         title: "60% OFF: 3 Bags",
         price: 32,
-        shipping: "Incl. FREE Shipping",
+        shipping: "Incl. FREE",
         variant: {
             "ogGummies": { id: 6754 },
             "soursGummies": { id: 6766 }
@@ -27,7 +27,7 @@ export const gummyBagsSelector: GummyBagOption[] = [
         id: 1,
         title: "40% OFF: 1 Bag",
         price: 48,
-        shipping: "$4.99 Shipping",
+        shipping: "$7.99",
         variant: {
             "ogGummies": { id: 6750 },
             "soursGummies": { id: 6762 }
@@ -211,8 +211,9 @@ export const compareAtPrice: { [key: string]: { price: number, discount: number 
     "1 Bag": { price: 79.99, discount: 40 },
     "2 Bags": { price: 159.98, discount: 51 },
     "3 Bags": { price: 239.97, discount: 60 },
-    "YOMZ Collectible Sticker": { price: 239.97, discount: 60 },
-    "YOMZ Interactive E-book": { price: 239.97, discount: 60 },
-    "YOMZ $20 Gift Card": { price: 239.97, discount: 60 },
-    "Chance for Order Refund": { price: 239.97, discount: 60 },
+    "YOMZ Collectible Sticker": { price: 4.99, discount: 0 },
+    "YOMZ Interactive E-book": { price: 9.99, discount: 0 },
+    "YOMZ $20 Gift Card": { price: 20.00, discount: 0 },
+    "Chance for Order Refund": { price: 239.97, discount: 0 },
+    "Expedited Shipping": { price: 9.99, discount: 0 },
 }

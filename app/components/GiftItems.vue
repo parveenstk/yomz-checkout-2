@@ -1,7 +1,6 @@
 <script setup>
 import { useCheckoutStore } from '~~/stores';
 
-
 // Checkout Store
 const chekoutStore = useCheckoutStore();
 
@@ -45,10 +44,6 @@ const visibleItems = computed(() => {
     return chekoutStore.giftsProducts;
 });
 
-// watch(visibleItems, (newValue) => {
-//     console.log("newValue:", newValue);
-// })
-
 </script>
 
 <template>
@@ -70,7 +65,7 @@ const visibleItems = computed(() => {
                 {{ item.productName }}
             </span>
             <span class="flex items-center gap-1 font-bold">
-                <del class="text-[#474747]">{{ item.compareAtPrice }}</del>
+                <del class="text-[#474747]">${{ item.compareAtPrice }}</del>
                 <span>${{ item.productPrice }}</span>
             </span>
         </p>
