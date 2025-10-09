@@ -3,10 +3,11 @@ import { encryptData } from '~~/server/utils/encryption';
 import request from '~~/server/utils/request';
 
 export default defineEventHandler(async (event) => {
-    const { method = 'POST' }: { [key: string]: string } = getQuery(event);
+
+    const method: string = event.method || 'POST'; // HTTP Method
     const routeName = event.context.params?.route; // dynamic [route].ts
     const headers = event.headers;
-    const body = await readBody(event);
+    const body = method === 'POST' ? await readBody(event) : {};
     const encrypt = headers.has('x-encrypt');
 
     try {

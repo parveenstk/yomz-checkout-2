@@ -104,3 +104,17 @@ export interface SimplifiedRule {
     shipPrice: number;
     shipProfileId: number;
 }
+
+export interface Country {
+    countryCode: string;
+    countryName: string;
+}
+
+export interface AllCountries extends Country {
+    stateCode: string;
+    stateName: string;
+}
+
+export interface IpAddress {
+    ip: string
+}

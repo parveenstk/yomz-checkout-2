@@ -32,7 +32,8 @@ export default defineNuxtConfig({
       sourBags: [6762, 6764, 6766],
       WarrantyId: 9196,
       giftItems: [9202, 9204, 9206, 9208],
-      shipProfiles: [36, 38]
+      shipProfiles: [36, 38],
+      countries: ["US", "CA"]
     }
   }
 })

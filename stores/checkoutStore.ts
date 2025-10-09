@@ -16,8 +16,18 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     const selectedGummyType: Ref<string> = ref("ogGummies");
     const selectedQuantity: Ref<number> = ref(2);
     const shipProfiles: Ref<SimplifiedRule[]> = ref([]);
+
     // OderId
     const orderId: Ref<string> = ref(getFromStorage('orderId', "session") || '');
+
+    // Ip Address
+    const ipAddress: Ref<string> = ref("");
+
+    // Countries
+    const availableCountires: Country[] = [];
+    const allCountries: AllCountries[] = [];
+    const selectedStates: AllCountries[] = [];
+    const selectedStatesBill: AllCountries[] = [];
 
     // to add save products in 'allProducts'
     const saveProducts = (
@@ -32,7 +42,7 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         // console.log('gummyProducts.value:', gummyProducts.value);
 
         giftsProducts.value = [...filteredGiftsProducts];
-        console.log('giftsProducts.value:', giftsProducts.value);
+        // console.log('giftsProducts.value:', giftsProducts.value);
     };
 
     // Add Product in Cart
@@ -98,6 +108,11 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
         addExtraProduct,
         addGiftProducts,
         shipProfiles,
-        orderId
+        orderId,
+        availableCountires,
+        allCountries,
+        selectedStates,
+        selectedStatesBill,
+        ipAddress
     }
 });

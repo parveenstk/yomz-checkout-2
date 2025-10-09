@@ -122,7 +122,13 @@ const switchGummyType = (type: string) => {
 onMounted(async () => {
 
     // Query Campaign
-    await queryCampaign()
+    await queryCampaign();
+
+    // Getting all countries
+    await countries();
+
+    // Getting API
+    await fetchIpInfo();
 
     // Initialize selected gummy and quanity on load
     checkoutStore.selectedGummyType = "ogGummies";
@@ -342,7 +348,7 @@ watch(paymentMethod, (newValue) => {
                         <!-- <p class="uppercase">{{ value.shipping }}</p> -->
                         <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
                             value.shipping
-                        }} Shipping</p>
+                            }} Shipping</p>
 
                     </div>
 
@@ -570,13 +576,14 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Shipping - Country -->
                             <select v-model="formFields.shipCounty" name="shipCounty"
-                                @input="validateField('shipCounty', ($event.target as HTMLInputElement).value)"
+                                @input="formStore.handleCountry(($event.target as HTMLInputElement).value), 'ship'"
                                 :class="[
                                     'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                     errors.shipCounty ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                 <option value="">-- Choose Country --</option>
-                                <option value="us">United States</option>
-                                <option value="ca">Canada</option>
+                                <option v-for="country in checkoutStore.availableCountires"
+                                    :value="country.countryCode">
+                                    {{ country.countryName }}</option>
                             </select>
                             <span v-if="errors.shipCounty" class="ml-2 text-sm text-[#e6193c]">
                                 {{ errors.shipCounty }}
@@ -591,8 +598,9 @@ watch(paymentMethod, (newValue) => {
                                             'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                             errors.shipState ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                         <option value="">-- Choose State --</option>
-                                        <option v-for="state in usStates" :key="state.code" :value="state.code">
-                                            {{ state.name }}
+                                        <option v-for="state in checkoutStore.selectedStates" :key="state.stateCode"
+                                            :value="state.stateCode">
+                                            {{ state.stateName }}
                                         </option>
                                     </select>
                                     <span v-if="errors.shipState" class="ml-2 text-sm text-[#e6193c]">
@@ -781,13 +789,13 @@ watch(paymentMethod, (newValue) => {
 
                                 <!-- Billing - Country -->
                                 <select v-model="formFields.billingCounty" name="billingCounty"
-                                    @input="validateField('billingCounty', ($event.target as HTMLInputElement).value)"
+                                    @input="formStore.handleCountry(($event.target as HTMLInputElement).value, 'bill')"
                                     :class="[
                                         'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                         errors.billingCounty ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                     <option value="">-- Choose Country --</option>
-                                    <option value="us">United States</option>
-                                    <option value="ca">Canada</option>
+                                    <option v-for="country in checkoutStore.availableCountires"
+                                        :value="country.countryCode">{{ country.countryName }}</option>
                                 </select>
                                 <span v-if="errors.billingCounty" class="ml-2 text-sm text-[#e6193c]">
                                     {{ errors.billingCounty }}
@@ -802,8 +810,9 @@ watch(paymentMethod, (newValue) => {
                                                 'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                                 errors.billingState ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                             <option value="">-- Choose State --</option>
-                                            <option v-for="state in usStates" :key="state.code" :value="state.code">
-                                                {{ state.name }}
+                                            <option v-for="state in checkoutStore.selectedStatesBill"
+                                                :key="state.stateCode" :value="state.stateCode">
+                                                {{ state.stateName }}
                                             </option>
                                         </select>
                                         <span v-if="errors.billingState" class="ml-2 text-sm text-[#e6193c]">

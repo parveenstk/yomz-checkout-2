@@ -4,6 +4,7 @@ const routes: Record<string, string> = {
     importClick: 'https://api.konnektive.com/landers/clicks/import/',
     importLead: 'https://api.konnektive.com/leads/import/',
     importOrder: 'https://api.konnektive.com/order/import/',
+    countires: 'https://assets.checkoutchamp.com/countries.json'
 };
 
 export default routes;

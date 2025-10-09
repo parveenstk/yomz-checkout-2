@@ -56,6 +56,8 @@ export const queryCampaign = async () => {
     const data = response.message.data[config.public.campaignId];
     const products: CampaignProducts[] = data.products;
     const shipProfiles: ShipProfile[] = data.shipProfiles;
+    const countries: Country[] = data.countries;
+    checkoutStore.availableCountires = [...countries];
 
     const structuredProducts: StructuredProducts[] = []; // For Products
     const simplifiedRules: SimplifiedRule[] = []; // For ShipProfiles
@@ -104,7 +106,7 @@ export const queryCampaign = async () => {
         }
     });
 
-    console.log("structuredProducts:", structuredProducts);
+    // console.log("structuredProducts:", structuredProducts);
 
     // Filter gummy products directly here
     let gummyProducts = structuredProducts.filter(product =>
@@ -119,7 +121,7 @@ export const queryCampaign = async () => {
     const giftProducts = structuredProducts.filter(product => config.public.giftItems.includes(product.productId));
 
     // Save both to the store (you'll need to update the store method)
-    checkoutStore.saveProducts(structuredProducts, gummyProducts, giftProducts,);
+    checkoutStore.saveProducts(structuredProducts, gummyProducts, giftProducts);
 };
 
 // Fetch Import Click 
@@ -130,7 +132,6 @@ export const importClick = async () => {
         sessionId: getFromStorage('sessionId', 'session') || ''
     });
 
-    // console.log("response:", response.message.sessionId);
     saveToStorage('sessionId', response.message.sessionId, 'session');
     console.log("sessionId:", getFromStorage('sessionId', 'session'));
 };
@@ -156,4 +157,36 @@ export const importOrder = async () => {
     console.log(response);
     if (response.result !== "SUCCESS") return;
     router.push('orderconfirmation')
+};
+
+// Countries
+export const countries = async () => {
+    const checkoutStore = useCheckoutStore();
+    const response = await request('/countires', {}, false, "GET");
+    checkoutStore.allCountries = response;
+    // console.log('countries:', checkoutStore.allCountries); // debug
+};
+
+// Ip Address 
+export const fetchIpInfo = async () => {
+    try {
+        const requestOptions: RequestInit = {
+            method: "GET",
+            redirect: "follow",
+        };
+        // await fetch("https://ipinfo.io/json", requestOptions)
+        const checkoutStore = useCheckoutStore();
+        const response = await fetch("https://ipinfo.io/json", requestOptions);
+        const data = await response.json();
+        const ip = data.ip; // getting ip address
+
+        checkoutStore.ipAddress = ip;
+        console.log('checkoutStore.ipAddress:', checkoutStore.ipAddress);
+
+        return { data, ip };
+    } catch (error) {
+        // throw new Error;
+        console.error("Error fetching IP address:", error);
+        return error;
+    }
 };

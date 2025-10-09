@@ -1,8 +1,12 @@
 import { defineStore } from 'pinia';
 import { reactive, ref, type Reactive } from 'vue';
 import { z, ZodError } from 'zod';
+import { useCheckoutStore } from './checkoutStore';
 
 export const useFormStore = defineStore('formStore', () => {
+    // Checkout Store
+    const checkoutStore = useCheckoutStore();
+
     // Payment method state ( 'creditCard' default selected )
     const paymentMethod = ref<'creditCard' | 'payPal' | null>('creditCard');
     // const paymentMethod = ref<'creditCard' | 'payPal' | null>('payPal');
@@ -254,7 +258,23 @@ export const useFormStore = defineStore('formStore', () => {
         sameBilling.value = status;
         console.log('sameBilling:', sameBilling.value);
         if (status) billSame();
-    }
+    };
+
+    // Filter States
+    const handleCountry = (value: string, type: string = 'ship') => {
+        const filteredStates = checkoutStore.allCountries.filter(country => country.countryCode === value);
+        if (type !== 'ship') {
+            console.log("Working")
+            formFields.billingCounty = value;
+            checkoutStore.selectedStatesBill = [...filteredStates];
+            formFields.billingState = '';
+            return;
+        }
+        console.log("Ship me aay")
+        formFields.shipCounty = value;
+        checkoutStore.selectedStates = [...filteredStates];
+        formFields.shipState = '';
+    };
 
     return {
         paymentMethod,  // Export payment method
@@ -264,6 +284,7 @@ export const useFormStore = defineStore('formStore', () => {
         formSubmit,
         validateField,
         billSame,
-        handleBillSame
+        handleBillSame,
+        handleCountry
     }
 });

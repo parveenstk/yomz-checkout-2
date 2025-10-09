@@ -34,6 +34,9 @@ export const params = (type: string = "lead") => {
         shipState: formFields.shipState,
         shipCountry: formFields.shipCounty,
         emailOptIn: '1',
+        salesUrl: window.location.href,
+        pageType: 'checkout',
+        ipAddress: checkoutStore.ipAddress
     }
 
     // Product details
