@@ -186,7 +186,7 @@ watch(paymentMethod, (newValue) => {
 
     <section class="w-full pt-3 p-2">
         <div class="max-w-[1200px] bg-white mx-auto grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 items-center 
-  lg:p-6 p-3 px-3 md:px-3 lg:px-8 border-[3px] border-dashed border-[#000]">
+  lg:p-6 p-3 px-3 md:px-3 lg:px-8 border-[3px] lg:border-dashed border-solid border-[#000]">
 
             <!-- Left: Image & Reasons -->
             <div class="flex flex-col items-center md:items-start text-center md:text-left">
@@ -229,13 +229,19 @@ watch(paymentMethod, (newValue) => {
                     class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left hidden lg:block">
                     The Power of 18 Superfoods to Supercharge Your Family
                 </h2>
-                <h2 class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
+                <h2 class="text-2xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
                     The Power of 18 Superfoods <br>to Supercharge Your Family
                 </h2>
 
                 <!-- Points -->
-                <div class="space-y-4 text-left">
+                <div class="hidden lg:block space-y-4 text-left">
                     <div v-for="point in keyPoints" class="flex items-start">
+                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
+                        <p class="text-gray-700">{{ point }}</p>
+                    </div>
+                </div>
+                <div class="lg:hidden space-y-4 text-left">
+                    <div v-for="point in MobilekeyPoints" class="flex items-start">
                         <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700">{{ point }}</p>
                     </div>
@@ -285,9 +291,8 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Right Text -->
                     <div class="text-center sm:text-center space-y-1">
-                        <p class="text-700 text-[#C91F3F] extrablod text-xl">Your up to 60% Discount Has Been
-                            Applied
-                        </p>
+                        <p class="text-700 text-[#C91F3F] extrablod text-xl hidden lg:block">Your up to 60% Discount Has Been Applied</p>
+                        <p class="text-700 text-[#C91F3F] extrablod text-xl lg:hidden">Your Discount Is Applied</p>
                         <p class="text-gray-700">Your Order Today Qualifies for a <span class="extrablod">Bulk
                                 Discount</span></p>
                     </div>

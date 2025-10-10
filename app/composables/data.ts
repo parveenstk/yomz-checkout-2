@@ -6,6 +6,14 @@ export const keyPoints = [
     "Join 6,312 American families Boosting Their Nutrition.",
 ];
 
+export const MobilekeyPoints = [
+    "Fill in Your Family’s Nutrition Gaps and Help Transform Their Lives!",
+    "Packed with Vitamins, Antioxidants, Prebiotics, and Probiotics",
+    "One Serving Is the Phytonutrient Equal of 2 Servings of Fruits & Vegetables",
+    "Crafted to Support: Gut Health, Energy, Focus, Mood, Brain Activity, Immunity, Heart Function, Vision, Family Nutrition",
+    "Picky Momz 200% Happiness Guarantee",
+];
+
 export const faqs = [
     {
         "question": "Do I really need to continue taking YOMZ after a couple of months or so?",
