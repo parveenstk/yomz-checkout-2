@@ -372,8 +372,7 @@ watch(paymentMethod, (newValue) => {
 
             </div>
 
-            <!-- Reviews - Mobile Screen -->
-            <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
+           <!-- old position of reviews -->
 
         </div>
 
@@ -504,8 +503,8 @@ watch(paymentMethod, (newValue) => {
                             </div>
                         </div>
 
-                        <!-- Reviews - Desktop Screen -->
-                        <Reviews v-if="!isMobile" />
+                        <!-- old positon of Reviews - Desktop Screen -->
+                        
                     </div>
 
                     <!-- STEP 5: SHIPPING ADDRESS -->
@@ -1014,9 +1013,13 @@ watch(paymentMethod, (newValue) => {
                                     what you paid.
                                 </p>
                             </div>
+                            <!-- Reviews - Desktop Screen -->
+                        <Reviews v-if="!isMobile" />
                         </div>
                     </div>
                 </form>
+                 <!-- Reviews - Mobile Screen -->
+            <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
             </section>
 
         </div>
