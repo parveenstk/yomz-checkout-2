@@ -20,7 +20,7 @@ type ApiResponse<T = any> = {
 export const request = async <T = any>(
     route: string,
     payload: Record<string, any> = {},
-    encrypt = false,
+    encrypt = true,
     method: Method = 'POST',
 ): Promise<T> => {
     try {
@@ -181,7 +181,7 @@ export const fetchIpInfo = async () => {
         const ip = data.ip; // getting ip address
 
         checkoutStore.ipAddress = ip;
-        console.log('checkoutStore.ipAddress:', checkoutStore.ipAddress);
+        // console.log('checkoutStore.ipAddress:', checkoutStore.ipAddress);
 
         return { data, ip };
     } catch (error) {

@@ -9,44 +9,8 @@
                 Within a few minutes you will receive an order confirmation email with your order ID.
                 below you can find all the products you purchased...
             </p>
-
-            <!-- <div class="flex items-center justify-center m-3">
-                <h3 class="lg:text-2xl text-sm text-center underline lg:px-0 px-3">
-                    Click The Button Below & Ask To Join The YOMZ VIP Club Now!
-                </h3>
-            </div> -->
-            <!-- <div class="bg-white lg:mx-2 mx-2">
-                <div class="flex justify-center items-center w-full max-w-5xl mx-auto p-0 ">
-                    <div ref="wrapper" id="videoWrapper" class="w-full  relative cursor-pointer" tabindex="0"
-                        @click="togglePlay" @keydown.space.prevent="togglePlay" @mousemove="onMouseMove">
-                        <video ref="video" id="myVideo" class="w-full shadow-lg block" playsinline :poster="poster"
-                            preload="metadata" style="aspect-ratio:16/9;">
-                            <source :src="src" type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                        overlay icon (pointer-events: none so it doesn't block clicks)
-                        <img :src="overlaySrc" id="overlayIcon"
-                            class="absolute inset-0 m-auto w-16 h-16 select-none pointer-events-none z-10 transition-opacity duration-300"
-                            :class="{ 'opacity-0': hideOverlay }" alt="Play / Pause" />
-                    </div>
-                </div>
-                <div class="p-4">
-                    <button type="button"
-                        class="rounded-xl shadow-lg block w-full  text-center p-3 bg-[#FFEB00] text-black">
-                        <span class="block lg:text-bease text-lg  font-bold">JOIN YOMZ VIP CLUB NOW</span></button>
-                </div>
-            </div> -->
-            <!-- <div class="flex justify-center rounded-3 mt-8 lg:mx-2 mx-2">
-                <p class="bg-[#fff793] text-black font-bold px-4 py-2 rounded lg:text-lg text-sm text-center">
-                    Note: The charge will appear on your card as "yomz.com"
-                </p>
-            </div>
-            <div class="flex justify-center rounded-3 mt-2 lg:mx-2 mx-2">
-                <p class="bg-[#fff793] text-black px-4 py-2 rounded font-bold lg:text-lg text-sm text-center">
-                    Note: The charge will appear on your card as "yomz by With Reach (USA) LLC"
-                </p>
-            </div> -->
         </div>
+
         <div class="max-w-xl mx-auto bg-white p-3 mt-4 rounded-xl">
             <div class="innerscan bg-gray-100 p-2 rounded-xl">
                 <h3 class="text-center lg:text-3xl text-2xl mt-4 extrablod lg:px-3 px-0">Download the YOMZ App on Your
@@ -72,11 +36,11 @@
                                 </p>
                             </div>
                         </div>
-                        <img src="/images/googleplay.png" class="w-full mb-3 lg:px-0 px-15">
-                        <img src="/images/appstore.png" class="w-full lg:px-0 px-15">
+                        <NuxtImg src="/images/googleplay.png" class="w-full mb-3 lg:px-0 px-15" />
+                        <NuxtImg src="/images/appstore.png" class="w-full lg:px-0 px-15" />
                     </div>
                     <div class="bar-details">
-                        <img src="/images/qr.png" class="w-full rounded-xl lg:px-0 px-15">
+                        <NuxtImg src="/images/qr.png" class="w-full rounded-xl lg:px-0 px-15" />
                     </div>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-3 gap-4 p-1 mt-4 items-center">
@@ -87,16 +51,14 @@
                                     class="flex bg-[#1EB9F0] text-white justify-center items-center w-8 h-8 rounded-full extrablod">2</span>
                             </div>
                             <div class="num-details mb-6">
-                                <p class="lg:text-xl text-sm"> <strong>Enter the email</strong>
-                                    you
-                                    used when placing
-                                    your order
+                                <p class="lg:text-xl text-sm">
+                                    <strong>Enter the email</strong> you used when placing your order
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="email-images">
-                        <img src="/images/enteremail.png" class="w-full">
+                        <NuxtImg src="/images/enteremail.png" class="w-full" />
                     </div>
                 </div>
             </div>
@@ -115,9 +77,8 @@
                         <span class="block lg:text-bease text-lg  font-bold">BOOK YOUR CALL NOW</span></button>
                 </div>
                 <div class="products-receipt">
-                    <p class="flex gap-1 items-center w-full bg-[#e9e9e9] p-2 extrablod mb-2"> <img
-                            src="/images/round-check.svg"> Your
-                        Product Receipt:
+                    <p class="flex gap-1 items-center w-full bg-[#e9e9e9] p-2 extrablod mb-2">
+                        <NuxtImg src="/images/round-check.svg" /> Your Product Receipt:
                     </p>
                     <p class="flex justify-between items-center mb-2"> <span class="font-bold">Item</span> <span
                             class="font-bold">Price</span> </p>
@@ -127,11 +88,12 @@
                             class="font-bold">$0.00</span> </p>
                     <p class="flex justify-between items-center"> <span class="font-bold">Total:</span> <span
                             class="font-bold">$0.00</span> </p>
-                    <p class="flex gap-1 items-center w-full bg-[#e9e9e9] p-2 extrablod mb-2 mt-5"> <img
-                            src="/images/lock.svg"> Our Guarantee:</p>
+                    <p class="flex gap-1 items-center w-full bg-[#e9e9e9] p-2 extrablod mb-2 mt-5">
+                        <NuxtImg src="/images/lock.svg" /> Our Guarantee:
+                    </p>
                     <div class="lg:flex block gap-3 lg:p-4 p-1 mb-3">
                         <div class="items-center justify-center flex">
-                            <img src="/images/guarantee.png" class="lg:w-full w-20 mb-3">
+                            <NuxtImg src="/images/guarantee.png" class="lg:w-full w-20 mb-3" />
                         </div>
                         <div>
                             <p class="text-gray-700 leading-[1.2] text-center sm:text-left"> Your
@@ -155,7 +117,7 @@
             <h4 class="text-center lg:my-5 my-3 underline lg:text-2xl text-base font-bold">HERE ARE OUR GIFTS FOR YOU :)
             </h4>
             <p class="w-full bg-[#e9e9e9] p-2 extrablod mb-2 text-center">FREE Swelling Relief Course</p>
-            <img src="/images/cam1.jpg" class="w-full">
+            <NuxtImg src="/images/cam1.jpg" class="w-full" />
             <div class="p-4 mb-3">
                 <button type="button"
                     class="rounded-xl shadow-lg block w-full  text-center p-3 bg-[#FFEB00] text-black">
@@ -164,7 +126,7 @@
             <div class="grid lg:grid-cols-2 grid-cols-1  gap-2">
                 <div>
                     <p class="w-full bg-[#e9e9e9] p-2 extrablod mb-2 text-center">Swelling Relief Nutrition Plan</p>
-                    <img src="/images/4.jpg" class="w-full">
+                    <NuxtImg src="/images/4.jpg" class="w-full" />
                     <div class="p-0 mb-3">
                         <button type="button"
                             class="rounded-xl shadow-lg block w-full  text-center p-3 bg-[#FFEB00] text-black">
@@ -173,7 +135,7 @@
                 </div>
                 <div>
                     <p class="w-full bg-[#e9e9e9] p-2 extrablod mb-2 text-center">Swelling Relief Nutrition Plan</p>
-                    <img src="/images/4.jpg" class="w-full">
+                    <NuxtImg src="/images/4.jpg" class="w-full" />
                     <div class="p-0 mb-3">
                         <button type="button"
                             class="rounded-xl shadow-lg block w-full  text-center p-3 bg-[#FFEB00] text-black">
@@ -188,7 +150,7 @@
             <div class="grid lg:grid-cols-2 grid-cols-1  gap-2">
                 <div>
                     <p class="w-full bg-[#e9e9e9] p-2 extrablod mb-2 text-center">How it works</p>
-                    <img src="/images/4.jpg" class="w-full">
+                    <NuxtImg src="/images/4.jpg" class="w-full" />
                     <div class="p-0 mb-3">
                         <button type="button"
                             class="rounded-xl shadow-lg block w-full  text-center p-3 bg-[#FFEB00] text-black">
@@ -197,7 +159,7 @@
                 </div>
                 <div>
                     <p class="w-full bg-[#e9e9e9] p-2 extrablod mb-2 text-center">User Manual</p>
-                    <img src="/images/4.jpg" class="w-full">
+                    <NuxtImg src="/images/4.jpg" class="w-full" />
                     <div class="p-0 mb-3">
                         <button type="button"
                             class="rounded-xl shadow-lg block w-full  text-center p-3 bg-[#FFEB00] text-black">
@@ -212,7 +174,7 @@
 
     <footer class="bg-[#1EB9F0] lg:py-7 py-3">
         <div class="mx-auto max-w-5xl text-center">
-            <img src="/images/logo.png" class="max-w-30 mx-auto mb-4">
+            <NuxtImg src="/images/logo.png" class="max-w-30 mx-auto mb-4" />
             <p class="text-white lg:text-lg text-sm">By filling out the field, you consent for YOMZ™ to use automated
                 technology,
                 including texts and

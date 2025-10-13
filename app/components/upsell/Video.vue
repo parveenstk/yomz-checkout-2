@@ -110,7 +110,7 @@ export default {
             </video>
 
             <!-- overlay icon (pointer-events: none so it doesn't block clicks) -->
-            <img :src="overlaySrc" id="overlayIcon"
+            <NuxtImg :src="overlaySrc" id="overlayIcon"
                 class="absolute inset-0 m-auto w-16 h-16 select-none pointer-events-none z-10 transition-opacity duration-300"
                 :class="{ 'opacity-0': hideOverlay }" alt="Play / Pause" />
         </div>

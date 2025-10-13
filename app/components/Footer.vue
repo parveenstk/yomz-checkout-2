@@ -16,7 +16,7 @@
 
         <!-- DMCA Badge -->
         <div class="flex justify-center mt-3">
-            <img src="/images/dmca.png" alt="DMCA Protection" class="h-6">
+            <NuxtImg src="/images/dmca.png" alt="DMCA Protection" class="h-6" />
         </div>
 
     </footer>
