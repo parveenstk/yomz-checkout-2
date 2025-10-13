@@ -348,7 +348,7 @@ watch(paymentMethod, (newValue) => {
                         <!-- <p class="uppercase">{{ value.shipping }}</p> -->
                         <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
                             value.shipping
-                        }} Shipping</p>
+                            }} Shipping</p>
 
                     </div>
 
@@ -616,7 +616,7 @@ watch(paymentMethod, (newValue) => {
                                         :class="[
                                             'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                             errors.shipPostalCode ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                        maxlength="9" />
+                                        maxlength="10" />
                                     <span v-if="errors.shipPostalCode" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.shipPostalCode }}
                                     </span>

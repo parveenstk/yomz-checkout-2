@@ -17,6 +17,9 @@ export const useFormStore = defineStore('formStore', () => {
     // loader
     const transactionStatus = ref(false);
 
+    // order details 
+    const orderDetails = ref({});
+
     const formFields: Reactive<FormFields> = reactive({
 
         // Basic fields
@@ -277,7 +280,8 @@ export const useFormStore = defineStore('formStore', () => {
             formFields.billingState = '';
             return;
         }
-        console.log("Ship me aay")
+        console.log("ship me aaya")
+
         formFields.shipCounty = value;
         checkoutStore.selectedStates = [...filteredStates];
         formFields.shipState = '';
@@ -293,6 +297,7 @@ export const useFormStore = defineStore('formStore', () => {
         billSame,
         handleBillSame,
         handleCountry,
-        transactionStatus
+        transactionStatus,
+        orderDetails
     }
 });

@@ -1,3 +1,22 @@
+<script lang="ts" setup>
+
+const orderDetails = ref<OrderDetail[]>([]);
+const totalAmount = ref('0.00');
+const shippingAmount = ref('0.00');
+
+onMounted(() => {
+    const savedOrderDetails = getFromStorage('savedOrderDetails', 'session') as SavedOrderDetails;
+    // console.log('Saved Order Details:', savedOrderDetails);
+
+    if (savedOrderDetails && Array.isArray(savedOrderDetails.items)) {
+        orderDetails.value = savedOrderDetails.items;
+        totalAmount.value = savedOrderDetails.totalAmount || '0.00';
+        shippingAmount.value = savedOrderDetails.shipTotal || '0.00';
+    }
+});
+
+</script>
+
 <template>
     <section class="lg:py-10 py-4 bg-[#e9e9e9]">
 
@@ -16,10 +35,9 @@
                 <h3 class="text-center lg:text-3xl text-2xl mt-4 extrablod lg:px-3 px-0">Download the YOMZ App on Your
                     Phone
                 </h3>
-                <p class="text-center mt-4 lg:px-3 px-0 ">Your personalized plan and coach support are only available
-                    via the
-                    mobile app. Here's how to
-                    download it
+                <p class="text-center mt-4 lg:px-3 px-0 ">
+                    Your personalized plan and coach support are only available via the mobile app.
+                    Here's how to download it
                 </p>
                 <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-10 gap-4 lg:p-3 p-0 mt-4 items-center">
                     <div class="bar-details">
@@ -29,10 +47,11 @@
                                     class="flex bg-[#1EB9F0] text-white justify-center items-center w-8 h-8 rounded-full extrablod">2</span>
                             </div>
                             <div class="num-details mb-6">
-                                <p class="lg:text-xl text-sm"> <strong class="lg:block inline"> Open the YOMZ
-                                        app on your phone</strong>
-                                    by scanning the QR
-                                    code on the right
+                                <p class="lg:text-xl text-sm">
+                                    <strong class="lg:block inline">
+                                        Open the YOMZ app on your phone
+                                    </strong>
+                                    by scanning the QR code on the right
                                 </p>
                             </div>
                         </div>
@@ -76,18 +95,45 @@
                         class="rounded-xl shadow-lg block w-full  text-center p-3 bg-[#FFEB00] text-black">
                         <span class="block lg:text-bease text-lg  font-bold">BOOK YOUR CALL NOW</span></button>
                 </div>
+
+                <!-- Your Product Receipt -->
                 <div class="products-receipt">
                     <p class="flex gap-1 items-center w-full bg-[#e9e9e9] p-2 extrablod mb-2">
                         <NuxtImg src="/images/round-check.svg" /> Your Product Receipt:
                     </p>
-                    <p class="flex justify-between items-center mb-2"> <span class="font-bold">Item</span> <span
-                            class="font-bold">Price</span> </p>
-                    <p class="flex justify-between items-center mb-2"> <span>Sample cell</span> <span>$0.00</span> </p>
+                    <p class="flex justify-between items-center mb-2">
+                        <span class="font-bold">Item</span>
+                        <span class="font-bold">Price</span>
+                    </p>
+
+                    <!-- Product Details -->
+                    <div v-if="orderDetails.length">
+                        <p v-for="(item, index) in orderDetails" :key="index"
+                            class="flex justify-between items-center mb-2">
+                            <span>{{ index !== 0 ? item.name : item.title }}</span>
+                            <span>${{ item.price }}</span>
+                        </p>
+                    </div>
+
                     <hr class="my-5">
-                    <p class="flex justify-between items-center"> <span class="font-bold">Tax</span> <span
-                            class="font-bold">$0.00</span> </p>
-                    <p class="flex justify-between items-center"> <span class="font-bold">Total:</span> <span
-                            class="font-bold">$0.00</span> </p>
+                    <p class="flex justify-between items-center">
+                        <span class="font-bold">Tax</span>
+                        <span class="font-bold">$0.00</span>
+                    </p>
+
+                    <!-- shipping price -->
+                    <p class="flex justify-between items-center">
+                        <span class="font-bold">Shipping</span>
+                        <span class="font-bold">${{ shippingAmount }}</span>
+                    </p>
+
+                    <!-- total amount -->
+                    <p class="flex justify-between items-center">
+                        <span class="font-bold">Total:</span>
+                        <span class="font-bold">${{ totalAmount }}</span>
+                    </p>
+
+                    <!-- Our Guarantee -->
                     <p class="flex gap-1 items-center w-full bg-[#e9e9e9] p-2 extrablod mb-2 mt-5">
                         <NuxtImg src="/images/lock.svg" /> Our Guarantee:
                     </p>
@@ -100,7 +146,8 @@
                                 order today is protected by our ridiculously iron-clad Picky Momz 90-day <span
                                     class="font-bold">200% Happiness Guarantee.</span> If you’re not
                                 happy with how <span class="font-bold">great</span> you and your
-                                family feel, or how improved your energy, focus, and gut issues are, then let us know
+                                family feel, or how improved your energy, focus, and gut issues are, then let us
+                                know
                                 anytime in the next <span class="font-bold">90 days.</span> We’ll
                                 refund <span class="font-bold">DOUBLE</span> what you paid.
                             </p>
@@ -114,7 +161,8 @@
                 waiting for your
                 order...
             </h3>
-            <h4 class="text-center lg:my-5 my-3 underline lg:text-2xl text-base font-bold">HERE ARE OUR GIFTS FOR YOU :)
+            <h4 class="text-center lg:my-5 my-3 underline lg:text-2xl text-base font-bold">
+                HERE ARE OUR GIFTS FOR YOU :)
             </h4>
             <p class="w-full bg-[#e9e9e9] p-2 extrablod mb-2 text-center">FREE Swelling Relief Course</p>
             <NuxtImg src="/images/cam1.jpg" class="w-full" />
@@ -145,7 +193,8 @@
                 <div>
                 </div>
             </div>
-            <h4 class="text-center my-5 underline lg:text-2xl text-xl font-bold">PLEASE ALSO CHECK THESE RESOURCES...
+            <h4 class="text-center my-5 underline lg:text-2xl text-xl font-bold">PLEASE ALSO CHECK THESE
+                RESOURCES...
             </h4>
             <div class="grid lg:grid-cols-2 grid-cols-1  gap-2">
                 <div>
@@ -184,112 +233,11 @@
     </footer>
 </template>
 
-<style>
+<!-- <style>
 #overlayIcon {
     display: none;
 }
 </style>
-
-<script>
-export default {
-    props: {
-        src: { type: String, default: '/images/upsellvideo.mp4' },
-        poster: { type: String, default: '/images/video-thumb.jpg' }
-    },
-    data() {
-        return {
-            overlaySrc: '/images/play-button.png',
-            hideOverlay: false,
-            hideTimeout: null
-        };
-    },
-    mounted() {
-        const video = this.$refs.video;
-        // make sure video element exists
-        if (!video) {
-            console.error('myVideo element not found');
-            return;
-        }
-        video.addEventListener('play', this.onPlay);
-        video.addEventListener('pause', this.onPause);
-        video.addEventListener('ended', this.onEnded);
-
-        // small debug log so you can see clicks in console
-        console.log('Video mounted. src=', this.src);
-    },
-    beforeUnmount() {
-        const v = this.$refs.video;
-        if (v) {
-            v.removeEventListener('play', this.onPlay);
-            v.removeEventListener('pause', this.onPause);
-            v.removeEventListener('ended', this.onEnded);
-        }
-        this.clearHideTimeout();
-    },
-    methods: {
-        togglePlay() {
-            const video = this.$refs.video;
-            if (!video) return;
-            console.log('togglePlay called (video.paused =', video.paused, ')');
-
-            if (video.paused) {
-                // attempt to play (returns a promise on modern browsers)
-                video.play().then(() => {
-                    // show native controls while playing
-                    video.setAttribute('controls', '');
-                }).catch(err => {
-                    console.warn('video.play() failed:', err);
-                });
-            } else {
-                video.pause();
-                // optional: remove native controls when paused to avoid overlap
-                video.removeAttribute('controls');
-            }
-        },
-        onPlay() {
-            this.overlaySrc = '/images/pause.png';
-            this.startHideTimeout(); // auto-hide icon after short delay
-        },
-        onPause() {
-            this.overlaySrc = '/images/play-button.png';
-            this.showOverlay();
-            // remove native controls when paused
-            this.$refs.video.removeAttribute('controls');
-        },
-        onEnded() {
-            this.overlaySrc = '/images/play-button.png';
-            this.$refs.video.removeAttribute('controls');
-            this.$refs.video.currentTime = 0;
-            this.showOverlay();
-        },
-        startHideTimeout() {
-            this.clearHideTimeout();
-            this.hideOverlay = false;
-            this.hideTimeout = setTimeout(() => {
-                this.hideOverlay = true;
-            }, 1500); // hide after 1.5s
-        },
-        clearHideTimeout() {
-            if (this.hideTimeout) {
-                clearTimeout(this.hideTimeout);
-                this.hideTimeout = null;
-            }
-        },
-        showOverlay() {
-            this.clearHideTimeout();
-            this.hideOverlay = false;
-        },
-        onMouseMove() {
-            // when user moves mouse while playing, show icon briefly
-            const v = this.$refs.video;
-            if (v && !v.paused) {
-                this.showOverlay();
-                this.startHideTimeout();
-            }
-        }
-    }
-};
-</script>
 
 <style scoped>
 /* make absolutely sure icon doesn't block clicks and stays centered */
@@ -297,4 +245,4 @@ export default {
     pointer-events: none;
     user-select: none;
 }
-</style>
+</style> -->

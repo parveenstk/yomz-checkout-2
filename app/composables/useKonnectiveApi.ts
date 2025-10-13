@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig, type Method } from "axios";
-import { useCheckoutStore } from "../../stores/index";
+import { useCheckoutStore, useFormStore } from "../../stores/index";
 import { getFromStorage, saveToStorage } from "~/utils/storage";
 import { params } from "./common";
 import { compareAtPrice } from "~/assets/data/checkout";
@@ -20,7 +20,7 @@ type ApiResponse<T = any> = {
 export const request = async <T = any>(
     route: string,
     payload: Record<string, any> = {},
-    encrypt = true,
+    encrypt = false,
     method: Method = 'POST',
 ): Promise<T> => {
     try {
@@ -154,7 +154,28 @@ export const importOrder = async () => {
     const payload = params('order');
     if (!payload) return;
     const response = await request('/importOrder', payload);
-    console.log(response);
+    console.log('response:', response);
+
+    // saving response in variable
+    const message = response.message;
+
+    // Construct the object with the required fields
+    const savedOrderDetails: SavedOrderDetails = {
+        profileName: message.profileName,
+        shipProfileId: message.shipProfileId,
+        totalAmount: message.totalAmount,
+        items: message.items,
+        shipTotal: message.shipTotal
+    };
+
+    // Save to session storage
+    saveToStorage('savedOrderDetails', savedOrderDetails, 'session');
+    console.log('savedOrder:', savedOrderDetails);
+
+    // (Optional) Read again if needed
+    // const storedDetails = getFromStorage('savedOrderDetails', 'session');
+    // console.log('Saved Order Details:', storedDetails);
+
     if (response.result !== "SUCCESS") return;
     router.push('orderconfirmation')
 };

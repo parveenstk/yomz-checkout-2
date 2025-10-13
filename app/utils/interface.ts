@@ -118,3 +118,17 @@ export interface AllCountries extends Country {
 export interface IpAddress {
     ip: string
 }
+
+export interface SavedOrderDetails {
+    profileName: string;
+    shipProfileId: number;
+    totalAmount: string;
+    shipTotal: string;
+    items: OrderDetail[];
+}
+
+export interface OrderDetail {
+    name: string
+    price: string;
+    title: string;
+}
