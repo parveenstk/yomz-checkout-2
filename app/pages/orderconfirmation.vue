@@ -21,7 +21,7 @@ onMounted(() => {
     <section class="lg:py-10 py-4 bg-[#e9e9e9]">
 
         <div class="max-w-3xl mx-auto">
-            <NuxtImg class="w-50 mx-auto mb-8" src="/images/logo.png" :placeholder="[70, 28, 50, 1]" alt="yomz-logo" />
+            <NuxtImg class="mx-auto mb-8" src="/images/logo.png" width="200" height="80" loading="eager" alt="yomz-logo" />
             <h1 class="lg:text-3xl text-2xl extrablod text-center lg:px-0 px-3">Congratulations! Your Order Is Complete!
             </h1>
             <p class="text-center lg:text-lg text-xs lg:px-0 px-3">
