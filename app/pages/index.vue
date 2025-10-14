@@ -122,7 +122,7 @@ const switchGummyType = (type: string) => {
 onMounted(async () => {
 
     // Query Campaign
-    await queryCampaign();
+    // await queryCampaign();
 
     // Getting all countries
     await countries();
@@ -147,31 +147,9 @@ onMounted(async () => {
     // Import Click
     await importClick();
 
-    // Import Lead
-    // await importLead()
-    // console.log('checkoutStore:', JSON.stringify(checkoutStore.allProducts[0]!, null, 2));
-
-    // const campaignProductId = checkoutStore.allProducts[0]?.campaignProductId;
-    // const allProducts = checkoutStore.allProducts
-    // console.log('allProducts:', allProducts);
-
-    // console.log("gummyProductss:", gummyProductss)
-
-    // const variants = checkoutStore.allProducts
-    // const variants = checkoutStore.allProducts[0]!.variants[0]
-    // console.log('variants:', variants);
-
     const keysToExtract: (keyof CampaignVariant)[] = [
         "price", "title", "variantDetailId", "variantName1", "productSku", "imageUrl", "isOutOfStock",
     ];
-
-    // const extractedValues = keysToExtract.reduce((obj, key) => {
-    //     obj[key] = variants?.[key] ?? null;
-    //     return obj;
-    // }, {} as Partial<Record<keyof CampaignVariant, any>>);
-
-    // console.log('extractedValues', extractedValues);
-
 })
 
 watch(paymentMethod, (newValue) => {
@@ -355,7 +333,7 @@ watch(paymentMethod, (newValue) => {
                         <!-- <p class="uppercase">{{ value.shipping }}</p> -->
                         <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
                             value.shipping
-                            }} Shipping</p>
+                        }} Shipping</p>
 
                     </div>
 
@@ -451,11 +429,11 @@ watch(paymentMethod, (newValue) => {
                                             placeholder="First Name" :class="[
                                                 'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                                 errors.firstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500'
-                                            ]" maxlength="12" />
+                                            ]" maxlength="16" />
                                         <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
-                                        <span v-if="errors.firstName" class="ml-2 text-sm text-[#e6193c]">
+                                        <p v-if="errors.firstName" class="ml-2 mt-1 text-sm text-[#e6193c]">
                                             {{ errors.firstName }}
-                                        </span>
+                                        </p>
                                     </div>
 
                                     <!-- Last Name -->
@@ -465,9 +443,9 @@ watch(paymentMethod, (newValue) => {
                                             :class="[
                                                 'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                                 errors.lastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                            maxlength="12" />
+                                            maxlength="16" />
                                         <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
-                                        <span v-if="errors.lastName" class="ml-2 text-sm text-[#e6193c]">
+                                        <span v-if="errors.lastName" class="ml-2 mt-1 text-sm text-[#e6193c]">
                                             {{ errors.lastName }}
                                         </span>
                                     </div>
@@ -1007,8 +985,8 @@ watch(paymentMethod, (newValue) => {
                             <!-- Guarantee Section -->
                             <div
                                 class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
-                                <NuxtImg src="/images/guarantee.png" alt="guarantee.png"
-                                    class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1" />
+                                <NuxtImg src="/images/guarantee.png" alt="guarantee.png" width="98" height="100"
+                                    class="mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1" />
                                 <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
                                     Your order today is protected by our ridiculously iron-clad Picky Momz 90-day
                                     <span class="font-bold">200% Happiness Guarantee.</span>
