@@ -10,7 +10,7 @@
         <article v-for="(review, index) in reviewsData" :key="index"
             :class="[`py-5 px-3 border-[#e7e7e7]`, index === 2 ? '' : 'border-b']">
             <div class="flex items-center gap-4">
-                <img :src="review.img" alt="" class="w-12 h-12 rounded-full object-cover" />
+                <NuxtImg :src="review.img" alt="" class="w-12 h-12 rounded-full object-cover" />
                 <div class="flex-1 min-w-0">
                     <div class="flex items-baseline gap-2">
                         <h3 class="font-semibold text-gray-900 truncate">{{ review.name }}</h3>

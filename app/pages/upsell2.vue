@@ -29,7 +29,7 @@
                     <div class="p-3">
                         <p class="text-5xl extrablod text-[#65a2b7]">1 PERSON</p>
                         <p class="text-2xl font-black mb-2">28 Day Supply</p>
-                        <img src="/images/desktop-bag-1.png" class="mb-3">
+                        <NuxtImg src="/images/desktop-bag-1.png" class="mb-3" />
 
                         <del class="block text-3xl  text-gray-500">$79.99</del>
                         <p class="flex gap-3 items-center justify-center">
@@ -60,7 +60,7 @@
                     <div class="p-3">
                         <p class="text-5xl extrablod text-[#196580]">3 PERSON</p>
                         <p class="text-2xl font-black mb-2">28 Day Supply Each</p>
-                        <img src="/images/desktop-bag-3.png" class="mb-3">
+                        <NuxtImg src="/images/desktop-bag-3.png" class="mb-3" />
 
                         <del class="block text-3xl  text-gray-500">$239.97</del>
                         <p class="flex gap-3 items-center justify-center">
@@ -72,11 +72,11 @@
                         <p class="block text-lg font-black my-1">$1.14 per day</p>
                         <p
                             class="flex w-full items-center justify-start gap-1 bg-[#E6193C] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
-                            <img src="/images/white-check.svg" class="h-6">4 FREE BONUSES!
+                            <NuxtImg src="/images/white-check.svg" class="h-6" />4 FREE BONUSES!
                         </p>
                         <p
                             class="flex w-full items-center justify-start gap-1 bg-[#196580] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
-                            <img src="/images/white-check.svg" class="h-6">FREE US SHIPPING!
+                            <NuxtImg src="/images/white-check.svg" class="h-6" />FREE US SHIPPING!
                         </p>
                         <button type="button" class="rounded-xl block w-full text-center p-3 bg-[#FFEB00] text-black">
                             <span class="block text-3xl extrablod">ADD TO ORDER</span>
@@ -94,7 +94,7 @@
                     <div class="p-3 py-4">
                         <p class="text-5xl extrablod text-[#1f94bd]">2 PERSON</p>
                         <p class="text-2xl font-black mb-2">28 Day Supply Each</p>
-                        <img src="/images/desktop-bag-2.png" class="mb-3">
+                        <NuxtImg src="/images/desktop-bag-2.png" class="mb-3" />
 
                         <del class="block text-3xl  text-gray-500">$159.98</del>
                         <p class="flex gap-3 items-center justify-center">
@@ -105,11 +105,11 @@
                         <p class="block text-lg font-black my-1">$1.39 per day</p>
                         <p
                             class="flex w-full items-center justify-start gap-1 bg-[#E6193C] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
-                            <img src="/images/white-check.svg" class="h-6">4 FREE BONUSES!
+                            <NuxtImg src="/images/white-check.svg" class="h-6" />4 FREE BONUSES!
                         </p>
                         <p
                             class="flex w-full items-center justify-start gap-1 bg-[#196580] py-1 pl-2 mb-2 rounded-lg text-white font-bold">
-                            <img src="/images/white-check.svg" class="h-6">FREE US SHIPPING!
+                            <NuxtImg src="/images/white-check.svg" class="h-6" />FREE US SHIPPING!
                         </p>
                         <button type="button" class="rounded-xl block w-full text-center p-3 bg-[#FFEB00] text-black">
                             <span class="block text-3xl extrablod">ADD TO ORDER</span>

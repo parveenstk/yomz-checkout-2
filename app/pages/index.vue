@@ -194,7 +194,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Main Image -->
                     <div class="relative overflow-hidden rounded-xl shadow-lg">
-                        <img :src="currentSlide" alt="Carousel Image"
+                        <NuxtImg :src="currentSlide" alt="Carousel Image"
                             class="w-full  object-cover transition duration-500" />
 
                         <!-- Prev Button -->
@@ -213,10 +213,10 @@ watch(paymentMethod, (newValue) => {
                     <!-- Thumbnails -->
                     <div class="flex justify-center space-x-2">
                         <template v-for="(slide, index) in slides" :key="index">
-                            <img :src="slide" @click="goTo(index)" :class="activeSlide === index
+                            <NuxtImg :src="slide" @click="goTo(index)" :class="activeSlide === index
                                 ? 'ring-2 ring-blue-500 opacity-100'
                                 : 'opacity-60 hover:opacity-100'"
-                                class="w-12 h-12 lg:w-20 lg:h-20 object-cover rounded cursor-pointer transition p-1">
+                                class="w-12 h-12 lg:w-20 lg:h-20 object-cover rounded cursor-pointer transition p-1" />
                         </template>
                     </div>
                 </div>
@@ -236,7 +236,7 @@ watch(paymentMethod, (newValue) => {
                 <!-- Points -->
                 <div class="hidden lg:block space-y-4 text-left">
                     <div v-for="point in keyPoints" class="flex items-start">
-                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
+                        <NuxtImg src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1" />
                         <p class="text-gray-700">{{ point }}</p>
                     </div>
                 </div>
@@ -256,7 +256,7 @@ watch(paymentMethod, (newValue) => {
             class="max-w-[1200px] flex bg-yellow-200 border border-yellow-300 rounded-md lg:px-4 px-2  py-2 lg:py-6 items-center justify-center text-sm sm:text-base text-gray-800 font-medium mx-2 lg:mx-auto">
 
             <!-- Fire Icon -->
-            <img src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0">
+            <NuxtImg src="/images/fire.svg" alt="Fire" class="w-8 h-8 sm:w-8 sm:h-8 mr-2 flex-shrink-0" />
 
             <!-- Text -->
             <p class="text-center text-lg extrablod">
@@ -358,7 +358,7 @@ watch(paymentMethod, (newValue) => {
                     </div>
 
                     <!-- Red Arrow -->
-                    <img v-if="value.id === 2" src="/images/redarrow.svg"
+                    <NuxtImg v-if="value.id === 2" src="/images/redarrow.svg"
                         class="w-8 lg:w-12 absolute lg:-left-10 -left-5" alt="Best Seller Arrow" />
                 </div>
 
@@ -400,7 +400,7 @@ watch(paymentMethod, (newValue) => {
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <img src="/images/paypal.png" alt="PayPal" class="lg:h-10 h-6" />
+                        <NuxtImg src="/images/paypal.png" alt="PayPal" class="lg:h-10 h-6" />
                     </div>
                 </label>
 
@@ -423,7 +423,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Card Logos -->
                     <div class="flex lg:space-x-2 space-x-0">
-                        <img src="/images/payicons.svg" alt="cards-merchandise-icons" class="lg:h-10 h-6" />
+                        <NuxtImg src="/images/payicons.svg" alt="cards-merchandise-icons" class="lg:h-10 h-6" />
                     </div>
                 </label>
             </div>
@@ -485,7 +485,7 @@ watch(paymentMethod, (newValue) => {
                                 <!-- Phone -->
                                 <div class="flex items-center justify-center gap-3 w-full mt-4 m-0">
                                     <div class="flex items-center bg-white shadow-md px-4 rounded-md h-[58px]">
-                                        <img src="/images/flag.png" alt="US Flag" class="lg:h-5 h-4  mr-1">
+                                        <NuxtImg src="/images/flag.png" alt="US Flag" class="lg:h-5 h-4  mr-1" />
                                         <span class="text-gray font-bold">+1</span>
                                     </div>
                                     <input v-model="formFields.phoneNumber" name="phoneNumber" type="tel"
@@ -620,7 +620,7 @@ watch(paymentMethod, (newValue) => {
                                         :class="[
                                             'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                             errors.shipPostalCode ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                        maxlength="9" />
+                                        maxlength="10" />
                                     <span v-if="errors.shipPostalCode" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.shipPostalCode }}
                                     </span>
@@ -864,7 +864,7 @@ watch(paymentMethod, (newValue) => {
 
                                 <div class="flex items-center cursor-pointer w-fit mt-1">
                                     <!-- Arrow -->
-                                    <img src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
+                                    <NuxtImg src="/images/redarrow.svg" class="lg:w-6 w-6 arrowimg relative" />
 
                                     <!-- Circle with tick -->
                                     <div :class="['w-6 h-6 border-2 border-[#172969] shrink-0 rounded-full flex items-center justify-center',
@@ -900,7 +900,7 @@ watch(paymentMethod, (newValue) => {
                                 <div v-for="(item, index) in checkoutStore.cartData.slice(0, 2)" :key="item.productId"
                                     class="flex justify-between items-start mb-2 pt-2 first:pt-0">
                                     <div class="flex items-start space-x-4">
-                                        <img :src="item.productImage" alt="Product Image"
+                                        <NuxtImg :src="item.productImage" alt="Product Image"
                                             class="lg:w-18 lg:h-18 w-15 h-15 object-contain border rounded" />
                                         <div>
                                             <h3 class="font-semibold text-gray-900">{{ index === 0 ?
@@ -988,19 +988,25 @@ watch(paymentMethod, (newValue) => {
                             </div>
 
                             <!-- Checkout Button -->
-                            <button type="submit" @click="importLead"
+                            <button type="submit" v-if="!formStore.transactionStatus"
                                 :class="['w-full flex justify-center items-center py-3 rounded-lg cursor-pointer text-pixel', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white text-2xl']">
                                 {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
-                                <img v-if="paymentMethod === 'payPal'"
+                                <NuxtImg v-if="paymentMethod === 'payPal'"
                                     src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png"
-                                    alt="PayPal" class="h-6 ml-2">
+                                    alt="PayPal" class="h-6 ml-2" />
                             </button>
+
+                            <!-- Loader -->
+                            <div name="loader" v-if="formStore.transactionStatus"
+                                class="bg-[#1ab22c] hover:bg-[#169924] w-full flex justify-center items-center rounded-lg cursor-pointer text-pixel">
+                                <NuxtImg class="w-12 h-12 my-1" src="/images/loader.svg" alt="loader.svg" />
+                            </div>
 
                             <!-- Guarantee Section -->
                             <div
                                 class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
-                                <img src="/images/guarantee.png" alt=""
-                                    class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1">
+                                <NuxtImg src="/images/guarantee.png" alt="guarantee.png"
+                                    class="h-25 mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1" />
                                 <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
                                     Your order today is protected by our ridiculously iron-clad Picky Momz 90-day
                                     <span class="font-bold">200% Happiness Guarantee.</span>

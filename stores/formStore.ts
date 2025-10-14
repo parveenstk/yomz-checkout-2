@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'; 9
 import { reactive, ref, type Reactive } from 'vue';
 import { z, ZodError } from 'zod';
 import { useCheckoutStore } from './checkoutStore';
@@ -13,6 +13,12 @@ export const useFormStore = defineStore('formStore', () => {
 
     // same billing
     const sameBilling = ref(true);
+
+    // loader
+    const transactionStatus = ref(false);
+
+    // order details 
+    const orderDetails = ref({});
 
     const formFields: Reactive<FormFields> = reactive({
 
@@ -139,6 +145,8 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Submit method
     const formSubmit = async () => {
+        transactionStatus.value = true;
+
         // Clear previous errors
         Object.keys(errors).forEach((key) => {
             errors[key] = ''
@@ -151,14 +159,14 @@ export const useFormStore = defineStore('formStore', () => {
             return false;
         }
 
-        billSame()
+        billSame();
 
         // Use the active schema based on payment method
         const schema = activeSchema.value;
         if (!schema) {
             console.log('No schema available');
             return false;
-        }
+        };
 
         // Use the active schema based on payment method
         const result = schema.safeParse(formFields)
@@ -175,12 +183,14 @@ export const useFormStore = defineStore('formStore', () => {
                 }
             })
             console.log('errors:', JSON.stringify(errors, null, 2));
+            transactionStatus.value = false;
             return false
-        }
+        };
 
         await importLead();
         await importOrder();
         resetForm();
+        transactionStatus.value = false;
         console.log('Form is valid!')
         return true
     }
@@ -270,7 +280,8 @@ export const useFormStore = defineStore('formStore', () => {
             formFields.billingState = '';
             return;
         }
-        console.log("Ship me aay")
+        console.log("ship me aaya")
+
         formFields.shipCounty = value;
         checkoutStore.selectedStates = [...filteredStates];
         formFields.shipState = '';
@@ -285,6 +296,8 @@ export const useFormStore = defineStore('formStore', () => {
         validateField,
         billSame,
         handleBillSame,
-        handleCountry
+        handleCountry,
+        transactionStatus,
+        orderDetails
     }
 });
