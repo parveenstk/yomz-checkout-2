@@ -194,7 +194,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Main Image -->
                     <div class="relative overflow-hidden rounded-xl shadow-lg">
-                        <NuxtImg :src="currentSlide" alt="Carousel Image"
+                        <NuxtImg :src="currentSlide" :placeholder="true" alt="Carousel Image"
                             class="w-full  object-cover transition duration-500" />
 
                         <!-- Prev Button -->
@@ -213,7 +213,7 @@ watch(paymentMethod, (newValue) => {
                     <!-- Thumbnails -->
                     <div class="flex justify-center space-x-2">
                         <template v-for="(slide, index) in slides" :key="index">
-                            <NuxtImg :src="slide" @click="goTo(index)" :class="activeSlide === index
+                            <NuxtImg :placeholder="true" :src="slide" @click="goTo(index)" :class="activeSlide === index
                                 ? 'ring-2 ring-blue-500 opacity-100'
                                 : 'opacity-60 hover:opacity-100'"
                                 class="w-12 h-12 lg:w-20 lg:h-20 object-cover rounded cursor-pointer transition p-1" />
@@ -229,7 +229,8 @@ watch(paymentMethod, (newValue) => {
                     class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left hidden lg:block">
                     The Power of 18 Superfoods to Supercharge Your Family
                 </h2>
-                <h2 class="text-2xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
+                <h2
+                    class="text-2xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
                     The Power of 18 Superfoods <br>to Supercharge Your Family
                 </h2>
 
@@ -291,7 +292,8 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Right Text -->
                     <div class="text-center sm:text-center space-y-1">
-                        <p class="text-700 text-[#C91F3F] extrablod text-xl hidden lg:block">Your up to 60% Discount Has Been Applied</p>
+                        <p class="text-700 text-[#C91F3F] extrablod text-xl hidden lg:block">Your up to 60% Discount Has
+                            Been Applied</p>
                         <p class="text-700 text-[#C91F3F] extrablod text-xl lg:hidden">Your Discount Is Applied</p>
                         <p class="text-gray-700">Your Order Today Qualifies for a <span class="extrablod">Bulk
                                 Discount</span></p>
@@ -353,7 +355,7 @@ watch(paymentMethod, (newValue) => {
                         <!-- <p class="uppercase">{{ value.shipping }}</p> -->
                         <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
                             value.shipping
-                            }} Shipping</p>
+                        }} Shipping</p>
 
                     </div>
 
@@ -372,7 +374,7 @@ watch(paymentMethod, (newValue) => {
 
             </div>
 
-           <!-- old position of reviews -->
+            <!-- old position of reviews -->
 
         </div>
 
@@ -504,7 +506,7 @@ watch(paymentMethod, (newValue) => {
                         </div>
 
                         <!-- old positon of Reviews - Desktop Screen -->
-                        
+
                     </div>
 
                     <!-- STEP 5: SHIPPING ADDRESS -->
@@ -1020,12 +1022,12 @@ watch(paymentMethod, (newValue) => {
                                 </p>
                             </div>
                             <!-- Reviews - Desktop Screen -->
-                        <Reviews v-if="!isMobile" />
+                            <Reviews v-if="!isMobile" />
                         </div>
                     </div>
                 </form>
-                 <!-- Reviews - Mobile Screen -->
-            <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
+                <!-- Reviews - Mobile Screen -->
+                <Reviews v-if="isMobile" class="bg-white p-3 rounded-lg shadow mt-3" />
             </section>
 
         </div>
