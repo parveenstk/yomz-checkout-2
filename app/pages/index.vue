@@ -194,7 +194,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Main Image -->
                     <div class="relative overflow-hidden rounded-xl shadow-lg">
-                        <NuxtImg :src="currentSlide" :placeholder="true" alt="Carousel Image"
+                        <NuxtImg :src="currentSlide" width="509" height="460" alt="Carousel Image"
                             class="w-full  object-cover transition duration-500" />
 
                         <!-- Prev Button -->
@@ -213,7 +213,7 @@ watch(paymentMethod, (newValue) => {
                     <!-- Thumbnails -->
                     <div class="flex justify-center space-x-2">
                         <template v-for="(slide, index) in slides" :key="index">
-                            <NuxtImg :placeholder="true" :src="slide" @click="goTo(index)" :class="activeSlide === index
+                            <NuxtImg width="72" height="72" :src="slide" @click="goTo(index)" :class="activeSlide === index
                                 ? 'ring-2 ring-blue-500 opacity-100'
                                 : 'opacity-60 hover:opacity-100'"
                                 class="w-12 h-12 lg:w-20 lg:h-20 object-cover rounded cursor-pointer transition p-1" />
@@ -355,7 +355,7 @@ watch(paymentMethod, (newValue) => {
                         <!-- <p class="uppercase">{{ value.shipping }}</p> -->
                         <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
                             value.shipping
-                        }} Shipping</p>
+                            }} Shipping</p>
 
                     </div>
 
