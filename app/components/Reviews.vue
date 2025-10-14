@@ -2,8 +2,8 @@
     <div name="reviews-section">
         <h2
             class="text-3xl lg:text-2xl font-bold border-b text-centerc border-[#e7e7e7] lg:pb-4 pb-2 pt-4 mb-3 text-center">
-            <span class="md:inline hidden">Families Like You</span>
-            <span class="block lg:hidden">Moms Like You</span>
+            <!-- <span class="md:inline hidden">Families Like You</span> -->
+            <span class="block md:inline">Moms Like You</span>
             <span class="block md:inline"> Already Trust YOMZ</span>
         </h2>
 

@@ -202,29 +202,28 @@ watch(paymentMethod, (newValue) => {
             </div>
 
             <!-- Right: Text Content -->
-            <div class="space-y-4">
+            <div class="space-y-4  md:pr-[2.3rem] lg:pr-0">
                 <h2
-                    class="text-xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left hidden lg:block">
+                    class="text-4xl extrablod text-gray-900 leading-snug text-center md:text-left hidden lg:block">
                     The Power of 18 Superfoods to Supercharge Your Family
                 </h2>
-                <h2
-                    class="text-2xl md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
+                <h2 class="text-[1.4rem] md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
                     The Power of 18 Superfoods <br>to Supercharge Your Family
                 </h2>
 
                 <!-- Points -->
-                <div class="hidden lg:block space-y-4 text-left">
+                <div class="space-y-4 text-left">
                     <div v-for="point in keyPoints" class="flex items-start">
                         <NuxtImg src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1" />
                         <p class="text-gray-700">{{ point }}</p>
                     </div>
                 </div>
-                <div class="lg:hidden space-y-4 text-left">
+                <!-- <div class="lg:hidden space-y-4 text-left">
                     <div v-for="point in MobilekeyPoints" class="flex items-start">
                         <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
                         <p class="text-gray-700">{{ point }}</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -270,8 +269,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Right Text -->
                     <div class="text-center sm:text-center space-y-1">
-                        <p class="text-700 text-[#C91F3F] extrablod text-xl hidden lg:block">Your up to 60% Discount Has
-                            Been Applied</p>
+                        <p class="text-700 text-[#C91F3F] extrablod text-xl hidden lg:block">Your up to 60% Discount Has Been Applied</p>
                         <p class="text-700 text-[#C91F3F] extrablod text-xl lg:hidden">Your Discount Is Applied</p>
                         <p class="text-gray-700">Your Order Today Qualifies for a <span class="extrablod">Bulk
                                 Discount</span></p>
@@ -288,9 +286,9 @@ watch(paymentMethod, (newValue) => {
                 </div>
 
                 <!-- Gummies Selectors -->
-                <div v-else class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
+                <div v-else class="flex flex-wrap flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
                     <div v-for="value in gymmyTypeData" :key="value.id"
-                        class="flex items-center space-x-1 cursor-pointer relative select-none"
+                        class="flex items-center space-x-1 cursor-pointer relative select-none mb-4 lg:mb-0 last:mb-0"
                         @click="() => switchGummyType(value.id)">
                         <div class="w-6 h-6 border-2 shrink-0 rounded-full flex items-center justify-center ml-3 border-[#172969]"
                             :class="{ 'bg-[#172969]': checkoutStore.selectedGummyType === value.id }">

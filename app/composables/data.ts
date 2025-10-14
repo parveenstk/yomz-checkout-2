@@ -1,12 +1,12 @@
-export const keyPoints = [
-    "Fill in Your Family’s Nutrition Gaps and Help Transform Their Lives!",
-    "Packed with Vitamins, Antioxidants, and Nutrients from 18 Superfoods",
-    "One Serving Is the Phytonutrient Equal of 2 Servings of Fruits & Vegetables",
-    "Crafted to Support: Gut Health, Energy, Focus, Mood, Brain Activity, Immunity, Heart Function, Vision, Family Nutrition",
-    "Join 6,312 American families Boosting Their Nutrition.",
-];
+// export const keyPoints = [
+//     "Fill in Your Family’s Nutrition Gaps and Help Transform Their Lives!",
+//     "Packed with Vitamins, Antioxidants, and Nutrients from 18 Superfoods",
+//     "One Serving Is the Phytonutrient Equal of 2 Servings of Fruits & Vegetables",
+//     "Crafted to Support: Gut Health, Energy, Focus, Mood, Brain Activity, Immunity, Heart Function, Vision, Family Nutrition",
+//     "Join 6,312 American families Boosting Their Nutrition.",
+// ];
 
-export const MobilekeyPoints = [
+export const keyPoints = [
     "Fill in Your Family’s Nutrition Gaps and Help Transform Their Lives!",
     "Packed with Vitamins, Antioxidants, Prebiotics, and Probiotics",
     "One Serving Is the Phytonutrient Equal of 2 Servings of Fruits & Vegetables",
