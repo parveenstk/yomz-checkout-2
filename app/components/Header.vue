@@ -9,12 +9,12 @@
 
             <!-- Center: SSL Secure -->
             <div class="hidden lg:flex items-center gap-2">
-                <NuxtImg src="/images/ssl.png" alt="SSL" class="w-26" />
+                <NuxtImg src="/images/ssl.png" alt="SSL" width="104" height="46" />
             </div>
 
             <!-- Right: Flag + Contact -->
             <div class="flex items-center gap-2">
-                <NuxtImg src="/images/flag.png" alt="US Flag" class="w-16" />
+                <NuxtImg src="/images/flag.png" alt="US Flag" width="64" height="38" />
                 <div class="text-sm lg:text-sm text-gray-800 text-center">
                     <div class="hidden sm:block">
                         <span class="font-bold block text-lg">Contact Us:</span>

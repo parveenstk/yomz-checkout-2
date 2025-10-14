@@ -1,9 +1,11 @@
-import { defineStore } from 'pinia'; 9
+// import { defineStore } from 'pinia'; 9
+import { defineStore } from 'pinia';
 import { reactive, ref, type Reactive } from 'vue';
 import { z, ZodError } from 'zod';
 import { useCheckoutStore } from './checkoutStore';
 
 export const useFormStore = defineStore('formStore', () => {
+
     // Checkout Store
     const checkoutStore = useCheckoutStore();
 
@@ -76,7 +78,12 @@ export const useFormStore = defineStore('formStore', () => {
 
     const schema = z.object({
         // Basic
-        firstName: z.string().regex(nameRegex, 'Invalid first name'),
+        // firstName: z.string().regex(nameRegex, 'Required first name'),
+        firstName: z.string()
+            .nonempty('This field is required')
+            .min(2, 'First name must be at least 2 characters')
+            .max(15, 'First name must be at most 15 characters')
+            .regex(nameRegex, 'First name contains invalid characters'),
         lastName: z.string().optional(),
         email: z.email('Invalid email address'),
         phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number'),
@@ -143,6 +150,28 @@ export const useFormStore = defineStore('formStore', () => {
         billingPostalCode: '',
     })
 
+    const requiredFields: (keyof FormFields)[] = [
+        'firstName',
+        'email',
+        'phoneNumber',
+        'shipFirstName',
+        'shipStreetAddress',
+        'shipCity',
+        'shipCounty',
+        'shipState',
+        'shipPostalCode',
+        'creditCardNumber',
+        'cardCVV',
+        'expiryMonth',
+        'expiryYear',
+        'billingFirstName',
+        'billingStreetAddress',
+        'billingCity',
+        'billingCounty',
+        'billingState',
+        'billingPostalCode',
+    ];
+
     // Submit method
     const formSubmit = async () => {
         transactionStatus.value = true;
@@ -161,6 +190,20 @@ export const useFormStore = defineStore('formStore', () => {
 
         billSame();
 
+        // Manually check required fields for empty string
+        let hasEmpty = false;
+        requiredFields.forEach(field => {
+            if (!formFields[field] || formFields[field].toString().trim() === '') {
+                errors[field] = 'This field is required.';
+                hasEmpty = true;
+            }
+        });
+
+        if (hasEmpty) {
+            transactionStatus.value = false;
+            return false;  // stop submission because some required fields are empty
+        }
+
         // Use the active schema based on payment method
         const schema = activeSchema.value;
         if (!schema) {
@@ -170,8 +213,8 @@ export const useFormStore = defineStore('formStore', () => {
 
         // Use the active schema based on payment method
         const result = schema.safeParse(formFields)
-        console.log('formFields', JSON.stringify(formFields, null, 2))
-        console.log('Using schema for:', paymentMethod.value)
+        // console.log('formFields', JSON.stringify(formFields, null, 2))
+        // console.log('Using schema for:', paymentMethod.value)
 
         if (!result.success) {
             const zodError = result.error as ZodError
@@ -191,7 +234,7 @@ export const useFormStore = defineStore('formStore', () => {
         await importOrder();
         resetForm();
         transactionStatus.value = false;
-        console.log('Form is valid!')
+        // console.log('Form is valid!')
         return true
     }
 
