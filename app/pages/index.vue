@@ -122,7 +122,7 @@ const switchGummyType = (type: string) => {
 onMounted(async () => {
 
     // Query Campaign
-    // await queryCampaign();
+    await queryCampaign();
 
     // Getting all countries
     await countries();
