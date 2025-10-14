@@ -62,9 +62,9 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Zod schema
     const nameRegex = /^[A-Za-zÀ-ÿ\-'\s]{2,15}$/
-    const cityRegex = /^[A-Za-zÀ-ÿ\s\-]{2,50}$/
+    const cityRegex = /^[A-Za-zÀ-ÿ\s\-]{2,15}$/
     const stateRegex = /^[A-Z]{2}$/
-    const postalCodeRegex = /^\d{5}(-\d{4})?$/
+    const postalCodeRegex = /^\d{5,10}$/
     const phoneRegex = /^\+?[0-9\s\-]{10,15}$/
     const streetRegex = /^[A-Za-z0-9À-ÿ\s,'\-\.]{5,100}$/
 
@@ -78,41 +78,83 @@ export const useFormStore = defineStore('formStore', () => {
 
     const schema = z.object({
         // Basic
-        // firstName: z.string().regex(nameRegex, 'Required first name'),
         firstName: z.string()
             .nonempty('This field is required')
             .min(2, 'First name must be at least 2 characters')
             .max(15, 'First name must be at most 15 characters')
-            .regex(nameRegex, 'First name contains invalid characters'),
+            .regex(nameRegex, 'First name must contain only letters'),
         lastName: z.string().optional(),
         email: z.email('Invalid email address'),
-        phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number'),
+        phoneNumber: z.string()
+            .nonempty('This field is required.')
+            .min(10, 'Phone number must be at least 10 digits')
+            .max(15, 'Phone number must be at most 15 digits')
+            .regex(phoneRegex, 'Phone contains only numbers'),
 
-        // Shipping
-        shipFirstName: z.string().regex(nameRegex, 'Invalid shipping first name'),
+        // Shipping Address
+        shipFirstName: z.string()
+            .nonempty('This field is required.')
+            .min(2, 'Shipping first name must be at least 2 characters')
+            .max(15, 'Shipping first name must be at most 15 characters')
+            .regex(nameRegex, 'Shipping first name contains only characters'),
+
         shipLastName: z.string().optional(),
-        shipStreetAddress: z.string().regex(streetRegex, 'Invalid street address'),
+        shipStreetAddress: z.string()
+            .nonempty('This field is required.')
+            .min(5, 'Street address must be at least 5 characters')
+            .max(100, 'Street address must be at most 100 characters')
+            .regex(streetRegex, 'Invalid street address'),
+
         shipApptsAddress: z.string().optional(),
-        shipCity: z.string().regex(cityRegex, 'Invalid city'),
+        shipCity: z.string()
+            .nonempty('This field is required.')
+            .min(2, 'City must be at least 2 characters.')
+            .max(15, 'City must be at most 15 characters.')
+            .regex(cityRegex, 'Invalid city name.'),
         shipCounty: z.string().regex(cityRegex, 'Invalid county'),
         shipState: z.string().regex(stateRegex, 'Invalid state (use 2-letter code)'),
-        shipPostalCode: z.string().regex(postalCodeRegex, 'Invalid postal code'),
+        shipPostalCode: z.string()
+            .nonempty('This field is required.')
+            .min(5, 'Postal code must be at least 5 digits.')
+            .max(10, 'Postal code must be at most 10 digits.')
+            .regex(/^\d{5,10}$/, 'Postal code must be between 5 and 10 digits'),
 
         // Credit card
-        creditCardNumber: z.string().regex(/^\d{15,16}$/, 'Invalid credit card number'),
+        creditCardNumber: z.string()
+            .nonempty('This field is required.')
+            .min(15, 'Credit card number must be at least 15 digits')
+            .max(16, 'Credit card number must be at most 16 digits')
+            .regex(/^\d{15,16}$/, 'Invalid credit card number'),
+
         cardCVV: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
         expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Invalid month'),
         expiryYear: z.string().regex(/^\d{4}$/, 'Invalid year'),
 
-        // Billing
-        billingFirstName: z.string().regex(nameRegex, 'Invalid billing first name'),
+        // Billing Address
+        billingFirstName: z.string()
+            .nonempty('This field is required')
+            .min(2, 'First name must be at least 2 characters')
+            .max(15, 'First name must be at most 15 characters')
+            .regex(nameRegex, 'First name must contain only letters'),
         billingLastName: z.string().optional(),
-        billingStreetAddress: z.string().regex(streetRegex, 'Invalid billing street'),
+        billingStreetAddress: z.string()
+            .nonempty('This field is required.')
+            .min(5, 'Street address must be at least 5 characters')
+            .max(100, 'Street address must be at most 100 characters')
+            .regex(streetRegex, 'Invalid street address'),
         billingApptsAddress: z.string().optional(),
-        billingCity: z.string().regex(cityRegex, 'Invalid city'),
+        billingCity: z.string()
+            .nonempty('This field is required.')
+            .min(2, 'City must be at least 2 characters.')
+            .max(15, 'City must be at most 15 characters.')
+            .regex(cityRegex, 'Invalid city name.'),
         billingCounty: z.string().regex(cityRegex, 'Invalid county'),
         billingState: z.string().regex(stateRegex, 'Invalid state (use 2-letter code)'),
-        billingPostalCode: z.string().regex(postalCodeRegex, 'Invalid postal code')
+        billingPostalCode: z.string()
+            .nonempty('This field is required.')
+            .min(5, 'Postal code must be at least 5 digits.')
+            .max(10, 'Postal code must be at most 10 digits.')
+            .regex(/^\d{5,10}$/, 'Postal code must be between 5 and 10 digits'),
     });
 
     // Computed schema based on payment method
@@ -150,27 +192,14 @@ export const useFormStore = defineStore('formStore', () => {
         billingPostalCode: '',
     })
 
+    // Required Feilds
     const requiredFields: (keyof FormFields)[] = [
-        'firstName',
-        'email',
-        'phoneNumber',
-        'shipFirstName',
-        'shipStreetAddress',
-        'shipCity',
-        'shipCounty',
-        'shipState',
-        'shipPostalCode',
-        'creditCardNumber',
-        'cardCVV',
-        'expiryMonth',
-        'expiryYear',
-        'billingFirstName',
-        'billingStreetAddress',
-        'billingCity',
-        'billingCounty',
-        'billingState',
-        'billingPostalCode',
+        'firstName', 'email', 'phoneNumber', 'shipFirstName', 'shipStreetAddress', 'shipCity', 'shipCounty', 'shipState', 'shipPostalCode', 'creditCardNumber', 'cardCVV', 'expiryMonth', 'expiryYear',
+        // 'billingFirstName', 'billingStreetAddress', 'billingCity', 'billingCounty', 'billingState', 'billingPostalCode',
     ];
+
+    const billingRequiredFields: (keyof FormFields)[] =
+        ['billingFirstName', 'billingStreetAddress', 'billingCity', 'billingCounty', 'billingState', 'billingPostalCode',];
 
     // Submit method
     const formSubmit = async () => {
@@ -316,6 +345,8 @@ export const useFormStore = defineStore('formStore', () => {
     // Filter States
     const handleCountry = (value: string, type: string = 'ship') => {
         const filteredStates = checkoutStore.allCountries.filter(country => country.countryCode === value);
+        console.log('checkoutStore.allCountries:', checkoutStore.allCountries);
+
         if (type !== 'ship') {
             console.log("Working")
             formFields.billingCounty = value;

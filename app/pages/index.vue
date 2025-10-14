@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { cardExpiryMonths, cardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
+import { cardExpiryMonths, getCardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
 import Faq from '~/components/Faq.vue';
 import Footer from '~/components/Footer.vue';
 import Header from '~/components/Header.vue';
@@ -31,15 +31,15 @@ const paymentMethod = computed({
 // Gummy bags
 const selectedBag = ref(2);
 
-// add extra product
-// const extraProduct = ref(false);
-
 // track screen size
 const isMobile = ref(false)
 
 // carousel slider
 const activeSlide = ref(0)
 const currentSlide = computed(() => slides[activeSlide.value])
+
+// dynamic card expiry year
+const cardExpiryYears = getCardExpiryYears();
 
 const next = () => {
     activeSlide.value = (activeSlide.value + 1) % slides.length
@@ -163,8 +163,8 @@ watch(paymentMethod, (newValue) => {
     <Header />
 
     <section class="w-full pt-3 p-2">
-        <div class="max-w-[1200px] bg-white mx-auto grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 items-center 
-  lg:p-6 p-3 px-3 md:px-3 lg:px-8 border-[3px] lg:border-dashed border-solid border-[#000]">
+        <div class="max-w-[1200px] bg-white mx-auto grid grid-cols-1 md:grid-cols-[45%_55%] gap-8 items-center  
+            lg:p-6 p-3 px-3 md:px-3 lg:px-8 border-[3px] lg:border-dashed border-solid border-[#000]">
 
             <!-- Left: Image & Reasons -->
             <div class="flex flex-col items-center md:items-start text-center md:text-left">
@@ -203,11 +203,11 @@ watch(paymentMethod, (newValue) => {
 
             <!-- Right: Text Content -->
             <div class="space-y-4  md:pr-[2.3rem] lg:pr-0">
-                <h2
-                    class="text-4xl extrablod text-gray-900 leading-snug text-center md:text-left hidden lg:block">
+                <h2 class="text-4xl extrablod text-gray-900 leading-snug text-center md:text-left hidden lg:block">
                     The Power of 18 Superfoods to Supercharge Your Family
                 </h2>
-                <h2 class="text-[1.4rem] md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
+                <h2
+                    class="text-[1.4rem] md:text-2xl extrablod text-gray-900 leading-snug text-center md:text-left lg:hidden">
                     The Power of 18 Superfoods <br>to Supercharge Your Family
                 </h2>
 
@@ -218,12 +218,6 @@ watch(paymentMethod, (newValue) => {
                         <p class="text-gray-700">{{ point }}</p>
                     </div>
                 </div>
-                <!-- <div class="lg:hidden space-y-4 text-left">
-                    <div v-for="point in MobilekeyPoints" class="flex items-start">
-                        <img src="/images/rightarrow.svg" alt="" class="w-5 h-5 mr-3 flex-shrink-0 mt-1">
-                        <p class="text-gray-700">{{ point }}</p>
-                    </div>
-                </div> -->
             </div>
         </div>
     </section>
@@ -269,8 +263,7 @@ watch(paymentMethod, (newValue) => {
 
                     <!-- Right Text -->
                     <div class="text-center sm:text-center space-y-1">
-                        <p class="text-700 text-[#C91F3F] extrablod text-xl hidden lg:block">Your up to 60% Discount Has Been Applied</p>
-                        <p class="text-700 text-[#C91F3F] extrablod text-xl lg:hidden">Your Discount Is Applied</p>
+                        <p class="text-700 text-[#C91F3F] extrablod text-xl">Your Discount Is Applied</p>
                         <p class="text-gray-700">Your Order Today Qualifies for a <span class="extrablod">Bulk
                                 Discount</span></p>
                     </div>
@@ -286,7 +279,8 @@ watch(paymentMethod, (newValue) => {
                 </div>
 
                 <!-- Gummies Selectors -->
-                <div v-else class="flex flex-wrap flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
+                <div v-else
+                    class="flex flex-wrap flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 lg:space-x-6 mb-8">
                     <div v-for="value in gymmyTypeData" :key="value.id"
                         class="flex items-center space-x-1 cursor-pointer relative select-none mb-4 lg:mb-0 last:mb-0"
                         @click="() => switchGummyType(value.id)">
@@ -428,7 +422,6 @@ watch(paymentMethod, (newValue) => {
                                                 'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                                 errors.firstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500'
                                             ]" maxlength="16" />
-                                        <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
                                         <p v-if="errors.firstName" class="ml-2 mt-1 text-sm text-[#e6193c]">
                                             {{ errors.firstName }}
                                         </p>
@@ -438,14 +431,8 @@ watch(paymentMethod, (newValue) => {
                                     <div>
                                         <input v-model="formFields.lastName" name="lastName" type="text"
                                             placeholder="Last Name"
-                                            :class="[
-                                                'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                                errors.lastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                            maxlength="16" />
-                                        <!-- <span class="hidden ml-2 text-sm text-[#e6193c]"></span> -->
-                                        <span v-if="errors.lastName" class="ml-2 mt-1 text-sm text-[#e6193c]">
-                                            {{ errors.lastName }}
-                                        </span>
+                                            class="w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            maxlength=" 16" />
                                     </div>
 
                                 </div>
@@ -456,9 +443,9 @@ watch(paymentMethod, (newValue) => {
                                         'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                         errors.email ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
                                     maxlength="30" />
-                                <span v-if="errors.email" class="ml-2 text-sm text-[#e6193c]">
+                                <p v-if="errors.email" class="ml-2 text-sm text-[#e6193c]">
                                     {{ errors.email }}
-                                </span>
+                                </p>
 
                                 <!-- Phone -->
                                 <div class="flex items-center justify-center gap-3 w-full mt-4 m-0">
@@ -472,17 +459,14 @@ watch(paymentMethod, (newValue) => {
                                         :class="[
                                             'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                             errors.phoneNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                        maxlength="15" />
+                                        maxlength="16" />
                                 </div>
-                                <span v-if="errors.phoneNumber" class="ml-22 md:ml-25 text-sm text-[#e6193c]">
+                                <p v-if="errors.phoneNumber" class="ml-22 md:ml-25 text-sm text-[#e6193c]">
                                     {{ errors.phoneNumber }}
-                                </span>
+                                </p>
 
                             </div>
                         </div>
-
-                        <!-- old positon of Reviews - Desktop Screen -->
-
                     </div>
 
                     <!-- STEP 5: SHIPPING ADDRESS -->
@@ -503,10 +487,10 @@ watch(paymentMethod, (newValue) => {
                                             'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
 
                                             errors.shipFirstName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                        maxlength="12" />
-                                    <span v-if="errors.shipFirstName" class="ml-2 text-sm text-[#e6193c]">
+                                        maxlength="16" />
+                                    <p v-if="errors.shipFirstName" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.shipFirstName }}
-                                    </span>
+                                    </p>
                                 </div>
 
                                 <!-- Shipping - Last Name -->
@@ -519,9 +503,9 @@ watch(paymentMethod, (newValue) => {
 
                                             errors.shipLastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
                                         maxlength="12" />
-                                    <span v-if="errors.shipLastName" class="ml-2 text-sm text-[#e6193c]">
+                                    <p v-if="errors.shipLastName" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.shipLastName }}
-                                    </span>
+                                    </p>
                                 </div>
                             </div>
 
@@ -531,30 +515,30 @@ watch(paymentMethod, (newValue) => {
                                 placeholder="Street Address"
                                 :class="[
                                     'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                    errors.shipStreetAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="50" />
-                            <span v-if="errors.shipStreetAddress" class="ml-2 text-sm text-[#e6193c]">
+                                    errors.shipStreetAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="51" />
+                            <p v-if="errors.shipStreetAddress" class="ml-2 text-sm text-[#e6193c]">
                                 {{ errors.shipStreetAddress }}
-                            </span>
+                            </p>
 
                             <!-- Shipping -  Apartment or Suite (Optional) -->
                             <input v-model="formFields.shipApptsAddress" name="shipApptsAddress" type="text"
                                 placeholder="Apartment or Suite (Optional)"
                                 :class="[
                                     'w-full mb-4 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                    errors.shipApptsAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="50" />
-                            <span v-if="errors.shipApptsAddress" class="ml-2 text-sm text-[#e6193c]">
+                                    errors.shipApptsAddress ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="51" />
+                            <p v-if="errors.shipApptsAddress" class="ml-2 text-sm text-[#e6193c]">
                                 {{ errors.shipApptsAddress }}
-                            </span>
+                            </p>
 
                             <!-- Shipping - City -->
                             <input v-model="formFields.shipCity" name="shipCity" type="text" placeholder="City"
                                 @input="validateField('shipCity', ($event.target as HTMLInputElement).value)" :class="[
                                     'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                     errors.shipCity ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                maxlength="20" />
-                            <span v-if="errors.shipCity" class="ml-2 text-sm text-[#e6193c]">
+                                maxlength="16" />
+                            <p v-if="errors.shipCity" class="ml-2 text-sm text-[#e6193c]">
                                 {{ errors.shipCity }}
-                            </span>
+                            </p>
 
                             <!-- Shipping - Country -->
                             <select v-model="formFields.shipCounty" name="shipCounty"
@@ -567,9 +551,9 @@ watch(paymentMethod, (newValue) => {
                                     :value="country.countryCode">
                                     {{ country.countryName }}</option>
                             </select>
-                            <span v-if="errors.shipCounty" class="ml-2 text-sm text-[#e6193c]">
+                            <p v-if="errors.shipCounty" class="ml-2 text-sm text-[#e6193c]">
                                 {{ errors.shipCounty }}
-                            </span>
+                            </p>
 
                             <!-- Shipping - States -->
                             <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -585,9 +569,9 @@ watch(paymentMethod, (newValue) => {
                                             {{ state.stateName }}
                                         </option>
                                     </select>
-                                    <span v-if="errors.shipState" class="ml-2 text-sm text-[#e6193c]">
+                                    <p v-if="errors.shipState" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.shipState }}
-                                    </span>
+                                    </p>
                                 </div>
 
                                 <!--  Shipping - Postal Code -->
@@ -598,10 +582,10 @@ watch(paymentMethod, (newValue) => {
                                         :class="[
                                             'w-full m-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                             errors.shipPostalCode ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                        maxlength="10" />
-                                    <span v-if="errors.shipPostalCode" class="ml-2 text-sm text-[#e6193c]">
+                                        maxlength="11" />
+                                    <p v-if="errors.shipPostalCode" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.shipPostalCode }}
-                                    </span>
+                                    </p>
                                 </div>
                             </div>
 
@@ -612,9 +596,9 @@ watch(paymentMethod, (newValue) => {
                                 :class="[
                                     'w-full m-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                     errors.creditCardNumber ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']" maxlength="16">
-                            <span v-if="errors.creditCardNumber" class="ml-2 text-sm text-[#e6193c]">
+                            <p v-if="errors.creditCardNumber" class="ml-2 text-sm text-[#e6193c]">
                                 {{ errors.creditCardNumber }}
-                            </span>
+                            </p>
 
                             <!-- Security Code (3-4 Digits) -->
                             <input v-model="formFields.cardCVV" name="cardCVV" type="text"
@@ -624,9 +608,9 @@ watch(paymentMethod, (newValue) => {
 
                                     errors.cardCVV ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
                                 maxlength="4" />
-                            <span v-if="errors.cardCVV" class="ml-2 text-sm text-[#e6193c]">
+                            <p v-if="errors.cardCVV" class="ml-2 text-sm text-[#e6193c]">
                                 {{ errors.cardCVV }}
-                            </span>
+                            </p>
 
                             <!-- Card Expiry Month -->
                             <div class="mb-0 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -641,9 +625,9 @@ watch(paymentMethod, (newValue) => {
                                             month.name }}
                                         </option>
                                     </select>
-                                    <span v-if="errors.expiryMonth" class="ml-2 text-sm text-[#e6193c]">
+                                    <p v-if="errors.expiryMonth" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.expiryMonth }}
-                                    </span>
+                                    </p>
                                 </div>
 
                                 <!-- Card Expiry Year -->
@@ -658,9 +642,9 @@ watch(paymentMethod, (newValue) => {
                                             {{ year.name }}
                                         </option>
                                     </select>
-                                    <span v-if="errors.expiryYear" class="ml-2 text-sm text-[#e6193c]">
+                                    <p v-if="errors.expiryYear" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.expiryYear }}
-                                    </span>
+                                    </p>
                                 </div>
                             </div>
 
