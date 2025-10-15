@@ -339,15 +339,18 @@ export const useFormStore = defineStore('formStore', () => {
 
     // bill details same
     const billSame = () => {
-        // console.log("chala")
-        formFields.billingFirstName = formFields.shipFirstName
-        formFields.billingLastName = formFields.shipLastName
-        formFields.billingStreetAddress = formFields.shipStreetAddress
-        formFields.billingApptsAddress = formFields.shipApptsAddress
-        formFields.billingCity = formFields.shipCity
-        formFields.billingCounty = formFields.shipCounty
-        formFields.billingState = formFields.shipState
-        formFields.billingPostalCode = formFields.shipPostalCode
+        formFields.billingFirstName = formFields.shipFirstName;
+        formFields.billingLastName = formFields.shipLastName;
+        formFields.billingStreetAddress = formFields.shipStreetAddress;
+        formFields.billingApptsAddress = formFields.shipApptsAddress;
+        formFields.billingCity = formFields.shipCity;
+        formFields.billingCounty = formFields.shipCounty;
+        formFields.billingState = formFields.shipState;
+        formFields.billingPostalCode = formFields.shipPostalCode;
+
+        // updating the billing states dropdown
+        // handleCountry(formFields.shipCounty, 'bill');
+        // console.log('checkoutStore.allCountries', checkoutStore.allCountries);
 
         // Clear billing errors
         const billingKeys: (keyof FormFields)[] = [
@@ -359,11 +362,11 @@ export const useFormStore = defineStore('formStore', () => {
             'billingCounty',
             'billingState',
             'billingPostalCode'
-        ]
+        ];
 
         billingKeys.forEach(key => {
-            if (formFields[key] !== "") errors[key] = ''
-        })
+            if (formFields[key] !== "") errors[key] = '';
+        });
     };
 
     // Handle bill same status
@@ -377,7 +380,7 @@ export const useFormStore = defineStore('formStore', () => {
     // Filter States
     const handleCountry = (value: string, type: string = 'ship') => {
         const filteredStates = checkoutStore.allCountries.filter(country => country.countryCode === value);
-        console.log('checkoutStore.allCountries:', checkoutStore.allCountries);
+        // console.log('checkoutStore.allCountries:', checkoutStore.allCountries);
 
         if (type !== 'ship') {
             console.log("Working")

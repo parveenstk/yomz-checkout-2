@@ -11,7 +11,7 @@ onMounted(() => {
     if (savedOrderDetails && Array.isArray(savedOrderDetails.items)) {
         orderDetails.value = savedOrderDetails.items;
         totalAmount.value = savedOrderDetails.totalAmount || '0.00';
-        shippingAmount.value = savedOrderDetails.shipTotal || '0.00';
+        shippingAmount.value = savedOrderDetails.shipProfileId === 38 ? 'Free' : `$${savedOrderDetails.shipTotal}`;
     }
 });
 
@@ -21,7 +21,8 @@ onMounted(() => {
     <section class="lg:py-10 py-4 bg-[#e9e9e9]">
 
         <div class="max-w-3xl mx-auto">
-            <NuxtImg class="mx-auto mb-8" src="/images/logo.png" width="200" height="80" loading="eager" alt="yomz-logo" />
+            <NuxtImg class="mx-auto mb-8" src="/images/logo.png" width="200" height="80" loading="eager"
+                alt="yomz-logo" />
             <h1 class="lg:text-3xl text-2xl extrablod text-center lg:px-0 px-3">Congratulations! Your Order Is Complete!
             </h1>
             <p class="text-center lg:text-lg text-xs lg:px-0 px-3">
@@ -124,7 +125,7 @@ onMounted(() => {
                     <!-- shipping price -->
                     <p class="flex justify-between items-center">
                         <span class="font-bold">Shipping</span>
-                        <span class="font-bold">${{ shippingAmount }}</span>
+                        <span class="font-bold">{{ shippingAmount }}</span>
                     </p>
 
                     <!-- total amount -->

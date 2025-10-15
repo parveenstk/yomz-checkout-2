@@ -965,7 +965,7 @@ watch(paymentMethod, (newValue) => {
                             </div>
 
                             <p v-if="formStore.hasEmptyFields && formStore.hasAttemptedSubmit"
-                                class="ml-2 mb-0 text-red-600 font-semibold">
+                                class="ml-2 mb-0 text-red-600 font-semibold text-center">
                                 Please fill the required fields
                             </p>
 
