@@ -50,8 +50,7 @@
 }
 
 .text-pixel {
-    -webkit-text-stroke: 1px #ffffff;
-    -webkit-text-fill-color: white;
+    -webkit-text-stroke: 1px;
     letter-spacing: 1px;
 }
 

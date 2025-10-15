@@ -541,11 +541,11 @@ watch(paymentMethod, (newValue) => {
                             </p>
 
                             <!-- Shipping - Country -->
-                            <select v-model="formFields.shipCounty" name="shipCounty"
-                                @input="formStore.handleCountry(($event.target as HTMLInputElement).value), 'ship'"
-                                :class="[
-                                    'w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
-                                    errors.shipCounty ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
+                            <select v-model="formFields.shipCounty" name="shipCounty" @change="
+                                formStore.handleCountry(($event.target as HTMLInputElement).value, 'ship');
+                            formStore.validateField('shipCounty', ($event.target as HTMLInputElement).value);
+                            " :class="['w-full mb-0 mt-4 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                errors.shipCounty ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                 <option value="">-- Choose Country --</option>
                                 <option v-for="country in checkoutStore.availableCountires"
                                     :value="country.countryCode">
@@ -951,7 +951,7 @@ watch(paymentMethod, (newValue) => {
 
                             <!-- Checkout Button -->
                             <button type="submit" v-if="!formStore.transactionStatus"
-                                :class="['w-full flex justify-center items-center py-3 rounded-lg cursor-pointer text-pixel', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white text-2xl']">
+                                :class="['w-full mb-1 flex justify-center items-center py-3 rounded-lg cursor-pointer text-pixel', paymentMethod === 'payPal' ? 'bg-yellow-400 hover:bg-yellow-500 text-black' : 'bg-[#1ab22c] hover:bg-[#169924] text-white text-2xl']">
                                 {{ paymentMethod === 'payPal' ? 'CHECKOUT WITH' : 'COMPLETE PURCHASE' }}
                                 <NuxtImg v-if="paymentMethod === 'payPal'"
                                     src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png"
@@ -964,9 +964,14 @@ watch(paymentMethod, (newValue) => {
                                 <NuxtImg class="w-12 h-12 my-1" src="/images/loader.svg" alt="loader.svg" />
                             </div>
 
+                            <p v-if="formStore.hasEmptyFields && formStore.hasAttemptedSubmit"
+                                class="ml-2 mb-0 text-red-600 font-semibold">
+                                Please fill the required fields
+                            </p>
+
                             <!-- Guarantee Section -->
                             <div
-                                class="flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
+                                class="mt-6 flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
                                 <NuxtImg src="/images/guarantee.png" alt="guarantee.png" width="98" height="100"
                                     class="mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1" />
                                 <p class="text-gray-700 leading-[1.2] text-center sm:text-left">

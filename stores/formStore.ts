@@ -22,6 +22,12 @@ export const useFormStore = defineStore('formStore', () => {
     // order details 
     const orderDetails = ref({});
 
+    // check required fields
+    const hasEmptyFields = ref(false);
+
+    // check on submit required fields
+    const hasAttemptedSubmit = ref(false);
+
     const formFields: Reactive<FormFields> = reactive({
 
         // Basic fields
@@ -60,6 +66,17 @@ export const useFormStore = defineStore('formStore', () => {
         shipProfile: '36'
     })
 
+    // Watch form fields for changes and clear hasEmptyFields flag if all required fields are filled
+    watch(formFields, () => {
+        if (!hasAttemptedSubmit.value) return;
+
+        const anyEmpty = requiredFields.some(field => {
+            return !formFields[field] || formFields[field].toString().trim() === '';
+        });
+
+        hasEmptyFields.value = anyEmpty;
+    }, { deep: true });
+
     // Zod schema
     const nameRegex = /^[A-Za-zÀ-ÿ\-'\s]{2,15}$/
     const cityRegex = /^[A-Za-zÀ-ÿ\s\-]{2,15}$/
@@ -70,10 +87,18 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Basic schema (always required for both payment methods)
     const basicSchema = z.object({
-        firstName: z.string().regex(nameRegex, 'Invalid first name'),
+        firstName: z.string()
+            .nonempty('This field is required')
+            .min(2, 'First name must be at least 2 characters')
+            .max(15, 'First name must be at most 15 characters')
+            .regex(nameRegex, 'First name must contain only letters'),
         lastName: z.string().optional(),
         email: z.email('Invalid email address'),
-        phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number'),
+        phoneNumber: z.string()
+            .nonempty('This field is required.')
+            .min(10, 'Phone number must be at least 10 digits')
+            .max(15, 'Phone number must be at most 15 digits')
+            .regex(phoneRegex, 'Phone contains only numbers'),
     });
 
     const schema = z.object({
@@ -117,7 +142,7 @@ export const useFormStore = defineStore('formStore', () => {
             .nonempty('This field is required.')
             .min(5, 'Postal code must be at least 5 digits.')
             .max(10, 'Postal code must be at most 10 digits.')
-            .regex(/^\d{5,10}$/, 'Postal code must be between 5 and 10 digits'),
+            .regex(postalCodeRegex, 'Postal code must be between 5 and 10 digits'),
 
         // Credit card
         creditCardNumber: z.string()
@@ -154,7 +179,7 @@ export const useFormStore = defineStore('formStore', () => {
             .nonempty('This field is required.')
             .min(5, 'Postal code must be at least 5 digits.')
             .max(10, 'Postal code must be at most 10 digits.')
-            .regex(/^\d{5,10}$/, 'Postal code must be between 5 and 10 digits'),
+            .regex(postalCodeRegex, 'Postal code must be between 5 and 10 digits'),
     });
 
     // Computed schema based on payment method
@@ -194,8 +219,7 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Required Feilds
     const requiredFields: (keyof FormFields)[] = [
-        'firstName', 'email', 'phoneNumber', 'shipFirstName', 'shipStreetAddress', 'shipCity', 'shipCounty', 'shipState', 'shipPostalCode', 'creditCardNumber', 'cardCVV', 'expiryMonth', 'expiryYear',
-        // 'billingFirstName', 'billingStreetAddress', 'billingCity', 'billingCounty', 'billingState', 'billingPostalCode',
+        'firstName', 'email', 'phoneNumber', 'shipFirstName', 'shipStreetAddress', 'shipCity', 'shipCounty', 'shipState', 'shipPostalCode', 'creditCardNumber', 'cardCVV', 'expiryMonth', 'expiryYear'
     ];
 
     const billingRequiredFields: (keyof FormFields)[] =
@@ -203,6 +227,7 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Submit method
     const formSubmit = async () => {
+        hasAttemptedSubmit.value = true;
         transactionStatus.value = true;
 
         // Clear previous errors
@@ -227,6 +252,7 @@ export const useFormStore = defineStore('formStore', () => {
                 hasEmpty = true;
             }
         });
+        hasEmptyFields.value = hasEmpty;
 
         if (hasEmpty) {
             transactionStatus.value = false;
@@ -255,14 +281,18 @@ export const useFormStore = defineStore('formStore', () => {
                 }
             })
             console.log('errors:', JSON.stringify(errors, null, 2));
+            // hasEmptyFields.value = true;
+            hasEmptyFields.value = false;
+            hasAttemptedSubmit.value = false;
             transactionStatus.value = false;
-            return false
+            return false;
         };
 
         await importLead();
         await importOrder();
         resetForm();
         transactionStatus.value = false;
+        hasEmptyFields.value = false;
         // console.log('Form is valid!')
         return true
     }
@@ -272,7 +302,9 @@ export const useFormStore = defineStore('formStore', () => {
         Object.keys(formFields).forEach((key) => {
             formFields[key as keyof FormFields] = ''
         });
-        paymentMethod.value = null; // Reset payment method too
+        paymentMethod.value = null; // Reset payment method too 
+        hasEmptyFields.value = false;
+        hasAttemptedSubmit.value = false;
         console.log("🗑️ : All fields are clean now.");
     };
 
@@ -372,6 +404,8 @@ export const useFormStore = defineStore('formStore', () => {
         handleBillSame,
         handleCountry,
         transactionStatus,
-        orderDetails
+        orderDetails,
+        hasEmptyFields,
+        hasAttemptedSubmit
     }
 });

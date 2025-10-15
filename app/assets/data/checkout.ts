@@ -192,19 +192,6 @@ export const cardExpiryMonths = [
     { code: "12", name: "12 - December" }
 ];
 
-// export const cardExpiryYears = [
-//     { value: "2026", name: "2026" },
-//     { value: "2027", name: "2027" },
-//     { value: "2028", name: "2028" },
-//     { value: "2029", name: "2029" },
-//     { value: "2030", name: "2030" },
-//     { value: "2031", name: "2031" },
-//     { value: "2032", name: "2032" },
-//     { value: "2033", name: "2033" },
-//     { value: "2034", name: "2034" },
-//     { value: "2035", name: "2035" }
-// ];
-
 export const getCardExpiryYears = (
     startYear = new Date().getFullYear(),
     numYears = 10): { value: string; name: string }[] =>

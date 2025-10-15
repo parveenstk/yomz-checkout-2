@@ -14,6 +14,7 @@
     "@pinia/nuxt": "^0.11.2",
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.12.1",
+    "braintree-web": "^3.130.1",
     "nuxt": "^4.1.1",
     "pinia": "^3.0.3",
     "tailwindcss": "^4.1.13",
