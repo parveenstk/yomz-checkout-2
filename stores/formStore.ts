@@ -93,7 +93,7 @@ export const useFormStore = defineStore('formStore', () => {
             .max(15, 'First name must be at most 15 characters')
             .regex(nameRegex, 'First name must contain only letters'),
         lastName: z.string().optional(),
-        email: z.email('Invalid email address'),
+        email: z.email('Invalid email address').nonempty('This field is required'),
         phoneNumber: z.string()
             .nonempty('This field is required.')
             .min(10, 'Phone number must be at least 10 digits')
@@ -121,9 +121,13 @@ export const useFormStore = defineStore('formStore', () => {
             .nonempty('This field is required.')
             .min(2, 'Shipping first name must be at least 2 characters')
             .max(15, 'Shipping first name must be at most 15 characters')
-            .regex(nameRegex, 'Shipping first name contains only characters'),
+            .regex(nameRegex, 'Shipping first name contains only letters'),
 
-        shipLastName: z.string().optional(),
+        shipLastName: z.string()
+            .nonempty('This field is required.')
+            .min(2, 'Shipping first name must be at least 2 characters')
+            .max(15, 'Shipping first name must be at most 15 characters')
+            .regex(nameRegex, 'Shipping last name contains only letters'),
         shipStreetAddress: z.string()
             .nonempty('This field is required.')
             .min(5, 'Street address must be at least 5 characters')
@@ -219,7 +223,7 @@ export const useFormStore = defineStore('formStore', () => {
 
     // Required Feilds
     const requiredFields: (keyof FormFields)[] = [
-        'firstName', 'email', 'phoneNumber', 'shipFirstName', 'shipStreetAddress', 'shipCity', 'shipCounty', 'shipState', 'shipPostalCode', 'creditCardNumber', 'cardCVV', 'expiryMonth', 'expiryYear'
+        'firstName', 'email', 'phoneNumber', 'shipFirstName', 'shipLastName', 'shipStreetAddress', 'shipCity', 'shipCounty', 'shipState', 'shipPostalCode', 'creditCardNumber', 'cardCVV', 'expiryMonth', 'expiryYear'
     ];
 
     const billingRequiredFields: (keyof FormFields)[] =
@@ -339,18 +343,21 @@ export const useFormStore = defineStore('formStore', () => {
 
     // bill details same
     const billSame = () => {
+        const shipCounty = formFields.shipCounty;
+
         formFields.billingFirstName = formFields.shipFirstName;
         formFields.billingLastName = formFields.shipLastName;
         formFields.billingStreetAddress = formFields.shipStreetAddress;
         formFields.billingApptsAddress = formFields.shipApptsAddress;
         formFields.billingCity = formFields.shipCity;
-        formFields.billingCounty = formFields.shipCounty;
-        formFields.billingState = formFields.shipState;
+        formFields.billingCounty = shipCounty;
         formFields.billingPostalCode = formFields.shipPostalCode;
 
-        // updating the billing states dropdown
-        // handleCountry(formFields.shipCounty, 'bill');
-        // console.log('checkoutStore.allCountries', checkoutStore.allCountries);
+        // Update billing county and selected states
+        handleCountry(shipCounty, 'bill');
+
+        // Set billing state AFTER calling handleCountry
+        formFields.billingState = formFields.shipState;
 
         // Clear billing errors
         const billingKeys: (keyof FormFields)[] = [

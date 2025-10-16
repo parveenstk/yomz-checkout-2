@@ -502,7 +502,7 @@ watch(paymentMethod, (newValue) => {
                                             'w-full mb-0 p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
 
                                             errors.shipLastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']"
-                                        maxlength="12" />
+                                        maxlength="16" />
                                     <p v-if="errors.shipLastName" class="ml-2 text-sm text-[#e6193c]">
                                         {{ errors.shipLastName }}
                                     </p>
