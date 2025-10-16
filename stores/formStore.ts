@@ -139,9 +139,9 @@ export const useFormStore = defineStore('formStore', () => {
             .nonempty('This field is required.')
             .min(2, 'City must be at least 2 characters.')
             .max(15, 'City must be at most 15 characters.')
-            .regex(cityRegex, 'Invalid city name.'),
+            .regex(cityRegex, 'City name can only contain letters'),
         shipCounty: z.string().regex(cityRegex, 'Invalid county'),
-        shipState: z.string().regex(stateRegex, 'Invalid state (use 2-letter code)'),
+        shipState: z.string().regex(stateRegex, 'Invalid state'),
         shipPostalCode: z.string()
             .nonempty('This field is required.')
             .min(5, 'Postal code must be at least 5 digits.')
@@ -178,7 +178,7 @@ export const useFormStore = defineStore('formStore', () => {
             .max(15, 'City must be at most 15 characters.')
             .regex(cityRegex, 'Invalid city name.'),
         billingCounty: z.string().regex(cityRegex, 'Invalid county'),
-        billingState: z.string().regex(stateRegex, 'Invalid state (use 2-letter code)'),
+        billingState: z.string().regex(stateRegex, 'Invalid state'),
         billingPostalCode: z.string()
             .nonempty('This field is required.')
             .min(5, 'Postal code must be at least 5 digits.')
@@ -246,16 +246,34 @@ export const useFormStore = defineStore('formStore', () => {
             return false;
         }
 
-        billSame();
+        handleBillSame(sameBilling.value);
 
         // Manually check required fields for empty string
+        // let hasEmpty = false;
+        // requiredFields.forEach(field => {
+        //     if (!formFields[field] || formFields[field].toString().trim() === '') {
+        //         errors[field] = 'This field is required.';
+        //         hasEmpty = true;
+        //     }
+        // });
+
         let hasEmpty = false;
-        requiredFields.forEach(field => {
+
+        // Basic + Shipping + Payment
+        const allRequired = [...requiredFields];
+
+        // Add billing if using different billing address
+        if (!sameBilling.value) {
+            allRequired.push(...billingRequiredFields);
+        }
+
+        allRequired.forEach(field => {
             if (!formFields[field] || formFields[field].toString().trim() === '') {
                 errors[field] = 'This field is required.';
                 hasEmpty = true;
             }
         });
+
         hasEmptyFields.value = hasEmpty;
 
         if (hasEmpty) {
@@ -343,6 +361,8 @@ export const useFormStore = defineStore('formStore', () => {
 
     // bill details same
     const billSame = () => {
+        // Extra Protection
+        if (!sameBilling.value) return;
         const shipCounty = formFields.shipCounty;
 
         formFields.billingFirstName = formFields.shipFirstName;
@@ -376,13 +396,43 @@ export const useFormStore = defineStore('formStore', () => {
         });
     };
 
+    // clear billing fields when "use a different billing address"
+    const clearBillingFields = () => {
+        const billingKeys: (keyof FormFields)[] = [
+            'billingFirstName',
+            'billingLastName',
+            'billingStreetAddress',
+            'billingApptsAddress',
+            'billingCity',
+            'billingCounty',
+            'billingState',
+            'billingPostalCode'
+        ];
+
+        billingKeys.forEach(key => {
+            formFields[key] = '';
+            errors[key] = '';
+        });
+
+        // Clear selected states for billing as well
+        checkoutStore.selectedStatesBill = [];
+    };
+
     // Handle bill same status
     const handleBillSame = (status: boolean) => {
-        // console.log("haa bilsame");
         sameBilling.value = status;
-        console.log('sameBilling:', sameBilling.value);
+        // console.log('sameBilling:', sameBilling.value);
         if (status) billSame();
     };
+
+    // const handleBillSame = (status: boolean) => {
+    //     sameBilling.value = status;
+    //     if (status) {
+    //         billSame(); // copy shipping values
+    //     } else {
+    //         clearBillingFields(); // clear so user can enter manually
+    //     }
+    // };
 
     // Filter States
     const handleCountry = (value: string, type: string = 'ship') => {

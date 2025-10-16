@@ -139,13 +139,28 @@ export const importClick = async () => {
 // Fetch Import Lead
 export const importLead = async () => {
     // checkoutStore
+    console.log("importLead called");
     const checkoutStore = useCheckoutStore();
+
     const payload = params();
+    console.log("importLead → payload:", payload);
     if (!payload) return;
+
     const response = await request('/importLead', payload);
+    console.log("importLead → response:", response);
     if (response.result !== "SUCCESS") return;
+
     saveToStorage("orderId", response.message.orderId, "session");
     checkoutStore.orderId = response.message.orderId;
+    console.log('orderId:', getFromStorage('orderId', 'session'));
+
+    // const orderId = response.message.orderId;
+    // saveToStorage('orderId', orderId, 'session');
+    // const savedOrderId = getFromStorage('orderId', 'session')
+    // checkoutStore.orderId = savedOrderId ? savedOrderId : 'Not Found';
+    // console.log('checkoutStore.orderId:', checkoutStore.orderId);
+    // console.log('savedOrderId:', savedOrderId);
+
 };
 
 // Import Order
@@ -173,8 +188,8 @@ export const importOrder = async () => {
     console.log('savedOrder:', savedOrderDetails);
 
     // (Optional) Read again if needed
-    // const storedDetails = getFromStorage('savedOrderDetails', 'session');
-    // console.log('Saved Order Details:', storedDetails);
+    const storedDetails = getFromStorage('savedOrderDetails', 'session');
+    console.log('Saved Order Details:', storedDetails);
 
     if (response.result !== "SUCCESS") return;
     router.push('orderconfirmation')

@@ -13,6 +13,10 @@ onMounted(() => {
         totalAmount.value = savedOrderDetails.totalAmount || '0.00';
         shippingAmount.value = savedOrderDetails.shipProfileId === 38 ? 'Free' : `$${savedOrderDetails.shipTotal}`;
     }
+
+    setTimeout(() => {
+        cleanStorage();
+    }, 500)
 });
 
 </script>
