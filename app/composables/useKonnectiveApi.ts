@@ -126,52 +126,61 @@ export const queryCampaign = async () => {
 
 // Fetch Import Click 
 export const importClick = async () => {
+    const formStore = useFormStore();
     const response = await request('/importClick', {
         pageType: 'checkoutPage',
         requestUri: window.location.href,
         sessionId: getFromStorage('sessionId', 'session') || ''
     });
 
+    if (response.result !== 'SUCCESS') formStore.apiErrorAlert = { status: true, message: response.message };
+
+    // console.log('importClick response.resutl:', response.result)
+    // console.log('importClick response.message:', response.message)
     saveToStorage('sessionId', response.message.sessionId, 'session');
     console.log("sessionId:", getFromStorage('sessionId', 'session'));
 };
 
 // Fetch Import Lead
 export const importLead = async () => {
+    const formStore = useFormStore();
+
     // checkoutStore
     console.log("importLead called");
     const checkoutStore = useCheckoutStore();
 
     const payload = params();
-    console.log("importLead → payload:", payload);
+    // console.log("importLead → payload:", payload);
     if (!payload) return;
 
     const response = await request('/importLead', payload);
-    console.log("importLead → response:", response);
-    if (response.result !== "SUCCESS") return;
+    // console.log("importLead → response:", response);
+    if (response.result !== 'SUCCESS') {
+        formStore.apiErrorAlert = { status: true, message: response.message }
+        return;
+    };
 
     saveToStorage("orderId", response.message.orderId, "session");
     checkoutStore.orderId = response.message.orderId;
     console.log('orderId:', getFromStorage('orderId', 'session'));
-
-    // const orderId = response.message.orderId;
-    // saveToStorage('orderId', orderId, 'session');
-    // const savedOrderId = getFromStorage('orderId', 'session')
-    // checkoutStore.orderId = savedOrderId ? savedOrderId : 'Not Found';
-    // console.log('checkoutStore.orderId:', checkoutStore.orderId);
-    // console.log('savedOrderId:', savedOrderId);
-
 };
 
 // Import Order
 export const importOrder = async () => {
+    const formStore = useFormStore();
     const router = useRouter()
     const payload = params('order');
     if (!payload) return;
     const response = await request('/importOrder', payload);
-    console.log('response:', response);
+    console.log('importOrder response:', response);
 
     // saving response in variable
+    if (response.result !== 'SUCCESS') {
+        formStore.apiErrorAlert = { status: true, message: response.message };
+        return;
+    };
+    // console.log('formStore.apiErrorAlert:', formStore.apiErrorAlert);
+
     const message = response.message;
 
     // Construct the object with the required fields
@@ -190,8 +199,7 @@ export const importOrder = async () => {
     // (Optional) Read again if needed
     const storedDetails = getFromStorage('savedOrderDetails', 'session');
     console.log('Saved Order Details:', storedDetails);
-
-    if (response.result !== "SUCCESS") return;
+    formStore.resetForm(); // Reset form before redirection;
     router.push('orderconfirmation')
 };
 

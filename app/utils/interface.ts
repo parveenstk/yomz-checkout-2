@@ -132,3 +132,8 @@ export interface OrderDetail {
     price: string;
     title: string;
 }
+
+export interface ApiResponse {
+    result: string
+    message: string
+}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { cardExpiryMonths, getCardExpiryYears, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
+import { cardExpiryMonths, getCardExpiryYears, getValueMonth, gummyBagsSelector, gymmyTypeData, productData, slides, usStates } from '~/assets/data/checkout';
 import Faq from '~/components/Faq.vue';
 import Footer from '~/components/Footer.vue';
 import Header from '~/components/Header.vue';
@@ -38,9 +38,6 @@ const isMobile = ref(false)
 const activeSlide = ref(0)
 const currentSlide = computed(() => slides[activeSlide.value])
 
-// dynamic card expiry year
-const cardExpiryYears = getCardExpiryYears();
-
 const next = () => {
     activeSlide.value = (activeSlide.value + 1) % slides.length
 }
@@ -52,6 +49,31 @@ const prev = () => {
 const goTo = (index: number) => {
     activeSlide.value = index
 }
+
+const currentMonth = new Date().getMonth() + 1;
+const currentYear = new Date().getFullYear();
+const cardExpiryYears = ref(getCardExpiryYears());
+
+// Watch for expiryMonth changes
+watch(() => formFields.expiryMonth, (selectedMonth) => {
+    if (!selectedMonth) {
+        cardExpiryYears.value = getCardExpiryYears(currentYear);
+        return;
+    }
+
+    const selectedMonthNum = parseInt(selectedMonth, 10);
+
+    if (selectedMonthNum < currentMonth) {
+        cardExpiryYears.value = getCardExpiryYears(currentYear + 1);
+    } else {
+        cardExpiryYears.value = getCardExpiryYears(currentYear);
+    }
+
+    // Clear previously selected year if it no longer exists
+    if (!cardExpiryYears.value.find(y => y.value === formFields.expiryYear)) {
+        formFields.expiryYear = '';
+    }
+});
 
 // timer funtionality
 const minutes = ref(10)
@@ -156,8 +178,14 @@ watch(paymentMethod, (newValue) => {
     console.log('newValue:', newValue);
 });
 
+// watch(() => formFields.expiryMonth, (newVal) => {
+//     console.log('Month changed to:', newVal);
+// });
+
 </script>
 <template>
+    <!-- Alert -->
+    <Alert />
 
     <!-- Header Section -->
     <Header />
@@ -325,7 +353,7 @@ watch(paymentMethod, (newValue) => {
                         <!-- <p class="uppercase">{{ value.shipping }}</p> -->
                         <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
                             value.shipping
-                        }} Shipping</p>
+                            }} Shipping</p>
 
                     </div>
 
@@ -621,8 +649,8 @@ watch(paymentMethod, (newValue) => {
                                             'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
                                             errors.expiryMonth ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500']">
                                         <option value="">Card Month</option>
-                                        <option v-for="month in cardExpiryMonths" :key=month.code :value=month.code>{{
-                                            month.name }}
+                                        <option v-for="month in cardExpiryMonths" :key=month.code :value=month.code>
+                                            {{ month.name }}
                                         </option>
                                     </select>
                                     <p v-if="errors.expiryMonth" class="ml-2 text-sm text-[#e6193c]">
@@ -966,7 +994,7 @@ watch(paymentMethod, (newValue) => {
 
                             <p v-if="formStore.hasEmptyFields && formStore.hasAttemptedSubmit"
                                 class="ml-2 mb-0 text-red-600 font-semibold text-center">
-                                Please fill the required fields
+                                Please fill in the required fields.
                             </p>
 
                             <!-- Guarantee Section -->

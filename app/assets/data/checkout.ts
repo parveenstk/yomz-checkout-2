@@ -192,13 +192,17 @@ export const cardExpiryMonths = [
     { code: "12", name: "12 - December" }
 ];
 
-export const getCardExpiryYears = (
-    startYear = new Date().getFullYear(),
-    numYears = 10): { value: string; name: string }[] =>
-    Array.from({ length: numYears }, (_, i) => {
-        const year = startYear + i;
-        return { value: String(year), name: String(year) };
-    });
+export const getValueMonth = (): string => {
+    const month = new Date().getMonth() + 1; // 0-based, so +1
+    return month.toString().padStart(2, '0'); // Ensure format is "01", "02", ...
+};
+
+export const getCardExpiryYears =
+    (startYear = new Date().getFullYear(), numYears = 10): { value: string; name: string }[] =>
+        Array.from({ length: numYears }, (_, i) => {
+            const year = startYear + i;
+            return { value: String(year), name: String(year) };
+        });
 
 export const compareAtPrice: { [key: string]: { price: number, discount: number } } = {
     "1 Bag": { price: 79.99, discount: 40 },

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { reactive, ref, type Reactive } from 'vue';
 import { z, ZodError } from 'zod';
 import { useCheckoutStore } from './checkoutStore';
+import cardValidator from "card-validator";
 
 export const useFormStore = defineStore('formStore', () => {
 
@@ -27,6 +28,10 @@ export const useFormStore = defineStore('formStore', () => {
 
     // check on submit required fields
     const hasAttemptedSubmit = ref(false);
+
+    // importOrder response
+    // const apiErrorAlert = ref({})
+    const apiErrorAlert: Ref<{ status: boolean; message: string }> = ref({ status: false, message: "" })
 
     const formFields: Reactive<FormFields> = reactive({
 
@@ -155,6 +160,13 @@ export const useFormStore = defineStore('formStore', () => {
             .max(16, 'Credit card number must be at most 16 digits')
             .regex(/^\d{15,16}$/, 'Invalid credit card number'),
 
+        // creditCardNumber: z.string()
+        //     .min(12, "Card number is required")
+        //     .refine((val) => isValidCardNumber(val), {
+        //         message: "Invalid card number",
+        //     })
+        //     .regex(/^\d{15,16}$/, 'Invalid credit card number'),
+
         cardCVV: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
         expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Invalid month'),
         expiryYear: z.string().regex(/^\d{4}$/, 'Invalid year'),
@@ -185,6 +197,14 @@ export const useFormStore = defineStore('formStore', () => {
             .max(10, 'Postal code must be at most 10 digits.')
             .regex(postalCodeRegex, 'Postal code must be between 5 and 10 digits'),
     });
+
+    // BrainTree for credit card validation
+    const isValidCardNumber = (number: string): boolean => {
+        // if (checkoutStore.tester) return checkoutStore.tester
+        const valid = cardValidator;
+        const result = valid.number(number);
+        return result.isValid;
+    };
 
     // Computed schema based on payment method
     const activeSchema = computed(() => {
@@ -226,8 +246,9 @@ export const useFormStore = defineStore('formStore', () => {
         'firstName', 'email', 'phoneNumber', 'shipFirstName', 'shipLastName', 'shipStreetAddress', 'shipCity', 'shipCounty', 'shipState', 'shipPostalCode', 'creditCardNumber', 'cardCVV', 'expiryMonth', 'expiryYear'
     ];
 
-    const billingRequiredFields: (keyof FormFields)[] =
-        ['billingFirstName', 'billingStreetAddress', 'billingCity', 'billingCounty', 'billingState', 'billingPostalCode',];
+    const billingRequiredFields: (keyof FormFields)[] = [
+        'billingFirstName', 'billingStreetAddress', 'billingCity', 'billingCounty', 'billingState', 'billingPostalCode'
+    ];
 
     // Submit method
     const formSubmit = async () => {
@@ -247,15 +268,6 @@ export const useFormStore = defineStore('formStore', () => {
         }
 
         handleBillSame(sameBilling.value);
-
-        // Manually check required fields for empty string
-        // let hasEmpty = false;
-        // requiredFields.forEach(field => {
-        //     if (!formFields[field] || formFields[field].toString().trim() === '') {
-        //         errors[field] = 'This field is required.';
-        //         hasEmpty = true;
-        //     }
-        // });
 
         let hasEmpty = false;
 
@@ -312,7 +324,7 @@ export const useFormStore = defineStore('formStore', () => {
 
         await importLead();
         await importOrder();
-        resetForm();
+        // resetForm();
         transactionStatus.value = false;
         hasEmptyFields.value = false;
         // console.log('Form is valid!')
@@ -324,7 +336,7 @@ export const useFormStore = defineStore('formStore', () => {
         Object.keys(formFields).forEach((key) => {
             formFields[key as keyof FormFields] = ''
         });
-        paymentMethod.value = null; // Reset payment method too 
+        paymentMethod.value = "creditCard"; // Reset payment method too 
         hasEmptyFields.value = false;
         hasAttemptedSubmit.value = false;
         console.log("🗑️ : All fields are clean now.");
@@ -354,8 +366,6 @@ export const useFormStore = defineStore('formStore', () => {
             }
         } finally {
             formFields[key] = value; // update form values
-            // Call Import Lead
-            // await importLead();
         }
     };
 
@@ -425,15 +435,6 @@ export const useFormStore = defineStore('formStore', () => {
         if (status) billSame();
     };
 
-    // const handleBillSame = (status: boolean) => {
-    //     sameBilling.value = status;
-    //     if (status) {
-    //         billSame(); // copy shipping values
-    //     } else {
-    //         clearBillingFields(); // clear so user can enter manually
-    //     }
-    // };
-
     // Filter States
     const handleCountry = (value: string, type: string = 'ship') => {
         const filteredStates = checkoutStore.allCountries.filter(country => country.countryCode === value);
@@ -466,6 +467,8 @@ export const useFormStore = defineStore('formStore', () => {
         transactionStatus,
         orderDetails,
         hasEmptyFields,
-        hasAttemptedSubmit
+        hasAttemptedSubmit,
+        apiErrorAlert,
+        resetForm
     }
 });
