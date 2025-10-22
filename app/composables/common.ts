@@ -12,7 +12,6 @@ export const params = (type: string = "lead") => {
 
     if (type === 'lead') {
         if (!formFields.firstName || !formFields.lastName || !formFields.email) return;
-
     }
     const param: { [key: string]: string } = {
         sessionId: getFromStorage('sessionId', "session")!,
@@ -36,7 +35,7 @@ export const params = (type: string = "lead") => {
         emailOptIn: '1',
         salesUrl: window.location.href,
         pageType: 'checkout',
-        ipAddress: checkoutStore.ipAddress
+        ipAddress: checkoutStore.ipAddress,
     }
 
     // Product details

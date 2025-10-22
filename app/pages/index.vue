@@ -109,11 +109,15 @@ const addProductData = (id: number, variantId: number) => {
 const calculateTotalPrice = computed(() => {
     const subtotal = checkoutStore.cartData.reduce((a, p, i) => {
         return a += +p.productPrice
-    }, 0)
+    }, 0);
+    let shipping = 0;
+    if (checkoutStore.shipProfiles.length > 0) {
+        const shipProfile = checkoutStore.shipProfiles.filter(shipping => shipping.shipProfileId === +formStore.formFields.shipProfile);
+        if (shipProfile.length < 1) return;
+        shipping = shipProfile[0]?.shipPrice || 0;
+    } else return (0).toFixed(2);
 
-    const shipping = +checkoutStore.shipProfiles.filter(shipping => shipping.shipProfileId === +formStore.formFields.shipProfile)[0]?.shipPrice!;
-
-    return (subtotal + shipping).toFixed(2);
+    return (subtotal + Number(shipping)).toFixed(2);
 });
 
 // Calculate total compareAt price
@@ -121,9 +125,20 @@ const calculateComparePrice = () => {
     const subtotal = checkoutStore.cartData.reduce((a, p, i) => {
         return a += +p.compareAtPrice!
     }, 0)
+    // const shipping = +checkoutStore.shipProfiles.filter(shipping => shipping.shipProfileId === +formStore.formFields.shipProfile)[0]?.shipPrice!;
+    // return (subtotal + shipping).toFixed(2);
 
-    const shipping = +checkoutStore.shipProfiles.filter(shipping => shipping.shipProfileId === +formStore.formFields.shipProfile)[0]?.shipPrice!;
-    return (subtotal + shipping).toFixed(2);
+    let shipping = 0;
+    if (checkoutStore.shipProfiles.length > 0) {
+        const shipProfile = checkoutStore.shipProfiles.filter(shipping => shipping.shipProfileId === +formStore.formFields.shipProfile);
+        if (shipProfile.length < 1) return;
+        shipping = shipProfile[0]?.shipPrice || 0;
+    } else return (0).toFixed(2);
+
+    console.log('subtotal:', subtotal);
+    console.log('shipping:', shipping);
+
+    return (subtotal + Number(shipping)).toFixed(2);
 };
 
 // Switch Gummy Type
@@ -353,7 +368,7 @@ watch(paymentMethod, (newValue) => {
                         <!-- <p class="uppercase">{{ value.shipping }}</p> -->
                         <p class="uppercase">${{ value.id === 1 ? checkoutStore.shipProfiles[0]?.shipPrice :
                             value.shipping
-                            }} Shipping</p>
+                        }} Shipping</p>
 
                     </div>
 
@@ -458,9 +473,14 @@ watch(paymentMethod, (newValue) => {
                                     <!-- Last Name -->
                                     <div>
                                         <input v-model="formFields.lastName" name="lastName" type="text"
-                                            placeholder="Last Name"
-                                            class="w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            maxlength=" 16" />
+                                            @input="validateField('lastName', ($event.target as HTMLInputElement).value)"
+                                            placeholder="Last Name" :class="[
+                                                'w-full p-3 rounded-md h-[60px] bg-gray-100 focus:outline-none focus:ring-2',
+                                                errors.lastName ? 'border border-red-500 ring-[#e6193c]' : 'focus:ring-blue-500'
+                                            ]" maxlength="16" />
+                                        <p v-if="errors.lastName" class="ml-2 mt-1 text-sm text-[#e6193c]">
+                                            {{ errors.lastName }}
+                                        </p>
                                     </div>
 
                                 </div>

@@ -97,7 +97,11 @@ export const useFormStore = defineStore('formStore', () => {
             .min(2, 'First name must be at least 2 characters')
             .max(15, 'First name must be at most 15 characters')
             .regex(nameRegex, 'First name must contain only letters'),
-        lastName: z.string().optional(),
+        lastName: z.string()
+            .nonempty('This field is required.')
+            .min(2, 'Shipping first name must be at least 2 characters')
+            .max(15, 'Shipping first name must be at most 15 characters')
+            .regex(nameRegex, 'Last name contains only letters'),
         email: z.email('Invalid email address').nonempty('This field is required'),
         phoneNumber: z.string()
             .nonempty('This field is required.')
@@ -113,7 +117,11 @@ export const useFormStore = defineStore('formStore', () => {
             .min(2, 'First name must be at least 2 characters')
             .max(15, 'First name must be at most 15 characters')
             .regex(nameRegex, 'First name must contain only letters'),
-        lastName: z.string().optional(),
+        lastName: z.string()
+            .nonempty('This field is required.')
+            .min(2, 'Shipping first name must be at least 2 characters')
+            .max(15, 'Shipping first name must be at most 15 characters')
+            .regex(nameRegex, 'Last name contains only letters'),
         email: z.email('Invalid email address'),
         phoneNumber: z.string()
             .nonempty('This field is required.')
@@ -160,13 +168,6 @@ export const useFormStore = defineStore('formStore', () => {
             .max(16, 'Credit card number must be at most 16 digits')
             .regex(/^\d{15,16}$/, 'Invalid credit card number'),
 
-        // creditCardNumber: z.string()
-        //     .min(12, "Card number is required")
-        //     .refine((val) => isValidCardNumber(val), {
-        //         message: "Invalid card number",
-        //     })
-        //     .regex(/^\d{15,16}$/, 'Invalid credit card number'),
-
         cardCVV: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
         expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Invalid month'),
         expiryYear: z.string().regex(/^\d{4}$/, 'Invalid year'),
@@ -199,12 +200,12 @@ export const useFormStore = defineStore('formStore', () => {
     });
 
     // BrainTree for credit card validation
-    const isValidCardNumber = (number: string): boolean => {
-        // if (checkoutStore.tester) return checkoutStore.tester
-        const valid = cardValidator;
-        const result = valid.number(number);
-        return result.isValid;
-    };
+    // const isValidCardNumber = (number: string): boolean => {
+    //     // if (checkoutStore.tester) return checkoutStore.tester
+    //     const valid = cardValidator;
+    //     const result = valid.number(number);
+    //     return result.isValid;
+    // };
 
     // Computed schema based on payment method
     const activeSchema = computed(() => {
@@ -250,6 +251,37 @@ export const useFormStore = defineStore('formStore', () => {
         'billingFirstName', 'billingStreetAddress', 'billingCity', 'billingCounty', 'billingState', 'billingPostalCode'
     ];
 
+    const getRequiredFields = () => {
+        const fields: (keyof FormFields)[] = [
+            'firstName',
+            'lastName',
+            'email',
+            'phoneNumber'
+        ];
+
+        if (paymentMethod.value === 'creditCard') {
+            fields.push(
+                'shipFirstName',
+                'shipLastName',
+                'shipStreetAddress',
+                'shipCity',
+                'shipCounty',
+                'shipState',
+                'shipPostalCode',
+                'creditCardNumber',
+                'cardCVV',
+                'expiryMonth',
+                'expiryYear'
+            );
+
+            if (!sameBilling.value) {
+                fields.push(...billingRequiredFields);
+            }
+        }
+
+        return fields;
+    };
+
     // Submit method
     const formSubmit = async () => {
         hasAttemptedSubmit.value = true;
@@ -272,7 +304,8 @@ export const useFormStore = defineStore('formStore', () => {
         let hasEmpty = false;
 
         // Basic + Shipping + Payment
-        const allRequired = [...requiredFields];
+        // const allRequired = [...requiredFields];
+        const allRequired = getRequiredFields();
 
         // Add billing if using different billing address
         if (!sameBilling.value) {

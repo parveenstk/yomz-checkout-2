@@ -50,9 +50,11 @@ export const request = async <T = any>(
 
 // Fetch Query Campaign
 export const queryCampaign = async () => {
+    const formStore = useFormStore();
     const checkoutStore = useCheckoutStore();
     const config = useRuntimeConfig();
     const response = await request('/queryCampaign', {});
+    if (response.result !== 'SUCCESS') formStore.apiErrorAlert = { status: true, message: response.message };
     const data = response.message.data[config.public.campaignId];
     const products: CampaignProducts[] = data.products;
     const shipProfiles: ShipProfile[] = data.shipProfiles;
