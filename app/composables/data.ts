@@ -7,7 +7,7 @@
 // ];
 
 export const keyPoints = [
-    "Fill in Your Family’s Nutrition Gaps and Help Transform Their Lives!",
+    "Fills in Your Family’s Nutrition Gaps and Helps Transform Their Lives!",
     "Packed with Vitamins, Antioxidants, Prebiotics, and Probiotics",
     "One Serving Is the Phytonutrient Equal of 2 Servings of Fruits & Vegetables",
     "Crafted to Support: Gut Health, Energy, Focus, Mood, Brain Activity, Immunity, Heart Function, Vision, Family Nutrition",

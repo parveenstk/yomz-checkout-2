@@ -9,9 +9,8 @@
 
         <!-- Disclaimer -->
         <p class="max-w-2xl mx-auto text-xs leading-relaxed">
-            By filling out the field, you consent for YOMZ™ to use automated technology,
-            including texts and prerecorded messages, to contact you at the number and email provided about YOMZ™
-            offers.
+            By filling out the field, you consent for Yumzy to use automated technology, including texts and prerecorded
+            messages, to contact you at the number and email provided about Yumzy offers.
         </p>
 
         <!-- DMCA Badge -->

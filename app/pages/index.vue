@@ -993,7 +993,7 @@ watch(paymentMethod, (newValue) => {
                                 </div>
 
                                 <p class="text-center text-[0.9rem] font-medium">
-                                    🔒 By placing this order you accept YOMZ's Privacy Policy and Terms of Use.
+                                    🔒 By placing this order you accept Yumzy's Privacy Policy and Terms of Use.
                                 </p>
                             </div>
 
@@ -1022,16 +1022,13 @@ watch(paymentMethod, (newValue) => {
                                 class="mt-6 flex flex-col sm:flex-row items-center sm:items-start lg:pt-0 lg:pr-6 lg:pb-6 lg:pl-6 pt-0 pr-2 pb-2 pl-2">
                                 <NuxtImg src="/images/guarantee.png" alt="guarantee.png" width="98" height="100"
                                     class="mb-3 sm:mb-0 sm:mr-3 flex-shrink-0 mt-1" />
+
                                 <p class="text-gray-700 leading-[1.2] text-center sm:text-left">
-                                    Your order today is protected by our ridiculously iron-clad Picky Momz 90-day
-                                    <span class="font-bold">200% Happiness Guarantee.</span>
-                                    If you're not happy with how
-                                    <span class="font-bold">great</span>
-                                    you and your family feel, or how improved your energy, focus, and gut issues are,
-                                    then let us know anytime in the next
-                                    <span class="font-bold">90 days.</span> We'll refund <span
-                                        class="font-bold">DOUBLE</span>
-                                    what you paid.
+                                    Your order today is protected by Yumzy's ridiculously iron-clad
+                                    <span class="font-bold">Picky Momz 90-day 200% Happiness Guarantee.</span> If you're
+                                    not happy with how great you and your family feel, or how improved your energy,
+                                    focus, and gut issues are, then let us know anytime in the next 90 days. We'll
+                                    refund DOUBLE what you paid.
                                 </p>
                             </div>
                             <!-- Reviews - Desktop Screen -->

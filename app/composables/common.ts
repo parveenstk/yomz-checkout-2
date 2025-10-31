@@ -74,14 +74,14 @@ export const giftItemsData = [
     {
         id: 9204,
         img: "/images/gift2.jpg",
-        name: "YOMZ Interactive E-book",
+        name: "Yumzy Interactive E-book",
         oldPrice: "$9.99",
     },
 
     {
         id: 9206,
         img: "/images/gift3.jpg",
-        name: "YOMZ $20 Gift Card",
+        name: "$20 Yumzy Gift Card",
         oldPrice: "$20.00",
     },
 
